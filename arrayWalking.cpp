@@ -4,8 +4,8 @@
 
 int main()
 {
-    const std::size_t rowsCnt = 3000;
-    const std::size_t colsCnt = 30000;
+    const std::size_t rowsCnt = 6000;
+    const std::size_t colsCnt = 400000;
 
     int* arr = new int[rowsCnt * colsCnt];
 
