@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1634577849 source:g:\fmi\year 2\fall_winter\sdp\seminars\seminar1\dynamicvector\sortedarray_proxy_design_pattern\sortedarray_proxy\main.cpp
+	<iostream>
+	"sortedArray.h"
+
+1634578275 g:\fmi\year 2\fall_winter\sdp\seminars\seminar1\dynamicvector\sortedarray_proxy_design_pattern\sortedarray_proxy\sortedarray.h
+	"G:\FMI\Year 2\fall_winter\SDP\seminars\seminar1\dynamicVector\dynamicVector\dynamicVector.h"
+
+1634488271 g:\fmi\year 2\fall_winter\sdp\seminars\seminar1\dynamicvector\dynamicvector\dynamicvector.h
+	<cstddef>
+	<algorithm>
+

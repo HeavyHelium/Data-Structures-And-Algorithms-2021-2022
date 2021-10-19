@@ -44,18 +44,31 @@ public:
             iterator copy = *this;
             return --(*this);
         }
-        iterator operator+(std::size_t)
-        {
-
-        }
-        iterator operator-(std::size_t)
-        {
-
-        }
+        iterator operator+(std::size_t offset)
+        { return ptr + offset; }
+        iterator operator-(std::size_t offset)
+        { return ptr - offset; }
         bool operator!=(const iterator& other)
         { return ptr != other.ptr; }
 
     };
+    /*
+    class elementProxy
+    {
+        std::size_t index;
+        T* arrayPtr;
+    public:
+        elementProxy(std::size_t index, T* array)
+            : index(index), arrayPtr(array)
+        {}
+        elementProxy& operator=(const elementProxy& other)
+        { index = other.index; return *this; }
+        operator T() const
+        { return arrayPtr[index]; }
+
+
+    };*/
+
     dynamicArray(std::size_t size);
     dynamicArray();
     dynamicArray(const dynamicArray& other);
@@ -75,6 +88,7 @@ public:
     iterator begin();
     iterator end();
     const iterator begin() const;
+    const iterator end() const;
     std::size_t size() const;
     std::size_t capacity() const;
     bool empty() const;
@@ -92,7 +106,7 @@ dynamicArray<T>::dynamicArray(std::size_t size)
 
 template<class T>
 dynamicArray<T>::dynamicArray()
-    : m_size(0), array(new T[INITIAL_CAPACITY]), m_capacity(INITIAL_CAPACITY)
+    : m_capacity(INITIAL_CAPACITY), m_size(0), array(new T[m_capacity])
 {}
 
 template<class T>
@@ -229,7 +243,9 @@ void dynamicArray<T>::push_back(T&& element)
 template<class T>
 void dynamicArray<T>::swap(dynamicArray& other)
 {
-
+    std::swap(array, other.array);
+    std::swap(m_size, other.m_size);
+    std::swap(m_capacity, other.m_capacity);
 }
 
 template<class T>
@@ -249,9 +265,11 @@ typename dynamicArray<T>::iterator dynamicArray<T>::end()
 
 template<class T>
 const typename dynamicArray<T>::iterator dynamicArray<T>::begin() const
-{
+{ return iterator(array); }
 
-}
+template<class T>
+const typename dynamicArray<T>::iterator dynamicArray<T>::end() const
+{ return iterator(array + size()); }
 
 template<class T>
 std::size_t dynamicArray<T>::size() const
