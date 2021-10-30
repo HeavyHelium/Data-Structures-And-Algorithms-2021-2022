@@ -1,0 +1,9 @@
+# depslib dependency file v1.0
+1635283971 source:g:\fmi\year 2\fall_winter\sdp\seminars\seminar2\vector\main.cpp
+	<cassert>
+	<stdexcept>
+	<algorithm>
+	<utility>
+	<iostream>
+	<vector>
+
