@@ -55,28 +55,28 @@ public:
 	/// Set value at index to true
 	void set(int index)
 	{
-	    assert(index >= 0 && index < count);
-	    int pos = index / 32;
-		uint32_t temp = 1 << calculate_shift(pos, index);
-		data[pos] = data[pos] | temp;
+	  	assert(index >= 0 && index < count);
+	  	int pos = index / 32;
+			uint32_t temp = 1 << calculate_shift(pos, index);
+			data[pos] = data[pos] | temp;
 	}
 
 	/// Set value at @index to false
 	void clear(int index)
 	{
-        assert(index >= 0 && index < count);
-        int pos = index / 32;
-		uint32_t temp = 1 << calculate_shift(pos, index);
-		data[pos] = (data[pos] & (~temp));
+    	assert(index >= 0 && index < count);
+    	int pos = index / 32;
+			uint32_t temp = 1 << calculate_shift(pos, index);
+			data[pos] = (data[pos] & (~temp));
 	}
 
 	/// Get value at @index
 	bool get(int index) const
 	{
-        assert(index >= 0&& index < count);
-        int pos = index / 32;
-		uint32_t temp = 1 << calculate_shift(pos, index);
-        return data[pos] & temp;
+      assert(index >= 0&& index < count);
+      int pos = index / 32;
+		  uint32_t temp = 1 << calculate_shift(pos, index);
+      return data[pos] & temp;
 	}
 
 	/// Get number of bits
