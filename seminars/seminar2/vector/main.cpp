@@ -66,9 +66,9 @@ public:
 	public:
 		iterator(T* ptr) : ptr(ptr) {}
 		iterator& operator++()    { ++ptr; return *this; }
-		iterator operator++(int) { iterator copy(*this);  ++ptr; return copy; }
+		iterator operator++(int)  { iterator copy(*this);  ++ptr; return copy; }
 		iterator& operator--()    { --ptr; return *this; }
-		iterator operator--(int) { iterator copy(*this);  --ptr; return copy; }
+		iterator operator--(int)  { iterator copy(*this);  --ptr; return copy; }
 
 		iterator operator+(int i) const
 		{ return iterator(ptr + i); }
@@ -104,6 +104,47 @@ public:
 	};
 
 
+	class const_reverse_iterator
+	{
+	    const T* ptr;
+	public:
+		const_reverse_iterator(T* ptr) : ptr(ptr) { /*std::cout << std::endl << "gosho" << *ptr << std::endl;*/ }
+		const_reverse_iterator& operator++()    { --ptr; return *this; }
+		const_reverse_iterator operator++(int)  { const_reverse_iterator copy(*this);  ++(*this); return copy; }
+		const_reverse_iterator& operator--()    { ++ptr; return *this; }
+		const_reverse_iterator operator--(int)  { const_reverse_iterator copy(*this);  --(*this); return copy; }
+
+		const_reverse_iterator operator+(int i) const
+		{ return const_reverse_iterator(ptr - i); }
+
+		const_reverse_iterator operator-(int i) const
+		{ return const_reverse_iterator(ptr + i); }
+
+		int operator-(const const_reverse_iterator& other)   const
+		{ return other.ptr - ptr; }
+
+		const T& operator*()        { return *ptr; }
+		const T& operator*()  const { return *ptr; }
+
+		const T* operator->()       { return  ptr; }
+		const T* operator->() const { return  ptr; }
+
+		bool operator==(const const_reverse_iterator& other) const
+		{ return ptr == other.ptr; }
+		bool operator!=(const const_reverse_iterator& other) const
+		{ return !((*this) == other); }
+
+		bool operator<(const const_reverse_iterator& other)  const
+		{ return ptr > other.ptr; }
+		bool operator>=(const const_reverse_iterator& other) const
+		{ return !(*this < other); }
+
+		bool operator>(const const_reverse_iterator& other)  const
+		{ return other < *this; }
+		bool operator<=(const const_reverse_iterator& other) const
+		{ return !(*this < other); }
+	};
+
 	class reverse_iterator
 	{
 	    T* ptr;
@@ -123,10 +164,10 @@ public:
 		int operator-(const reverse_iterator& other)   const
 		{ return other.ptr - ptr; }
 
-		const T& operator*()        { return *ptr; }
+		T& operator*()              { return *ptr; }
 		const T& operator*()  const { return *ptr; }
 
-		const T* operator->()       { return  ptr; }
+		T* operator->()             { return  ptr; }
 		const T* operator->() const { return  ptr; }
 
 		bool operator==(const reverse_iterator& other) const
@@ -143,6 +184,7 @@ public:
 		{ return other < *this; }
 		bool operator<=(const reverse_iterator& other) const
 		{ return !(*this < other); }
+        operator const_reverse_iterator() const { return const_reverse_iterator(ptr); }
 	};
 
 	vector() = default;
@@ -164,6 +206,15 @@ public:
 		catch (...) { delete[] array; throw; }
 	}
 
+	vector(vector&& other) noexcept
+	{
+	    /// (*this) is a null object,
+	    /// as its members have default values
+		std::swap(array, other.array);
+		std::swap(count, other.count);
+		std::swap(cap, other.cap);
+	}
+
 	vector& operator=(const vector& other)
 	{
 		if(this != &other)
@@ -174,7 +225,13 @@ public:
 			count = other.count;
 		}
 			return *this;
+	}
 
+	vector& operator=(vector&& other) noexcept
+	{
+	    std::swap(array, other.array);
+		std::swap(count, other.count);
+		std::swap(cap, other.cap);
 	}
 
 	~vector() { delete[] array; }
@@ -219,6 +276,21 @@ public:
 		check_resize();
 		array[count] = element;
 		++count;
+	}
+
+	void push_back(T&& element)
+	{
+		check_resize();
+		array[count] = std::move(element);
+		++count;
+	}
+	/// we make use of variadic templates
+	template<typename...Args>
+	void emplace_back(Args&&... args)
+	{
+	    check_resize();
+        array[count] = T(std::forward<Args>(args)...);
+        ++count;
 	}
 
 	void pop_back()
@@ -315,7 +387,7 @@ private:
 
 		try {
 			for (int i = 0; i < limit; ++i)
-				temp[i] = array[i];
+				temp[i] = std::move(array[i]);
 		}
 		catch (...) { delete[] temp; throw; }
 		T* toDelete = array;
@@ -332,7 +404,7 @@ private:
 
 		try {
 			for (int i = 0; i < limit; ++i)
-				temp[i] = array[i];
+				temp[i] = std::move(array[i]);
 			for (int i = limit; i < new_capacity; ++i)
 				temp[i] = value;
 		}
@@ -353,36 +425,66 @@ private:
 
 };
 
+class apple
+{
+    const std::size_t size;
+public:
+    unsigned w;
+    apple(unsigned w, std::size_t size) : w(w), size(size) { std::cout << "argument construction\n"; }
+    apple() : size(0), w(0) { std::cout << "default constructed\n"; }
+    apple(const apple& other)
+        : size(other.size)
+    { std::cout << "copy constructed\n"; }
+    apple(apple&& other)
+        : size(other.size)
+    { std::cout << "move constructed\n"; }
+    apple& operator=(const apple& lhs)
+    {
+        std::cout << "copy assigned\n";
+        return *this;
+    }
+    apple& operator=(apple&& lhs)
+    {
+        std::cout << "move assigned\n";
+    }
+};
+
 int main()
 {
-    vector<int> vec(1, 0);
-    std::cout << std::endl;
+    apple temp(500, 1000);
+    vector<apple> apples;
+    apples.push_back( apple(500, 1000) );
+    apples.push_back(temp);
+    apples.emplace_back(23, 32);
+
+    //vector<int> vec(1, 0);
+    //std::cout << std::endl;
     //for(int i: vec) std::cout << i << " ";
     //std::cout << std::endl;
-
-    vec.insert(vec.begin(), 7);
-    if(vec[0] != 7) std::cout << "false" << std::endl;
-    //std::cout << std::endl;
-    //for(int i: vec) std::cout << i << " ";
-    //std::cout << std::endl;
-   // std::cout << "capacity: " << vec.capacity() << " size: " << vec.size() << std::endl;
-
-    vec.insert(vec.begin() + 1, 4);
-    std::cout << std::endl;
-    for(int i: vec) std::cout << i << " ";
-    std::cout << std::endl;
-    std::cout << "capacity: " << vec.capacity() << " size: " << vec.size() << std::endl;
-
-    vec.erase(vec.begin(), vec.begin() + 1);
-    std::cout << std::endl;
-    for(int i: vec) std::cout << i << " ";
-    std::cout << std::endl;
-    std::cout << "capacity: " << vec.capacity() << " size: " << vec.size() << std::endl;
-
-    std::cout << *vec.rbegin() << " " << *(vec.rend() - 1) << std::endl;
-    for(vector<int>::reverse_iterator i = vec.rbegin(); i != vec.rend(); ++i)
-      std::cout << *i << " ";
-    std::cout << "\n";
+//
+//    vec.insert(vec.begin(), 7);
+//    if(vec[0] != 7) std::cout << "false" << std::endl;
+//    //std::cout << std::endl;
+//    //for(int i: vec) std::cout << i << " ";
+//    //std::cout << std::endl;
+//   // std::cout << "capacity: " << vec.capacity() << " size: " << vec.size() << std::endl;
+//
+//    vec.insert(vec.begin() + 1, 4);
+//    std::cout << std::endl;
+//    for(int i: vec) std::cout << i << " ";
+//    std::cout << std::endl;
+//    std::cout << "capacity: " << vec.capacity() << " size: " << vec.size() << std::endl;
+//
+//    vec.erase(vec.begin(), vec.begin() + 1);
+//    std::cout << std::endl;
+//    for(int i: vec) std::cout << i << " ";
+//    std::cout << std::endl;
+//    std::cout << "capacity: " << vec.capacity() << " size: " << vec.size() << std::endl;
+//
+//    std::cout << *vec.rbegin() << " " << *(vec.rend() - 1) << std::endl;
+//    for(vector<int>::reverse_iterator i = vec.rbegin(); i != vec.rend(); ++i)
+//      std::cout << *i << " ";
+//    std::cout << "\n";
 
 /*
     std::vector<int> cvec = { 1, 2, 3, 4, 5 };
