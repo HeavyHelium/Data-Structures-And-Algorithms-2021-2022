@@ -32,8 +32,149 @@ class vector {
 
 public:
 
-	using iterator = T*;
-	using const_iterator = const T*;
+	class const_iterator
+	{
+		const T* ptr;
+	public:
+		const_iterator(T* ptr) : ptr(ptr) {}
+		const_iterator& operator++() { ++ptr; return *this; }
+		const_iterator operator++(int) { const_iterator copy(*this); ++(*this); return copy; }
+		const_iterator& operator--() { --ptr; return *this; }
+		const_iterator operator--(int) { const_iterator copy(*this); --(*this); return copy; }
+
+		const_iterator& operator+=(int i)
+		{
+			ptr += i;
+			return *this;
+		}
+
+		const_iterator operator+(int i) const
+		{
+			const_iterator temp(*this);
+			return (temp += i);
+		}
+
+		const_iterator& operator-=(int i)
+		{
+			ptr += i;
+			return *this;
+		}
+
+		const_iterator operator-(int i) const
+		{
+			const_iterator temp(*this);
+			return (temp -= i);
+		}
+
+		int operator-(const const_iterator& other)   const
+		{
+			return ptr - other.ptr;
+		}
+
+		const T& operator*()  const { return *ptr; }
+		const T* operator->() const { return  ptr; }
+
+		bool operator==(const const_iterator& other) const
+		{
+			return ptr == other.ptr;
+		}
+		bool operator!=(const const_iterator& other) const
+		{
+			return !((*this) == other);
+		}
+
+		bool operator<(const const_iterator& other)  const
+		{
+			return ptr < other.ptr;
+		}
+		bool operator>=(const const_iterator& other) const
+		{
+			return !(*this < other);
+		}
+
+		bool operator>(const const_iterator& other)  const
+		{
+			return other < *this;
+		}
+		bool operator<=(const const_iterator& other) const
+		{
+			return !(*this < other);
+		}
+	};
+
+	class iterator
+	{
+		T* ptr;
+	public:
+		iterator(T* ptr) : ptr(ptr) {}
+		iterator& operator++() { ++ptr; return *this; }
+		iterator operator++(int) { iterator copy(*this);  ++(*this); return copy; }
+		iterator& operator--() { --ptr; return *this; }
+		iterator operator--(int) { iterator copy(*this);  --(*this); return copy; }
+
+		iterator& operator+=(int i)
+		{
+			ptr += i;
+			return *this;
+		}
+
+		iterator operator+(int i) const
+		{
+			iterator temp(*this);
+			return (temp += i);
+		}
+
+		iterator& operator-=(int i)
+		{
+			ptr += i;
+			return *this;
+		}
+
+		iterator operator-(int i) const
+		{
+			return (iterator(ptr - i));
+		}
+
+		int operator-(const iterator& other)   const
+		{
+			return ptr - other.ptr;
+		}
+
+		T& operator*() { return *ptr; }
+		const T& operator*()  const { return *ptr; }
+
+		T* operator->() { return  ptr; }
+		const T* operator->() const { return  ptr; }
+
+		bool operator==(const iterator& other) const
+		{
+			return ptr == other.ptr;
+		}
+		bool operator!=(const iterator& other) const
+		{
+			return !((*this) == other);
+		}
+
+		bool operator<(const iterator& other)  const
+		{
+			return ptr < other.ptr;
+		}
+		bool operator>=(const iterator& other) const
+		{
+			return !(*this < other);
+		}
+
+		bool operator>(const iterator& other)  const
+		{
+			return other < *this;
+		}
+		bool operator<=(const iterator& other) const
+		{
+			return !(*this < other);
+		}
+
+		operator const_iterator() const { return const_iterator(ptr); }
+	};
 
 	class const_reverse_iterator
 	{

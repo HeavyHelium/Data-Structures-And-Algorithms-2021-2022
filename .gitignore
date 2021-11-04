@@ -1,2 +1,14 @@
 *.exe
 *.o
+code/
+seminars/seminar2/vector/vector.layout
+*.depend
+*.layout
+*.layout
+seminars/vector_tests/tests/.vs/tests/v16/.suo
+seminars/vector_tests/tests/.vs/tests/v16/Browse.VC.db
+*.db-shm
+*.opendb
+*.ipch
+seminars/vector_tests/tests/Debug/tests.pdb
+*.db-wal
