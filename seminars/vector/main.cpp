@@ -1,11 +1,10 @@
-#include <cassert>
 #include <stdexcept>
 #include <algorithm>
 #include <utility>
 #include <iostream>
 #include <vector>
-
-
+#include <new>
+#include <cassert>
 
 template <typename T>
 class vector {
@@ -14,6 +13,7 @@ class vector {
 	T* array = nullptr;
 	int count = 0;
 	int cap = 0;
+
 
 public:
 
@@ -161,16 +161,15 @@ public:
 		operator const_iterator() const { return const_iterator(ptr); }
 	};
 
-
 	class const_reverse_iterator
 	{
 		const T* ptr;
 	public:
 		const_reverse_iterator(T* ptr) : ptr(ptr) {}
 		const_reverse_iterator& operator++() { --ptr; return *this; }
-		const_reverse_iterator operator++(int) { const_reverse_iterator copy(*this);  ++(*this); return copy; }
+		const_reverse_iterator operator++(int) { const_reverse_iterator copy(*this); ++(*this); return copy; }
 		const_reverse_iterator& operator--() { ++ptr; return *this; }
-		const_reverse_iterator operator--(int) { const_reverse_iterator copy(*this);  --(*this); return copy; }
+		const_reverse_iterator operator--(int) { const_reverse_iterator copy(*this); --(*this); return copy; }
 
 		const_reverse_iterator& operator+=(int i) const
 		{
@@ -181,7 +180,7 @@ public:
 		const_reverse_iterator operator+(int i) const
 		{
 			const_reverse_iterator temp(*this);
-			return temp -= i;
+			return temp += i;
 		}
 
 		const_reverse_iterator& operator-=(int i) const
@@ -193,69 +192,59 @@ public:
 		const_reverse_iterator operator-(int i) const
 		{
 			const_reverse_iterator temp(*this);
-			return temp += i;
+			return temp -= i;
 		}
 
 		int operator-(const const_reverse_iterator& other) const
-		{
-			return other.ptr - ptr;
-		}
+		{ return other.ptr - ptr; }
 
 		const T& operator*()  const { return *ptr; }
 		const T* operator->() const { return  ptr; }
 
 		bool operator==(const const_reverse_iterator& other) const
-		{
-			return ptr == other.ptr;
-		}
+		{ return ptr == other.ptr; }
+
 		bool operator!=(const const_reverse_iterator& other) const
-		{
-			return !((*this) == other);
-		}
+		{ return !((*this) == other); }
 
 		bool operator<(const const_reverse_iterator& other)  const
-		{
-			return ptr > other.ptr;
-		}
+		{ return ptr > other.ptr; }
+
 		bool operator>=(const const_reverse_iterator& other) const
-		{
-			return !(*this < other);
-		}
+		{ return !(*this < other); }
 
 		bool operator>(const const_reverse_iterator& other)  const
-		{
-			return other < *this;
-		}
+		{ return other < *this; }
+
 		bool operator<=(const const_reverse_iterator& other) const
-		{
-			return !(*this < other);
-		}
+		{ return !(*this > other); }
 	};
 
 	class reverse_iterator
 	{
 		T* ptr;
 	public:
-		reverse_iterator(T* ptr) : ptr(ptr) { /*std::cout << std::endl << "gosho" << *ptr << std::endl;*/ }
-		reverse_iterator& operator++() { --ptr; return *this; }
-		reverse_iterator operator++(int) { reverse_iterator copy(*this);  ++(*this); return copy; }
-		reverse_iterator& operator--() { ++ptr; return *this; }
-		reverse_iterator operator--(int) { reverse_iterator copy(*this);  --(*this); return copy; }
+		reverse_iterator(T* ptr) : ptr(ptr) {}
+		reverse_iterator& operator++()
+		{ --ptr; return *this; }
+
+		reverse_iterator operator++(int)
+		{ reverse_iterator copy(*this);  ++(*this); return copy; }
+
+		reverse_iterator& operator--()
+		{ ++ptr; return *this; }
+
+		reverse_iterator operator--(int)
+		{ reverse_iterator copy(*this);  --(*this); return copy; }
 
 		reverse_iterator operator+(int i) const
-		{
-			return reverse_iterator(ptr - i);
-		}
+		{ return reverse_iterator(ptr - i); }
 
 		reverse_iterator operator-(int i) const
-		{
-			return reverse_iterator(ptr + i);
-		}
+		{ return reverse_iterator(ptr + i); }
 
-		int operator-(const reverse_iterator& other)   const
-		{
-			return other.ptr - ptr;
-		}
+		int operator-(const reverse_iterator& other) const
+		{ return other.ptr - ptr; }
 
 		T& operator*() { return *ptr; }
 		const T& operator*()  const { return *ptr; }
@@ -264,32 +253,25 @@ public:
 		const T* operator->() const { return  ptr; }
 
 		bool operator==(const reverse_iterator& other) const
-		{
-			return ptr == other.ptr;
-		}
+		{ return ptr == other.ptr; }
+
 		bool operator!=(const reverse_iterator& other) const
-		{
-			return !((*this) == other);
-		}
+		{ return !((*this) == other); }
 
 		bool operator<(const reverse_iterator& other)  const
-		{
-			return ptr > other.ptr;
-		}
+		{ return ptr > other.ptr; }
+
 		bool operator>=(const reverse_iterator& other) const
-		{
-			return !(*this < other);
-		}
+		{ return !(*this < other); }
 
 		bool operator>(const reverse_iterator& other)  const
-		{
-			return other < *this;
-		}
+		{ return other < *this; }
+
 		bool operator<=(const reverse_iterator& other) const
-		{
-			return !(*this < other);
-		}
-		operator const_reverse_iterator() const { return const_reverse_iterator(ptr); }
+		{ return !(*this > other); }
+
+		operator const_reverse_iterator() const
+		{ return const_reverse_iterator(ptr); }
 	};
 
 	vector() = default;
@@ -380,24 +362,16 @@ public:
 	}
 
 	const T& back() const
-	{
-		return array[count - 1];
-	}
+	{ return at(count - 1); }
 
 	T& back()
-	{
-		return array[count - 1];
-	}
+	{ return at(count - 1); }
 
 	const T& front() const
-	{
-		return array[0];
-	}
+	{ return at(0); }
 
 	T& front()
-	{
-		return array[0];
-	}
+	{ return at(0); }
 
 	void push_back(const T& element)
 	{
@@ -412,7 +386,7 @@ public:
 		new(array + count) T(std::move(element));
 		++count;
 	}
-	/// I'm not sure if this is the right way to implement emplace_back
+
 	template<typename...Args>
 	void emplace_back(Args&&... args)
 	{
@@ -433,6 +407,8 @@ public:
 
 	void resize(int new_size)
 	{
+		/// we change the size, therefore we are going
+		/// to add dafault-constructed elements if necessary
 		if (new_size > cap)
 			do_resize(new_size, T());
 		else
@@ -465,43 +441,36 @@ public:
 		do_resize(count);
 	}
 
-	void clear() { count = 0; }
+	void clear()
+	{
+		for (int i = 0; i < count; ++i)
+			array[i].~T();
+		count = 0;
+	}
 
 	iterator begin()
-	{
-		return array;
-	}
+	{ return iterator(array); }
+
 	iterator end()
-	{
-		return array + count;
-	}
+	{ return iterator(array + count); }
 
 	const_iterator begin() const
-	{
-		return array;
-	}
+	{ return const_iterator(array); }
+
 	const_iterator end()   const
-	{
-		return array + count;
-	}
+	{ return const_iterator(array + count); }
 
 	reverse_iterator rbegin()
-	{
-		return reverse_iterator(array + count - 1);
-	}
+	{ return reverse_iterator(array + count - 1); }
+
 	reverse_iterator rend()
-	{
-		return reverse_iterator(array - 1);
-	}
+	{ return reverse_iterator(array - 1); }
 
 	const_reverse_iterator rbegin() const
-	{
-		return const_reverse_iterator(array + count - 1);
-	}
+	{ return const_reverse_iterator(array + count - 1); }
+
 	const_reverse_iterator rend() const
-	{
-		return const_reverse_iterator(array - 1);
-	}
+	{ return const_reverse_iterator(array - 1); }
 
 
 	void insert(iterator pos, const T& value)
@@ -509,9 +478,9 @@ public:
 		if (pos < begin() || pos > end())
 			throw std::out_of_range("iterator must be >= begin and <= end");
 		int offset = pos - begin();
-		push_back(T());
+		push_back(T());// just so there is a constructed new element
 		--count;
-		pos = begin() + offset;// in case reallocation happens
+		pos = begin() + offset;// in case of reallocation
 		for (iterator i = end(); i > pos; --i)
 		{
 			try {
@@ -522,8 +491,14 @@ public:
 		*pos = value;
 		++count;
 	}
+
 	void erase(iterator pos)
 	{
+		if (pos == end() - 1)
+		{
+			pop_back();
+			return;
+		}
 		iterator last = end();
 		for (iterator i = pos; i < last - 1; ++i)
 			*i = *(i + 1);
@@ -549,6 +524,11 @@ public:
 
 	bool empty() const { return count == 0; }
 
+    void map(T(*callback_function)(T))
+    {
+        for(iterator i = begin(); i != end(); ++i)
+            *i = callback_function(*i);
+    }
 
 private:
 	void do_resize(int new_capacity)
@@ -603,8 +583,8 @@ private:
 			do_resize(cap ? expansion_factor * cap : 1);
 	}
 	/// deallocates arrays whose elements have been constructed with placement new
-	/// the array itself has been allocated with operator new
-	/// so operator delete is called
+	/// the array itself has been allocated with ::operator new
+	/// so ::operator delete is called
 	static void deallocate_memory(T* arr, int cnt, int capacity)
 	{
 		for (int i = 0; i < cnt; ++i)
@@ -612,13 +592,22 @@ private:
 		::operator delete(arr, capacity * sizeof(T));
 	}
 
-
 };
 
 
 
 int main()
 {
+
+    std::vector<int> vstd({1, 2, 3, 4, 5});
+    std::cout << vstd.size() << std::endl;
+    for(auto& element : vstd)
+        ++element;
+
+    for(auto element : vstd)
+        std::cout << element << " ";
+    std::cout << std::endl;
+
 //    apple temp(500, 1000);
 //    vector<apple> apples;
 //    apples.push_back( apple(500, 1000) );
@@ -698,6 +687,9 @@ int main()
     std::cout << std::endl;
     std::cout << "capacity: " << vec.capacity() << " size: " << vec.size() << std::endl;
 
+    vec.map([](int a){ std::cout << "i'm called\n"; return a * 2; });
+    for(int i: vec) std::cout << i << " ";
+    std::cout << std::endl;
     //vec.erase(vec.begin(), vec.begin() + 1);
     //std::cout << std::endl;
     //for(int i: vec) std::cout << i << " ";
