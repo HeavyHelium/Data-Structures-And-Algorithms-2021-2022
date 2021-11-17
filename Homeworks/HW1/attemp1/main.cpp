@@ -9,9 +9,10 @@ class client
 
 
 };
-
+#define gram_mol 6.022E23
 int main()
 {
+    std::cout << gram_mol << std::endl;
 
     return 0;
 }
