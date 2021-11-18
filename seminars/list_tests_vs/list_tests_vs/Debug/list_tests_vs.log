@@ -1,0 +1,3 @@
+﻿  list_tests.cpp
+G:\FMI\Year 2\fall_winter\SDP\seminars\list_tests_vs\list_tests_vs\list.hpp(496,17): warning C4018: '<': signed/unsigned mismatch
+  list_tests_vs.vcxproj -> G:\FMI\Year 2\fall_winter\SDP\seminars\list_tests_vs\Debug\list_tests_vs.exe
