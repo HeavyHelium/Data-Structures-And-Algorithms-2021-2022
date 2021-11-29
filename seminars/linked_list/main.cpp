@@ -11,18 +11,17 @@
 // (doubly)linked lists do not copy because it
 // does neither reallocate, nor physically shift
 
-/// @brief doubly linked list
 template<class T>
 class linked_list
 {
+
+public:
     struct Node
     {
         Node* prev = nullptr;
         T value;
         Node* next = nullptr;
     };
-
-public:
     class iterator
     {
         friend class linked_list;
@@ -45,14 +44,14 @@ public:
         }
         iterator& operator+=(int offset)
         {
-            if(offset < 0)
-                while(offset < 0)
+            if (offset < 0)
+                while (offset < 0)
                 {
                     ptr = ptr->prev;
                     ++offset;
                 }
             else
-                while(offset > 0)
+                while (offset > 0)
                 {
                     ptr = ptr->next;
                     --offset;
@@ -60,28 +59,40 @@ public:
             return *this;
         }
         iterator& operator-=(int offset)
-        { return *this += (-offset); }
+        {
+            return *this += (-offset);
+        }
         iterator operator+(int offset)
         {
             iterator temp(*this);
             return temp += offset;
         }
         iterator operator-(int offset)
-        { return (*this + (-offset)); }
+        {
+            return (*this + (-offset));
+        }
 
         bool operator==(const iterator& other) const
-        { return ptr == other.ptr; }
+        {
+            return ptr == other.ptr;
+        }
         bool operator!=(const iterator& other) const
-        { return !(*this == other); }
+        {
+            return !(*this == other);
+        }
         T& operator*() const
-        { return ptr->value; }
+        {
+            return ptr->value;
+        }
         Node* operator->() const
-        { return ptr; }
-       // bool
+        {
+            return ptr;
+        }
+        // bool
 
     };
 
-     class const_iterator
+    class const_iterator
     {
         friend class linked_list;
         const Node* ptr;
@@ -150,52 +161,50 @@ public:
         // bool
 
     };
+
+
 public:
 
     linked_list() { dummy.prev = dummy.next = &dummy; }
 
+    linked_list(std::size_t count, const T& value = T())
+        : linked_list()
+    {
+        while (count--)
+            push_back(value);
+    }
+
     linked_list(std::initializer_list<T> init)
         : linked_list()
     {
-        for(const T& elem : init)
+        for (const T& elem : init)
             push_back(elem);
     }
-
-    linked_list(std::size_t count, const T& value)
-        : linked_list()
-    { while(count--) push_back(value); }
 
     linked_list(const linked_list& other)
         : linked_list()
     {
         try
         {
-         for(const T& element : other)
-             push_back(element);
+            for (const_iterator i = other.begin(); i != other.end(); ++i)
+                push_back(*i);
         }
-        catch(...)
-        { while(!empty()) pop_back(); }
+        catch (...)
+        {
+            while (!empty()) pop_back();
+        }
     }
 
     linked_list(linked_list&& other) noexcept
         : linked_list()
-    { std::swap(dummy, other.dummy); }
+    {
+        std::swap(dummy, other.dummy);
+    }
 
     linked_list& operator=(linked_list other)
     {
-        //std::cout << "hello\n\n";
-        // [prev  data  next]
-        dummy.prev->next = &other.dummy;
-        other.dummy.prev->next = &dummy;
-        dummy.next->prev = &other.dummy;
-        other.dummy.next->prev = &dummy;
-        std::swap(dummy.prev, other.dummy.prev);
-        std::swap(dummy.next, other.dummy.next);
-        m_size = other.m_size;
-        std::cout << other.m_size << std::endl;
-        std::cout << m_size << std::endl;
-
-        //other.clear();
+        std::swap(other.dummy, dummy);
+        std::swap(m_size, other.m_size);
         return *this;
     }
 
@@ -222,14 +231,14 @@ public:
     }
 
     template< class... Args >
-    void emplace_back( Args&&... args )
+    void emplace_back(Args&&... args)
     {
         insert_before(&dummy, T(std::forward<Args>(args)...));
         ++m_size;
     }
 
     template< class... Args >
-    void emplace_front( Args&&... args )
+    void emplace_front(Args&&... args)
     {
         insert_before(dummy.next, T(std::forward<Args>(args)...));
         ++m_size;
@@ -248,10 +257,11 @@ public:
         --m_size;
     }
 
-    iterator begin() { return {dummy.next}; }
-    iterator end()  { return &dummy; }
-    const_iterator begin() const { return {dummy.next}; }
-    const_iterator end() const { return &dummy; }
+    iterator begin() { return { dummy.next }; }
+    iterator end() { return &dummy; }
+
+    const_iterator begin() const { return { dummy.next }; }
+    const_iterator end() const { return const_iterator{ &dummy }; }
 
     void insert(iterator pos, const T& value)
     {
@@ -268,11 +278,11 @@ public:
     void splice(iterator pos, linked_list& other)
     {
         pos = pos->prev;
-        Node* temp = pos.ptr -> next;
+        Node* temp = pos.ptr->next;
         temp->prev = other.dummy.prev;
-        other.dummy.prev -> next = temp;
-        pos -> next = other.dummy.next;
-        other.dummy.next -> prev = pos.ptr;
+        other.dummy.prev->next = temp;
+        pos->next = other.dummy.next;
+        other.dummy.next->prev = pos.ptr;
         m_size += other.m_size;
         other.m_size = 0;
         other.dummy.next = other.dummy.next = nullptr;
@@ -281,11 +291,11 @@ public:
     void splice(iterator pos, linked_list&& other)
     {
         pos = pos->prev;
-        Node* temp = pos.ptr -> next;
+        Node* temp = pos.ptr->next;
         temp->prev = other.dummy.prev;
-        other.dummy.prev -> next = temp;
-        pos -> next = other.dummy.next;
-        other.dummy.next -> prev = pos.ptr;
+        other.dummy.prev->next = temp;
+        pos->next = other.dummy.next;
+        other.dummy.next->prev = pos.ptr;
         m_size += other.m_size;
         other.m_size = 0;
         other.dummy.next = other.dummy.next = nullptr;
@@ -297,35 +307,35 @@ public:
         Node* current = &dummy;
         iterator i1 = dummy.next;
         iterator i2 = other.dummy.next;
-        while(i1 != end() && i2 != other.end())
+        while (i1 != end() && i2 != other.end())
         {
-            std::cout << i1.ptr->value << " i2 :" << i2.ptr->value << std::endl;
+            //std::cout << i1.ptr->value << " i2 :" << i2.ptr->value << std::endl;
             Node* choice = (i1->value < i2->value) ? (i1++).ptr : (i2++).ptr;
-            current -> next = choice;
-            choice -> prev = current;
-            current = current -> next;
+            current->next = choice;
+            choice->prev = current;
+            current = current->next;
         }
-        if(i1 != end())
+        if (i1 != end())
         {
-            while(i1 != end())
+            while (i1 != end())
             {
-                current -> next = (i1++).ptr;
-                current -> next ->prev = current;
-                current = current -> next;
+                current->next = (i1++).ptr;
+                current->next->prev = current;
+                current = current->next;
             }
         }
         else if (i2 != other.end())
         {
-            while(i2 != other.end())
+            while (i2 != other.end())
             {
-            std::cout << i2->value << std::endl;
-            std::cout << current -> prev ->value << std::endl;
-                current -> next = (i2++).ptr;
-                current -> next ->prev = current;
-                current = current -> next;
+                //std::cout << i2->value << std::endl;
+               // std::cout << current->prev->value << std::endl;
+                current->next = (i2++).ptr;
+                current->next->prev = current;
+                current = current->next;
             }
         }
-        current -> next = &dummy;
+        current->next = &dummy;
         dummy.prev = current;
         m_size += other.m_size;
         other.dummy.next = other.dummy.prev = nullptr;
@@ -337,35 +347,35 @@ public:
         Node* current = &dummy;
         iterator i1 = dummy.next;
         iterator i2 = other.dummy.next;
-        while(i1 != end() && i2 != other.end())
+        while (i1 != end() && i2 != other.end())
         {
             std::cout << i1.ptr->value << " i2 :" << i2.ptr->value << std::endl;
             Node* choice = (i1->value < i2->value) ? (i1++).ptr : (i2++).ptr;
-            current -> next = choice;
-            choice -> prev = current;
-            current = current -> next;
+            current->next = choice;
+            choice->prev = current;
+            current = current->next;
         }
-        if(i1 != end())
+        if (i1 != end())
         {
-            while(i1 != end())
+            while (i1 != end())
             {
-                current -> next = (i1++).ptr;
-                current -> next ->prev = current;
-                current = current -> next;
+                current->next = (i1++).ptr;
+                current->next->prev = current;
+                current = current->next;
             }
         }
         else if (i2 != other.end())
         {
-            while(i2 != other.end())
+            while (i2 != other.end())
             {
-            std::cout << i2->value << std::endl;
-            std::cout << current -> prev ->value << std::endl;
-                current -> next = (i2++).ptr;
-                current -> next ->prev = current;
-                current = current -> next;
+                std::cout << i2->value << std::endl;
+                std::cout << current->prev->value << std::endl;
+                current->next = (i2++).ptr;
+                current->next->prev = current;
+                current = current->next;
             }
         }
-        current -> next = &dummy;
+        current->next = &dummy;
         dummy.prev = current;
         m_size += other.m_size;
         other.dummy.next = other.dummy.prev = nullptr;
@@ -374,8 +384,8 @@ public:
 
     void unique()
     {
-        for(iterator i = begin() + 1; i != end(); ++i)
-            if(i->value == (i - 1) -> value)
+        for (iterator i = begin() + 1; i != end(); ++i)
+            if (i->value == (i - 1)->value)
                 erase(i);
     }
 
@@ -387,25 +397,39 @@ public:
 
     void clear()
     {
-        while(!empty())
+        while (!empty())
             pop_back();
     }
 
     const T& front() const
-    { return dummy.next->value; }
+    {
+        return dummy.next->value;
+    }
     const T& back() const
-    { return dummy.prev->value; }
+    {
+        return dummy.prev->value;
+    }
     T& front()
-    { return dummy.next->value; }
+    {
+        return dummy.next->value;
+    }
     T& back()
-    { return dummy.prev->value; }
+    {
+        return dummy.prev->value;
+    }
     bool empty() const
-    { return (m_size == 0); }
+    {
+        return (m_size == 0);
+    }
     std::size_t size() const
-    { return m_size; }
+    {
+        return m_size;
+    }
 
     ~linked_list()
-   {  std::cout << "bef: \n"; while(!empty()) pop_front(); std::cout << size() << "dtor\n"; }
+    {
+        while (!empty()) pop_back();/* std::cout << size() << "dtor\n";*/
+    }
 private:
     static void insert_before(Node* pos, const T& element)
     {
@@ -426,39 +450,9 @@ private:
         delete pos;
     }
 
-    Node* d = new Node;// requires default ctor
-    Node& dummy = *d;
+    Node dummy;// requires default ctor
     std::size_t m_size = 0;
 };
-
-class apple
-{
-    double weight = 0;
-    std::string color = "beautiful";
-public:
-    apple(double w, const std::string& c)
-        : weight(w), color(c)
-    {std::cout << "ctor\n";}
-    apple(const apple& other)
-    {std::cout << "copy ctor\n";}
-    apple& operator=(const apple& other)
-    {std::cout << "operator=\n";}
-};
-
-
-void filter_arr(int* arr, std::size_t& size)
-{
-    int read = 1;
-    int write = 0;
-    while(read < size)
-    {
-        if(arr[write] != arr[read])
-            arr[++write] = arr[read];
-        ++read;
-    }
-    size = write + 1;
-}
-
 int main()
 {
 
@@ -469,9 +463,9 @@ int main()
     linked_list<int> copy(instance);
     assert(copy.size() == 10);
 
-    linked_list<int> assign;
-    assert(assign.size() == 0);
-    assign = copy;
+    //linked_list<int> assign;
+    //assert(assign.size() == 0);
+    //assign = copy;
 
     //assign = copy;
 

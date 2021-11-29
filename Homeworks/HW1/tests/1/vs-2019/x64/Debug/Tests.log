@@ -1,0 +1,5 @@
+﻿  implementation.cpp
+  tests.cpp
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\tests.cpp(66,2): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+  Tests.vcxproj -> G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\vs-2019\x64\Debug\Tests.exe
