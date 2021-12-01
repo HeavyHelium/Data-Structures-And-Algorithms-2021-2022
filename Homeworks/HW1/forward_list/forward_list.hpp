@@ -49,12 +49,18 @@ public:
     void insert_after(iterator pos, const T& data);
     void erase_after(iterator pos);
 
+    // O(1)
     void pop_front();
+    // O(1)
     void push_front(const T& data);
+    // O(1)
+    void push_back(const T& data);
 
     iterator begin()
     { return iterator(head); }
     /// returns iterator to past the last element
+    const iterator begin() const
+    { return iterator(head); }
     iterator end()
     { return iterator(tail -> next); }
 
@@ -157,6 +163,10 @@ void forward_list<T>::pop_front()
 template<typename T>
 void forward_list<T>::push_front(const T& data)
 { insert(begin(), data); }
+
+template<typename T>
+void forward_list<T>::push_back(const T& data)
+{ insert_after(iterator(tail), data); }
 
 template<typename T>
 typename forward_list<T>::beg_end_pair forward_list<T>::clone_chain(Node* start)

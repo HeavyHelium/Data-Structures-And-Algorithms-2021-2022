@@ -9,8 +9,10 @@ public:
     priority_queue(){}
     void push(const T& element);
     void pop();
+    T& top(){ *lst.begin(); }
     bool empty() { return lst.empty(); }
     std::size_t size() { return lst.size(); }
+    /// TODO!!!: remove those
     using iterator = typename forward_list<T>::iterator;
     iterator begin() { return lst.begin(); }
     iterator end() { return lst.end(); }
@@ -34,7 +36,7 @@ void priority_queue<T>::push(const T& element)
 template<typename T>
 void priority_queue<T>::pop()
 {
-    assert("cannot pop elements from an empty list" && !empty());
+    assert("cannot pop elements from an empty queue" && !empty());
     lst.pop_front();
 }
 

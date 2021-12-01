@@ -3,17 +3,29 @@
 #include <vector>
 #include <queue>
 #include <iostream>
+#include "priority_queue.hpp"
+
 
 constexpr unsigned RESTOCK_TIME = 60;
 constexpr unsigned RESTOCK_AMOUNT = 100;
 
-struct my_client : Client
+struct my_client : public Client
 {
-	unsigned id;
+	my_client(unsigned arriveMinute, unsigned banana, unsigned schweppes, unsigned maxWaitTime, unsigned id)
+		: Client{ arriveMinute, banana, schweppes, maxWaitTime },
+		id(id)
+	{}
 	unsigned max_departure_time()const
-	{ return arriveMinute + maxWaitTime; }
+	{
+		return arriveMinute + maxWaitTime;
+	}
 	bool operator<(const my_client& other) const
-	{ return max_departure_time() > other.max_departure_time(); }
+	{
+		return max_departure_time() > other.max_departure_time();
+	}
+	unsigned get_id() const { return id; }
+private:
+	unsigned id;
 };
 
 
@@ -34,7 +46,7 @@ struct MyStore : Store
 	void addClients(const Client* clients, int count) override
 	{
 		for (std::size_t i = 0; i < count; ++i)
-			addClient(clients[i]);
+			addClient();
 	}
 
 	void advanceTo(int minute) override
@@ -94,18 +106,19 @@ private:
 	struct goods_state { unsigned in_stock = 0; unsigned arriving = 0; } banana, schweppes;
 	struct workers_state { unsigned total_cnt = 0; unsigned available = 0; } workers;
 	struct arriving_good { enum T { banana, schweppes }type; unsigned time;  };
-	std::priority_queue<my_client> clients_waiting;
-	std::queue<arriving_good> arriving_goods;
-	unsigned arriving_bananas = 0;
-	unsigned arriving_schweppes = 0;
+	priority_queue<my_client> clients_waiting;
+	std::queue<arriving_good> arriving_goods;// this -- make a queue
 	unsigned last_client_id = 0;
 
-	void addClient(const Client& c)
+	void addClient(const my_client& c)
 	{
 		if (c.arriveMinute) advanceTo(c.arriveMinute);
 		if (c.banana > banana.in_stock || c.schweppes > schweppes.in_stock)
 		{
-			if(c.banana > (banana.in_stock))
+			if(c.banana <= (banana.in_stock + banana.arriving))
+			{
+				clients_waiting.push(c);
+			}
 		}
 		else
 		{

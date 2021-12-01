@@ -1,5 +1,25 @@
 ﻿  implementation.cpp
-  tests.cpp
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\tests.cpp(66,2): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  Generating Code...
-  Tests.vcxproj -> G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\vs-2019\x64\Debug\Tests.exe
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(15,13): error C2397: conversion from 'unsigned int' to 'int' requires a narrowing conversion
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(15,27): error C2397: conversion from 'unsigned int' to 'int' requires a narrowing conversion
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(15,35): error C2397: conversion from 'unsigned int' to 'int' requires a narrowing conversion
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(15,46): error C2397: conversion from 'unsigned int' to 'int' requires a narrowing conversion
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(49,1): error C2660: 'MyStore::addClient': function does not take 0 arguments
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(113,7): message : see declaration of 'MyStore::addClient'
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(55,24): error C2039: 'top': is not a member of 'priority_queue<my_client>'
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(109): message : see declaration of 'priority_queue<my_client>'
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(57,54): error C2039: 'top': is not a member of 'priority_queue<my_client>'
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(109): message : see declaration of 'priority_queue<my_client>'
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(57,36): error C2530: 'current_client': references must be initialized
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(72,25): warning C4018: '>=': signed/unsigned mismatch
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(72,72): warning C4018: '>=': signed/unsigned mismatch
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(75,33): error C2248: 'my_client::id': cannot access private member declared in class 'my_client'
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(28): message : see declaration of 'my_client::id'
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(12): message : see declaration of 'my_client'
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(87,53): warning C4018: '>': signed/unsigned mismatch
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(88,59): warning C4018: '>': signed/unsigned mismatch
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(89,32): error C2248: 'my_client::id': cannot access private member declared in class 'my_client'
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(28): message : see declaration of 'my_client::id'
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(12): message : see declaration of 'my_client'
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(116,16): warning C4018: '>': signed/unsigned mismatch
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(116,49): warning C4018: '>': signed/unsigned mismatch
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(118,16): warning C4018: '<=': signed/unsigned mismatch

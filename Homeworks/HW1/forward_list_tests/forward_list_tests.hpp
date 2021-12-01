@@ -22,6 +22,18 @@ TEST_CASE("Insertion works properly", "[forward_list]")
         (*l1.begin() == 4);
         REQUIRE(*(++l1.begin()) == 5);
     }
+    SECTION("push_back to an empty list works")
+    {
+        l1.push_back(5);
+        REQUIRE(l1.size() == 1);
+        *l1.begin() == 5;
+        l1.push_back(4);
+        REQUIRE(l1.size() == 2);
+        (*++l1.begin() == 4);
+        l1.push_back(3);
+        REQUIRE(l1.size() == 3);
+        (*++++l1.begin() == 3);
+    }
     SECTION("insertion at a given position works")
     {
         l1.push_front(5);
