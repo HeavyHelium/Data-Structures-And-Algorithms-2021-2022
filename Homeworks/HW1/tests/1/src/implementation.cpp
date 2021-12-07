@@ -13,7 +13,8 @@ void MyStore::init(int workerCount, int startBanana, int startSchweppes)
 void MyStore::addClients(const Client* clients, int count)
 {
 	assert(count >= 1);
-	iter = this->clients.push_back(MyClient(clients[0], last_client_id++));
+	if(iter == this->clients.end())
+		iter = this->clients.push_back(MyClient(clients[0], last_client_id++));
 	if (max_departure_minute < iter->MaxDepartureMinute)
 		max_departure_minute = iter->MaxDepartureMinute;
 	for (int i = 1; i < count; ++i)
@@ -32,10 +33,9 @@ void MyStore::executeDay()
 	advanceTo(max_departure_minute);
 	while (!arriving_resources.empty())
 		delivery();
+	assert(arriving_resources.empty() && clients_waiting.empty() 
+		&& "All events must be completed at the end of the day ");
 }
-/*
-action(before_client_comes); addClients up to minute
-*/
 
 void MyStore::advanceTo(int minute)
 {
@@ -51,7 +51,7 @@ void MyStore::advanceTo(int minute)
 void MyStore::action(int minute) 
 {
 //std::cout << minute << " there\n\n";
-//std::cout << "hakunamatata " << arriving_resources.size() << ", " << clients_waiting.size() << "\n\n";
+//std::cout << "hakunamatata " << arriving_resources.size() << ", " << clients_waiting.size() << "\n";
 	if (!arriving_resources.empty() && arriving_resources.front().delivery_minute > minute
 		|| arriving_resources.empty())
 	{
@@ -70,24 +70,24 @@ void MyStore::action(int minute)
 				&& arriving_resources.front().delivery_minute == delivery_time)
 			{
 				delivery();
-				for (list<client_remaining>::iterator i = clients_in_order.begin();
-					i != clients_in_order.end();)
+			}
+			for (list<client_remaining>::iterator i = clients_in_order.begin();
+				i != clients_in_order.end();)
+			{
+				list<client_remaining>::iterator j = i;
+				++j;
+				const MyClient& c = *(i->client_iter);
+				if (canBeServiced(c) || c.MaxDepartureMinute == delivery_time)
 				{
-					list<client_remaining>::iterator j = i;
-					++j;
-					const MyClient& c = *(i->client_iter);
-					if (canBeServiced(c) || c.MaxDepartureMinute == delivery_time)
-					{
-						clientDeparture(c, delivery_time);
-						assert(clients_waiting.size() == clients_in_order.size());
-						typename list<client_waiting>::iterator ref = i->waiting_iter;
-						clients_waiting.erase(ref);
-//std::cout << "after first\n\n";
-						clients_in_order.erase(i);
-					}
-
-					i = j;// beacause of iterator invalidation
+					clientDeparture(c, delivery_time);
+					assert(clients_waiting.size() == clients_in_order.size());
+					typename list<client_waiting>::iterator ref = i->waiting_iter;
+					clients_waiting.erase(ref);
+					//std::cout << "after first\n\n";
+					clients_in_order.erase(i);
 				}
+
+				i = j;// beacause of iterator invalidation
 			}
 
 
@@ -135,8 +135,8 @@ void MyStore::addClient(list<MyClient>::iterator iter)
 	if (client.banana <= resources.banana.in_stock
 		&& client.schweppes <= resources.schweppes.in_stock)
 	{
-		resources.banana.to_be_taken += client.banana;
-		resources.schweppes.to_be_taken += client.schweppes;
+		//resources.banana.to_be_taken += client.banana;
+		//resources.schweppes.to_be_taken += client.schweppes;
 		clientDeparture(client, client.arriveMinute);
 	}
 	else
@@ -156,8 +156,8 @@ void MyStore::addClient(list<MyClient>::iterator iter)
 			sendWorker(ResourceType::schweppes, client.arriveMinute);
 //std::cout << "\n\n" << resources.banana.estimate() << ", " << resources.schweppes.estimate() << "\n\n";
 		sendClientToWait(iter);
-		resources.banana.to_be_taken += client.banana;
-		resources.schweppes.to_be_taken += client.schweppes;
+		//resources.banana.to_be_taken += client.banana;
+		//resources.schweppes.to_be_taken += client.schweppes;
 	}
 }
 
@@ -170,7 +170,6 @@ void MyStore::sendClientToWait(typename list<MyClient>::iterator iter)
 	typename list<client_remaining>::iterator
 		remaining_iter = clients_in_order.push_back(client_remaining{ iter, waiting_iter });
 	waiting_iter->remaining_iter = remaining_iter;
-
 }
 
 /// @brief adds resource to resources queue and updates states
@@ -258,7 +257,7 @@ int MyStore::takeResource(ResourceType T, int amount)
 				resources.banana.in_stock = 0;
 			}
 			else { banana_taken = amount; resources.banana.in_stock -= banana_taken; }
-			resources.banana.to_be_taken -= banana_taken;
+			//resources.banana.to_be_taken -= banana_taken;
 			return banana_taken;
 		}
 		case ResourceType::schweppes:
@@ -270,7 +269,7 @@ int MyStore::takeResource(ResourceType T, int amount)
 				resources.schweppes.in_stock = 0;
 			}
 			else { schweppes_taken = amount; resources.schweppes.in_stock -= schweppes_taken; }
-			resources.schweppes.to_be_taken -= schweppes_taken;
+			//resources.schweppes.to_be_taken -= schweppes_taken;
 			return schweppes_taken;
 		}
 

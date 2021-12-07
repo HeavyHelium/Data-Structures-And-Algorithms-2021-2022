@@ -74,7 +74,7 @@ D 120 schweppes
 */
 
 /*
- 1 3
+ 2 3
  0 15 20 65
  0 35 20 5
  10 5 0 5
@@ -97,24 +97,20 @@ D 60 schweppes
 
 Изход:
 W 0 banana
-W 20 banana
 D 60 banana
 0 60 50 0
 1 60 50 0
-D 80 banana
-2 80 20 0
-3 80 10 0
+2 80 0 0
+3 90 0 0
 
-1  2
+2  2
 0 20 0 61
 1  90 0 59
 
 Изход:
 W 0 banana
-W 1 banana
 D 60 banana
 0 60 20 0
 1 60 80 0
-D 61 banana
 
 */
