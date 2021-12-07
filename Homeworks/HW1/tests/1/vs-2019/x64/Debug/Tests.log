@@ -1,4 +1,4 @@
 ﻿  implementation.cpp
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(99,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(252): warning C4715: 'MyStore::takeResource': not all control paths return a value
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(118,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(269): warning C4715: 'MyStore::takeResource': not all control paths return a value
   Tests.vcxproj -> G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\vs-2019\x64\Debug\Tests.exe

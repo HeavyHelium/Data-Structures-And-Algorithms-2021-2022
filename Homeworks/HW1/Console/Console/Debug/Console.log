@@ -1,8 +1,4 @@
 ﻿  implementation.cpp
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(99,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-  main.cpp
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\Console\Console\input.hpp(32,28): warning C4018: '<': signed/unsigned mismatch
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\Console\Console\input.hpp(51,29): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(252): warning C4715: 'MyStore::takeResource': not all control paths return a value
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(118,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\src\implementation.cpp(269): warning C4715: 'MyStore::takeResource': not all control paths return a value
   Console.vcxproj -> G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\Console\Debug\Console.exe

@@ -67,12 +67,11 @@ struct MyStore : Store
 	virtual void init(int workerCount, int startBanana, int startSchweppes) override;
 
 	virtual void addClients(const Client* clients, int count) override;
-	virtual void advanceTo(int minute) override;
 
 	virtual int getBanana() const override;
 	virtual int getSchweppes() const override;
-
-	void executeDay(const Client* clients, int count);
+	virtual void advanceTo(int minute) override;
+	void executeDay();
 
 private:
 	struct resource_state
@@ -122,7 +121,7 @@ std::cout << " schweppes\n";
 
 	list<MyClient> clients;//< clients sorted by max departure time
 
-	void addClient(const MyClient& client);
+	void addClient(list<MyClient>::iterator iter);
 	void sendWorker(ResourceType T, int minute);
 	
 	void delivery();
@@ -130,8 +129,10 @@ std::cout << " schweppes\n";
 	int takeResource(ResourceType T, int amount);
 	void sendClientToWait(typename list<MyClient>::iterator iter);
 	void releaseClientsBefore(int minute);
-	bool canBeServised(const MyClient& c) const;
-	void addClientsAction();
+	bool canBeServiced(const MyClient& c) const;
+	void action(int minute);
+	list<MyClient>::iterator iter = nullptr;
+	int max_departure_minute = 0;
 public:
 	static int calculate_workers_needed(int amount);
 };

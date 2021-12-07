@@ -12,26 +12,45 @@ void MyStore::init(int workerCount, int startBanana, int startSchweppes)
 
 void MyStore::addClients(const Client* clients, int count)
 {
-	for (int i = 0; i < count; ++i)
-		addClient(MyClient(clients[i], last_client_id++));
+	assert(count >= 1);
+	iter = this->clients.push_back(MyClient(clients[0], last_client_id++));
+	if (max_departure_minute < iter->MaxDepartureMinute)
+		max_departure_minute = iter->MaxDepartureMinute;
+	for (int i = 1; i < count; ++i)
+	{
+		this->clients.push_back(MyClient(clients[i], last_client_id++));
+		if (max_departure_minute < this->clients.back().MaxDepartureMinute)
+			max_departure_minute = this->clients.back().MaxDepartureMinute;
+	}
+
 }
 
-void MyStore::executeDay(const Client* clients, int count)
+void MyStore::executeDay()
 {
-	addClients(clients, count);
-	if (count)
-		advanceTo(clients[count - 1].arriveMinute + clients[count - 1].maxWaitTime + 1);
-	//assert(clients_waiting.empty() && clients_in_order.empty());
+	assert(!clients.empty());
+	advanceTo(max_departure_minute);
 	while (!arriving_resources.empty())
 		delivery();
-	//assert(arriving_resources.empty());
+}
+/*
+action(before_client_comes); addClients up to minute
+*/
+
+void MyStore::advanceTo(int minute)
+{
+	if (clients.empty() || (!clients.empty() && iter->arriveMinute > minute))
+	{ action(minute); return; }
+	
+	for (; iter != clients.end() && iter->arriveMinute <= minute; ++iter)
+		addClient(iter);
+	action(minute);
 }
 
-void MyStore::advanceTo(int minute) 
+void MyStore::action(int minute) 
 {
 	if (!arriving_resources.empty() && arriving_resources.front().delivery_minute > minute
 		|| arriving_resources.empty())
-		releaseClientsBefore(minute);
+		releaseClientsBefore(minute + 1);
 	else
 	{
 		while (!arriving_resources.empty() 
@@ -49,7 +68,7 @@ void MyStore::advanceTo(int minute)
 					list<client_remaining>::iterator j = i;
 					++j;
 					const MyClient& c = *(i->client_iter);
-					if (canBeServised(c))
+					if (canBeServiced(c))
 					{
 						clientDeparture(c, delivery_time);
 						assert(clients_waiting.size() == clients_in_order.size());
@@ -58,7 +77,7 @@ void MyStore::advanceTo(int minute)
 //std::cout << "after first\n\n";
 						clients_in_order.erase(i);
 					}
-					i = j;// beacause of oterator invalidation
+					i = j;// beacause of iterator invalidation
 				}
 			}
 
@@ -75,7 +94,7 @@ void MyStore::advanceTo(int minute)
 void MyStore::releaseClientsBefore(int minute)
 {
 	while (!clients_waiting.empty() 
-		&& clients_waiting.front().client_iter->MaxDepartureMinute <= minute)
+		&& clients_waiting.front().client_iter->MaxDepartureMinute < minute)
 	{
 		client_waiting& f = clients_waiting.front();
 		typename list<client_remaining>::iterator ref = f.remaining_iter;
@@ -100,12 +119,10 @@ int MyStore::calculate_workers_needed(int amount)
 	return needed;
 }
 
-void MyStore::addClient(const MyClient& c)
+void MyStore::addClient(list<MyClient>::iterator iter)
 {
-	typename list<MyClient>::iterator iter = clients.push_back(c);
-	const MyClient& client = clients.back();
-	assert(client == c);
-	advanceTo(client.arriveMinute);
+	const MyClient& client = *iter;
+	action(client.arriveMinute);
 	if (client.banana <= resources.banana.in_stock
 		&& client.schweppes <= resources.schweppes.in_stock)
 	{
@@ -153,7 +170,7 @@ void MyStore::sendClientToWait(typename list<MyClient>::iterator iter)
 void MyStore::sendWorker(ResourceType t, int minute) 
 { 
 #ifdef TESTS
-actionHandler->onWorkerSend(0, t);
+actionHandler->onWorkerSend(minute, t);
 #endif
 
 	arriving_resources.push(arriving_resource(t, minute)); 
@@ -251,7 +268,7 @@ int MyStore::takeResource(ResourceType T, int amount)
 	}
 }
 
-bool MyStore::canBeServised(const MyClient& c) const
+bool MyStore::canBeServiced(const MyClient& c) const
 {
 	return c.banana <= resources.banana.in_stock 
 		&& c.schweppes <= resources.schweppes.in_stock;

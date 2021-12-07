@@ -6,26 +6,27 @@
 
 int main() try
 {
-#if 0
+#if 1
 	InputHandler ihandler;
 	ihandler.getInput();
 	MyStore MrazMag;
 	MrazMag.init(ihandler.workersCnt(), 0, 0);
 	std::cout << std::endl;
 	MrazMag.addClients(ihandler.getClients(), ihandler.clientsCnt());
+	MrazMag.executeDay();
 	std::cout << std::endl;
 	std::cout << MrazMag.getBanana() << ", " << MrazMag.getSchweppes() << std::endl;
 #endif
+#if 0
 	MyStore MrazMag;
-	MrazMag.init(0, 1000, 1000);
-	Client c1{ 0, 0, 10, 10 };
-	Client c2{ 0, 10, 0, 3 };
-	Client c3{ 0, 10, 10, 5 };
+	MrazMag.init(0, 0, 0);
+	Client c1{ 0, 0, 10, 1 };
 	MrazMag.addClients(&c1, 1);
-	MrazMag.addClients(&c2, 1);
-	MrazMag.addClients(&c3, 1);
+	//MrazMag.addClients(&c2, 1);
+	//MrazMag.addClients(&c3, 1);
 	MrazMag.advanceTo(1);
 	return 0;
+#endif
 }
 catch (const std::exception& e)
 {
