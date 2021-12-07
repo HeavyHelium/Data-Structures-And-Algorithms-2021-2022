@@ -93,8 +93,6 @@ void MyStore::action(int minute)
 
 		}
 		releaseClientsBefore(minute + 1);
-
-
 	}
 
 /*	actionHandler->onWorkerSend(0, ResourceType::banana);
