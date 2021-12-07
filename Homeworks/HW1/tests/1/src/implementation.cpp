@@ -1,132 +1,260 @@
-#include "interface.h"
-#include <cstddef>
-#include <vector>
-#include <queue>
-#include <iostream>
-#include "priority_queue.hpp"
+#include "implementation.hpp"
+#include <cassert>
+#include <cmath>
 
-
-constexpr unsigned RESTOCK_TIME = 60;
-constexpr unsigned RESTOCK_AMOUNT = 100;
-
-struct my_client : public Client
+void MyStore::setActionHandler(ActionHandler* handler) { actionHandler = handler; }
+void MyStore::init(int workerCount, int startBanana, int startSchweppes)
 {
-	my_client(unsigned arriveMinute, unsigned banana, unsigned schweppes, unsigned maxWaitTime, unsigned id)
-		: Client{ arriveMinute, banana, schweppes, maxWaitTime },
-		id(id)
-	{}
-	unsigned max_departure_time()const
-	{
-		return arriveMinute + maxWaitTime;
-	}
-	bool operator<(const my_client& other) const
-	{
-		return max_departure_time() > other.max_departure_time();
-	}
-	unsigned get_id() const { return id; }
-private:
-	unsigned id;
-};
+	workers.available = workers.total_cnt = workerCount;
+	resources.banana.in_stock = startBanana;
+	resources.schweppes.in_stock = startSchweppes;
+}
 
-
-struct MyStore : Store
+void MyStore::addClients(const Client* clients, int count)
 {
-	ActionHandler* actionHandler = nullptr;
-	void setActionHandler(ActionHandler* handler) override
-	
-	{ actionHandler = handler; }
+	for (int i = 0; i < count; ++i)
+		addClient(MyClient(clients[i], last_client_id++));
+}
 
-	void init(int workerCount, int startBanana, int startSchweppes) override
-	{
-		workers.total_cnt = workerCount;
-		banana.in_stock = startBanana;
-		schweppes.in_stock = startSchweppes;
-	}
+void MyStore::executeDay(const Client* clients, int count)
+{
+	addClients(clients, count);
+	if (count)
+		advanceTo(clients[count - 1].arriveMinute + clients[count - 1].maxWaitTime + 1);
+	//assert(clients_waiting.empty() && clients_in_order.empty());
+	while (!arriving_resources.empty())
+		delivery();
+	//assert(arriving_resources.empty());
+}
 
-	void addClients(const Client* clients, int count) override
+void MyStore::advanceTo(int minute) 
+{
+	if (!arriving_resources.empty() && arriving_resources.front().delivery_minute > minute
+		|| arriving_resources.empty())
+		releaseClientsBefore(minute);
+	else
 	{
-		for (std::size_t i = 0; i < count; ++i)
-			addClient();
-	}
-
-	void advanceTo(int minute) override
-	{
-		while ((!clients_waiting.empty()) 
-				&& clients_waiting.top().max_departure_time() <= minute)
+		while (!arriving_resources.empty() 
+			&& arriving_resources.front().delivery_minute <= minute)
 		{
-			const my_client& current_client = clients_waiting.top();
-			unsigned last_arrived_good = current_client.max_departure_time();
-			bool done = false;
-			while ((!arriving_goods.empty())
-				&& arriving_goods.front().time < current_client.max_departure_time())
+			int delivery_time = arriving_resources.front().delivery_minute;
+			releaseClientsBefore(delivery_time);
+			while (!arriving_resources.empty()
+				&& arriving_resources.front().delivery_minute == delivery_time)
 			{
-				last_arrived_good = arriving_goods.front().time;
-				switch(arriving_goods.front().type)
+				delivery();
+				for (list<client_remaining>::iterator i = clients_in_order.begin();
+					i != clients_in_order.end();)
 				{
-				case arriving_good::T::banana: 
-				{ banana.in_stock += RESTOCK_AMOUNT; banana.arriving -= RESTOCK_AMOUNT; }
-				case arriving_good::T::schweppes: 
-				{ schweppes.in_stock += RESTOCK_AMOUNT; schweppes.arriving -= RESTOCK_AMOUNT; }
-				}
-				arriving_goods.pop();
-				if (banana.in_stock >= current_client.banana && schweppes.in_stock >= current_client.schweppes)
-				{
-					// ready to go
-					std::cout << current_client.id << " " << last_arrived_good << " "
-						<< current_client.banana << " " << current_client.schweppes << std::endl;
-					banana.in_stock -= current_client.banana;
-					schweppes.in_stock -= current_client.schweppes;
-					clients_waiting.pop();
-					done = true;
-					break;
+					list<client_remaining>::iterator j = i;
+					++j;
+					const MyClient& c = *(i->client_iter);
+					if (canBeServised(c))
+					{
+						clientDeparture(c, delivery_time);
+						assert(clients_waiting.size() == clients_in_order.size());
+						typename list<client_waiting>::iterator ref = i->waiting_iter;
+						clients_waiting.erase(ref);
+//std::cout << "after first\n\n";
+						clients_in_order.erase(i);
+					}
+					i = j;// beacause of oterator invalidation
 				}
 			}
-			if (done) continue;
-			else
-			{
-				unsigned banana_to_take = current_client.banana > banana.in_stock ? banana.in_stock : current_client.banana;
-				unsigned schweppes_to_take = current_client.schweppes > schweppes.in_stock ? schweppes.in_stock : current_client.schweppes;
-				std::cout << current_client.id << " " << current_client.max_departure_time() << " "
-					<< banana_to_take << " " << schweppes_to_take << std::endl;
-				banana.in_stock -= banana_to_take;
-				schweppes.in_stock -= schweppes_to_take;
-				clients_waiting.pop();
-			}
+
 
 		}
+
 	}
 
-	virtual int getBanana() const
-	{ return banana.in_stock; }
+/*	actionHandler->onWorkerSend(0, ResourceType::banana);
+	actionHandler->onWorkerBack(0, ResourceType::schweppes);
+	actionHandler->onClientDepart(0, 0, 1, 2);*/
+}
 
-	virtual int getSchweppes() const
-	{ return schweppes.in_stock; }
-
-private:
-	struct goods_state { unsigned in_stock = 0; unsigned arriving = 0; } banana, schweppes;
-	struct workers_state { unsigned total_cnt = 0; unsigned available = 0; } workers;
-	struct arriving_good { enum T { banana, schweppes }type; unsigned time;  };
-	priority_queue<my_client> clients_waiting;
-	std::queue<arriving_good> arriving_goods;// this -- make a queue
-	unsigned last_client_id = 0;
-
-	void addClient(const my_client& c)
+void MyStore::releaseClientsBefore(int minute)
+{
+	while (!clients_waiting.empty() 
+		&& clients_waiting.front().client_iter->MaxDepartureMinute <= minute)
 	{
-		if (c.arriveMinute) advanceTo(c.arriveMinute);
-		if (c.banana > banana.in_stock || c.schweppes > schweppes.in_stock)
+		client_waiting& f = clients_waiting.front();
+		typename list<client_remaining>::iterator ref = f.remaining_iter;
+		MyClient& current = *f.client_iter;
+		clientDeparture(current, current.MaxDepartureMinute);
+		clients_waiting.pop_front();
+		clients_in_order.erase(ref);
+	}
+}
+
+int MyStore::getBanana() const { return resources.banana.in_stock; }
+
+int MyStore::getSchweppes() const { return resources.schweppes.in_stock; }
+
+/// @brief helper function to calculate the workers needed
+/// @param amount int
+/// @return int
+int MyStore::calculate_workers_needed(int amount)
+{
+	assert("amount should be non-negative" && amount >= 0);
+	int needed = std::ceil((double)amount / RESTOCK_AMOUNT);
+	return needed;
+}
+
+void MyStore::addClient(const MyClient& c)
+{
+	typename list<MyClient>::iterator iter = clients.push_back(c);
+	const MyClient& client = clients.back();
+	assert(client == c);
+	advanceTo(client.arriveMinute);
+	if (client.banana <= resources.banana.in_stock
+		&& client.schweppes <= resources.schweppes.in_stock)
+	{
+		resources.banana.to_be_taken += client.banana;
+		resources.schweppes.to_be_taken += client.schweppes;
+		clientDeparture(client, client.arriveMinute);
+	}
+	else
+	{
+		int banana_order = 0;
+		int schweppes_order = 0;
+		int banana_balance = resources.banana.estimate();
+		int schweppes_balance = resources.schweppes.estimate();
+		if (client.banana > banana_balance) banana_order = client.banana - banana_balance;
+		if (client.schweppes > schweppes_balance) schweppes_order = client.schweppes - schweppes_balance;
+//std::cout << "orders<b><s>: " << banana_order << ", " << schweppes_order << std::endl;
+		int workers_for_banana = calculate_workers_needed(banana_order);
+		int workers_for_schweppes = calculate_workers_needed(schweppes_order);
+		for (int i = 0; (i < workers_for_banana && workers.available); ++i, --workers.available)
+			sendWorker(ResourceType::banana, client.arriveMinute);
+		for (int i = 0; (i < workers_for_schweppes && workers.available); ++i, --workers.available)
+			sendWorker(ResourceType::schweppes, client.arriveMinute);
+//std::cout << "\n\n" << resources.banana.estimate() << ", " << resources.schweppes.estimate() << "\n\n";
+		sendClientToWait(iter);
+		resources.banana.to_be_taken += client.banana;
+		resources.schweppes.to_be_taken += client.schweppes;
+	}
+}
+
+void MyStore::sendClientToWait(typename list<MyClient>::iterator iter)
+{
+	assert(!clients.empty());
+	const MyClient& client = clients.back();
+	typename list_with_sorted_insertion<client_waiting>::iterator
+		waiting_iter = clients_waiting.insert(client_waiting{ iter });
+	typename list<client_remaining>::iterator
+		remaining_iter = clients_in_order.push_back(client_remaining{ iter, waiting_iter });
+	waiting_iter->remaining_iter = remaining_iter;
+
+}
+
+/// @brief adds resource to resources queue and updates states
+/// @param t ResourseType
+/// @param minute int
+void MyStore::sendWorker(ResourceType t, int minute) 
+{ 
+#ifdef TESTS
+actionHandler->onWorkerSend(0, t);
+#endif
+
+	arriving_resources.push(arriving_resource(t, minute)); 
+	switch (t)
+	{
+		case ResourceType::banana: resources.banana.arriving += RESTOCK_AMOUNT; break;
+		case ResourceType::schweppes: resources.schweppes.arriving += RESTOCK_AMOUNT; break;
+	}
+	--workers.available;
+}
+
+/// @brief pops resource off the resources queue and updates states
+void MyStore::delivery()
+{
+	assert(!arriving_resources.empty() && "No deliveries when queue of arrivng resources is empty.");
+	const arriving_resource& resource = arriving_resources.front();
+#ifdef CONSOLE
+	std::cout << "D " << resource.delivery_minute << " ";
+#endif
+#ifdef TESTS 
+	actionHandler->onWorkerBack(resource.delivery_minute, resource.type);
+#endif
+	switch (resource.type)
+	{
+		case ResourceType::banana: 
+#ifdef CONSOLE 
+std::cout << "banana\n"; 
+#endif 
+			resources.banana.arriving -= RESTOCK_AMOUNT;
+			resources.banana.in_stock += RESTOCK_AMOUNT;
+			break;
+		case ResourceType::schweppes:
+#ifdef CONSOLE
+std::cout << "schweppes\n";
+#endif
+			resources.schweppes.arriving -= RESTOCK_AMOUNT;
+			resources.schweppes.in_stock += RESTOCK_AMOUNT;
+			break;
+	} 
+	arriving_resources.pop();
+	++workers.available;
+}
+
+/// @brief 
+/// @param client 
+/// @param minute 
+void MyStore::clientDeparture(const MyClient& client, int minute)
+{
+	int banana_taken = takeResource(ResourceType::banana, client.banana);
+	int schweppes_taken = takeResource(ResourceType::schweppes, client.schweppes);
+#ifdef TESTS
+actionHandler->onClientDepart(client.id, minute, banana_taken, schweppes_taken);
+#endif
+//std::cout << "goes: ";
+#ifdef CONSOLE
+	std::cout << client.id << " " << minute << " "
+		<< banana_taken << " " << schweppes_taken << " " << std::endl;
+#endif
+}
+/// @brief if amount is smaller than or equal to the resource in stock, takes amount units of resource, 
+/// otherwise takes what is in stock
+/// @param T ResourceType
+/// @param amount int
+/// @return int
+int MyStore::takeResource(ResourceType T, int amount)
+{
+	/// TODO: make template and avoid code duplicaion
+	switch (T)
+	{
+		case ResourceType::banana:
 		{
-			if(c.banana <= (banana.in_stock + banana.arriving))
+			int banana_taken = 0;
+			if (amount > resources.banana.in_stock)
 			{
-				clients_waiting.push(c);
+				banana_taken = resources.banana.in_stock;
+				resources.banana.in_stock = 0;
 			}
+			else { banana_taken = amount; resources.banana.in_stock -= banana_taken; }
+			resources.banana.to_be_taken -= banana_taken;
+			return banana_taken;
 		}
-		else
+		case ResourceType::schweppes:
 		{
-
+			int schweppes_taken = 0;
+			if (amount > resources.schweppes.in_stock)
+			{
+				schweppes_taken = resources.schweppes.in_stock;
+				resources.schweppes.in_stock = 0;
+			}
+			else { schweppes_taken = amount; resources.schweppes.in_stock -= schweppes_taken; }
+			resources.schweppes.to_be_taken -= schweppes_taken;
+			return schweppes_taken;
 		}
 
-	};
-};
+	}
+}
 
-Store* createStore() 
-{ return new MyStore(); } 
+bool MyStore::canBeServised(const MyClient& c) const
+{
+	return c.banana <= resources.banana.in_stock 
+		&& c.schweppes <= resources.schweppes.in_stock;
+}
+
+Store *createStore() { return new MyStore(); }

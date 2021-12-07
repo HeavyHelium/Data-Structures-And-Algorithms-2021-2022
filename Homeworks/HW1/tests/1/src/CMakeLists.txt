@@ -3,12 +3,13 @@ cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 project(tests)
 
 set(SOURCES
-	../../../group-G/source/common/catch.hpp
-
 	interface.h
 	tests.cpp
-
+	implementation.hpp
 	implementation.cpp
+	list.hpp
+	list_with_sorted_insertion.hpp
+	queue.hpp
 )
 
 add_executable(${PROJECT_NAME} ${SOURCES})
