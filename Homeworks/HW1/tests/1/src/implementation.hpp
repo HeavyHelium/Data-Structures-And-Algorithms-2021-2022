@@ -1,11 +1,11 @@
 #ifndef  IMPLEMENTATION_HPP
 #define IMPLEMENTATION_HPP
 
-#if 0
+#if 1
 #define TESTS
 #endif
 
-#if 1
+#if 0
 #define CONSOLE
 #endif
 
