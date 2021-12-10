@@ -1,5 +1,5 @@
 ﻿  tests.cpp
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\revamp\hw1\hw1\implementation.h(338,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\revamp\hw1\hw1\implementation.h(333,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\revamp\tests\tests\tests.h(278,21): warning C4018: '<': signed/unsigned mismatch
 G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\revamp\tests\tests\list_tests.h(21,21): warning C4553: '==': result of expression not used; did you intend '='?
 G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\revamp\tests\tests\list_tests.h(31,21): warning C4553: '==': result of expression not used; did you intend '='?
@@ -9,5 +9,5 @@ G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\revamp\tests\tests\forward_list_test
 G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\revamp\tests\tests\forward_list_tests.h(30,21): warning C4553: '==': result of expression not used; did you intend '='?
 G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\revamp\tests\tests\forward_list_tests.h(42,21): warning C4553: '==': result of expression not used; did you intend '='?
 G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\revamp\tests\tests\forward_list_tests.h(49,21): warning C4553: '==': result of expression not used; did you intend '='?
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\revamp\hw1\hw1\implementation.h(487): warning C4715: 'MyStore::takeResource': not all control paths return a value
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\revamp\hw1\hw1\implementation.h(446): warning C4715: 'MyStore::takeResource': not all control paths return a value
   tests.vcxproj -> G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\revamp\hw1\Debug\tests.exe
