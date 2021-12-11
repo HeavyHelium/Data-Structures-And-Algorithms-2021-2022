@@ -40,14 +40,14 @@ TEST_CASE("Insertion works properly", "[list]")
     {
         l1.push_front(5);
         REQUIRE(l1.size() == 1);
-        *l1.begin() == 5;
+        REQUIRE(*l1.begin() == 5);
         l1.push_front(4);
         REQUIRE(l1.size() == 2);
-        (*l1.begin() == 4);
+        REQUIRE((*l1.begin() == 4));
         REQUIRE(*(++l1.begin()) == 5);
         l1.insert(l1.begin(), 6);
         REQUIRE(l1.size() == 3);
-        *l1.begin() == 6;
+        REQUIRE(*l1.begin() == 6);
         l1.insert(++l1.begin(), 7);
         REQUIRE(l1.size() == 4);
         REQUIRE(*(++l1.begin()) == 7);

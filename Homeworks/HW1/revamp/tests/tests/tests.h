@@ -86,16 +86,6 @@ struct TestStore : ActionHandler {
 #define LastEvent() (store.log.back())
 
 
-TEST_CASE("Calculate workers needed works correctly", "[MyStore]")
-{
-	REQUIRE(MyStore::calculate_workers_needed(220) == 3);
-	REQUIRE(MyStore::calculate_workers_needed(200) == 2);
-	REQUIRE(MyStore::calculate_workers_needed(120) == 2);
-	REQUIRE(MyStore::calculate_workers_needed(100) == 1);
-	REQUIRE(MyStore::calculate_workers_needed(50) == 1);
-}
-
-
 TEST_CASE("No workers, empty store, up to one client") {
 	TestStore store;
 	store.init(0, 0, 0);

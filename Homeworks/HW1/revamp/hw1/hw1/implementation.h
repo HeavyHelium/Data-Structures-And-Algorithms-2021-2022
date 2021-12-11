@@ -199,7 +199,7 @@ void MyStore::advanceTo(int minute)
 			actionBefore(iter->arriveMinute - 1);
 		actionAt(iter->arriveMinute);
 	}
-	actionBefore(minute);
+	actionBefore(minute);// in case there are still events which are going to take place
 }
 
 void MyStore::actionAt(int minute)
@@ -279,7 +279,7 @@ void MyStore::actionBefore(int minute)
 			delivery(delivery_time);
 			releaseClientsByOrderBefore(delivery_time);
 		}
-		//releaseClientsByNecessityBefore(minute);// if after delivery someone has to go
+		releaseClientsByNecessityBefore(minute);// if after delivery someone has to go
 	}
 }
 
@@ -337,8 +337,6 @@ void MyStore::sendWorker(ResourceType t, int minute)
 #ifdef TESTS
 	actionHandler->onWorkerSend(minute, t);
 #endif
-
-
 	arriving_resources.push(arriving_resource(t, minute));
 }
 
@@ -378,9 +376,6 @@ void MyStore::delivery(int minute)
 	}
 }
 
-/// @brief 
-/// @param client 
-/// @param minute 
 void MyStore::clientDeparture(const MyClient& client, int minute)
 {
 	int banana_taken = takeResource(ResourceType::banana, client.banana);
