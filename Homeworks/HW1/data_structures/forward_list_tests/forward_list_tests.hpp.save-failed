@@ -1,0 +1,72 @@
+#ifndef FORWARD_LIST_TESTS_HPP_INCLUDED
+#define FORWARD_LIST_TESTS_HPP_INCLUDED
+#include "../forward_list/forward_list.hpp"
+
+
+TEST_CASE("Objects are well-constructed initially", "[forward_list]")
+{
+    forward_list<int> l1;
+    REQUIRE(l1.size() == 0);
+}
+
+TEST_CASE("Insertion works properly", "[forward_list]")
+{
+    forward_list<int> l1;
+    SECTION("push_front to an empty list works")
+    {
+        l1.push_front(5);
+        REQUIRE(l1.size() == 1);
+        *l1.begin() == 5;
+        l1.push_front(4);
+        REQUIRE(l1.size() == 2);
+        (*l1.begin() == 4);
+        REQUIRE(*(++l1.begin()) == 5);
+    }
+    SECTION("insertion at a given position works")
+    {
+        l1.push_front(5);
+        REQUIRE(l1.size() == 1);
+        *l1.begin() == 5;
+        l1.push_front(4);
+        REQUIRE(l1.size() == 2);
+        (*l1.begin() == 4);
+        REQUIRE(*(++l1.begin()) == 5);
+        std::cout << l1.size() << std::endl;
+        l1.insert(l1.begin(), 6);
+        REQUIRE(l1.size() == 3);
+        *l1.begin() == 6;
+        l1.insert(++l1.begin(), 7);
+        REQUIRE(l1.size() == 4);
+        REQUIRE(*(++l1.begin()) == 7);
+        REQUIRE(*(++l1.begin()) == 7);
+    }
+}
+
+TEST_CASE("Removal works properly", "[forward_list]")
+{
+    forward_list<int> fl;
+    for(int i = 9; i >= 0; --i)
+        fl.push_front(i);
+    fl.pop_front();
+    REQUIRE(fl.size() == 9);
+    f2.erase(++begin());
+    REQUIRE(fl.size() == 8);
+    REQUIRE(*fl.begin() == 1);
+    REQUIRE(*(++fl.begin()) == 3);
+}
+
+TEST_CASE("Copy semantics works properly", "[forward_list]")
+{
+    SECTION("Copy assignment")
+    {
+
+    }
+
+    SECTION("Copy construction")
+    {
+
+    }
+}
+
+
+#endif // FORWARD_LIST_TESTS_HPP_INCLUDED

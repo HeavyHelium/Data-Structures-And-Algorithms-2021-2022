@@ -1,6 +1,0 @@
-﻿  main.cpp
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\for_submission\console\console\input.hpp(32,29): warning C4018: '<': signed/unsigned mismatch
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\for_submission\console\console\input.hpp(51,29): warning C4018: '<': signed/unsigned mismatch
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\for_submission\src\implementation.hpp(294,13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\for_submission\src\implementation.hpp(442): warning C4715: 'MyStore::takeResource': not all control paths return a value
-  console.vcxproj -> G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\for_submission\hw1_82140\Debug\console.exe

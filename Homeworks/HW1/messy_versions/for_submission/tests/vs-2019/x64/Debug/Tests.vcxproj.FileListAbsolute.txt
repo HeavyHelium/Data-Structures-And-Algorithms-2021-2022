@@ -1,0 +1,3 @@
+G:\FMI\Year 2\fall_winter\sdp-2021-22\tests\1\vs-2019\x64\Debug\Tests.exe
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\tests\1\vs-2019\x64\Debug\Tests.exe
+G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\for_submission\tests\vs-2019\x64\Debug\Tests.exe
