@@ -1,6 +1,0 @@
-﻿  tests.cpp
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\homework1_82140\homework_1\tests.h(268,21): warning C4018: '<': signed/unsigned mismatch
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\homework1_82140\homework_1\list_tests.h(21,21): warning C4553: '==': result of expression not used; did you intend '='?
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\homework1_82140\homework_1\list_tests.h(31,21): warning C4553: '==': result of expression not used; did you intend '='?
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\homework1_82140\homework_1\implementation.h(424): warning C4715: 'MyStore::takeResource': not all control paths return a value
-  tests.vcxproj -> G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\homework1_82140\homework_1\Debug\tests.exe
