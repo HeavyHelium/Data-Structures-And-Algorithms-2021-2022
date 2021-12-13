@@ -35,6 +35,7 @@ public:
     bool balanced()           const { return is_balanced(root); }
     bool perfectly_balanced() const { return is_perfectly_balanced(root); }
     void print()              const { print_infix(root); std::cout << std::endl; }
+    bool check_invariant()    const { return is_binary_search_tree(root); }
     /// mind that this does a dfs on the tree and hence is O(n);
     /// size(), on the other hand, is O(1)
     std::size_t weight()      const { return weight(root); }
@@ -184,6 +185,34 @@ private:
             std::cout << root -> key << " ";
             print_infix(root -> right);
         }
+   }
+
+   static const node* find_max(const node* root)
+   {
+        if(!root->right)
+            return root;
+        return find_max(root->right);
+   }
+
+   static const node* find_min(const node* root)
+   {
+        if(!root->left)
+            return root;
+        return find_min(root->left);
+   }
+
+   /// a tree is a BST iff:
+   /// binary search tree (BST), also called an ordered or sorted binary tree,
+   /// is a rooted binary tree data structure whose internal nodes
+   /// store a key greater than all the keys in the node’s left subtree
+   /// and less than those in its right subtree
+   static bool is_binary_search_tree(const node* root)
+   {
+        if(!root) return true;
+        return root->key <= find_max(root)->key &&
+               root->key >= find_min(root)->key &&
+               is_binary_search_tree(root->left)&&
+               is_binary_search_tree(root->right);
    }
 };
 #endif
