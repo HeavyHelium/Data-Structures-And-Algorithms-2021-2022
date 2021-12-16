@@ -11,7 +11,9 @@ enum command_type
 {
     Help,
     Load,
+    Load_1arg,
     Save,
+    Save_1arg,
     Find,
     Num_subordinates,
     Manager,
@@ -57,13 +59,27 @@ struct command
              command_type::Load,
             "load",
             {"branch name", "filename"},
-            "loads a branch from a file and associates it with the name given"},
+            "loads a branch from a file and associates it with the name given"
+          },
+          {
+                  command_type::Load_1arg,
+                  "load",
+                  {"branch name"},
+                  "loads a branch from the console and associates it with the name given"
+          },
           {
              command_type::Save,
             "save",
             {"branch name", "filename"},
             "saves information about the branch in a file; if filename is empty, "
             "then outputs information on the standard output"
+          },
+          {
+                  command_type::Save_1arg,
+                  "save",
+                  {"branch name", "filename"},
+                  "saves information about the branch in a file; if filename is empty, "
+                  "then outputs information on the standard output"
           },
           {
               command_type::Find,

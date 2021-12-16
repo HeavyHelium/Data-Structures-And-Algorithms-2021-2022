@@ -62,9 +62,14 @@ public:
         if(!ifile)
             throw std::runtime_error("failed to open input file with path \"" +
                                      path + '\"');
-        std::string line;
-        std::string text;
+        std::string line, text;
         while(std::getline(ifile, line)) text += line + '\n';
+        return text;
+    }
+    static std::string console_input_to_string()
+    {
+        std::string line, text;
+        while(std::getline(std::cin, line)) text += line + '\n';
         return text;
     }
     void parse_text(const std::string& text)
