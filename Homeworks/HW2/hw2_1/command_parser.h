@@ -6,7 +6,6 @@
 #include "string_operations.h"
 #include <stdexcept>
 
-// <name, info>
 enum command_type
 {
     Help,
@@ -27,7 +26,6 @@ enum command_type
     Modernize,
     Exit
 };
-
 struct name_info_pair
 {
     command_type type;
@@ -43,7 +41,6 @@ struct name_info_pair
         return "\t" + info + "\n" + "\t\t" + basic_info;
     }
 };
-
 struct command
 {
 
@@ -157,8 +154,6 @@ struct command
     command_type type;
     const std::vector<std::string> arguments;
 };
-
-
 class command_parser
 {
     std::string command_name;
@@ -187,36 +182,6 @@ private:
             return command{ command_type::Load_1arg, arguments };
         if(command_name == "save" && arguments.size() == 1)
             return command{ command_type::Save_1arg, arguments };
-        /*
-        if(command_name == "save" && arguments.size() > 1)
-        {
-            std::string file_name;
-            std::string branch_name = arguments[0];
-            for(std::size_t i = 1; i < arguments.size(); ++i)
-                file_name += arguments[i];
-            arguments.clear();
-            arguments.push_back(branch_name);
-            arguments.push_back(file_name);
-            return command{ command_type::Save, arguments};
-        }
-        else if(command_name == "save") throw std::invalid_argument("command " +
-                                                                    command_name +
-                                                                    " wrong format; for more info, type help");
-        if(command_name == "load" && arguments.size() > 1)
-        {
-            std::string file_name;
-            std::string branch_name = arguments[0];
-            for(std::size_t i = 1; i < arguments.size(); ++i)
-                file_name += arguments[i];
-            arguments.clear();
-            arguments.push_back(branch_name);
-            arguments.push_back(file_name);
-            return command{ command_type::Load, arguments};
-        }
-        else if(command_name == "load") throw std::invalid_argument("command " +
-                                                                    command_name +
-                                                                    " wrong format; for more info, type help");
-        -*/
          for(const name_info_pair& elem : command::commands_supported)
         {
             if(elem.name == command_name)

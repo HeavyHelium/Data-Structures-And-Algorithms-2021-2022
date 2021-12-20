@@ -1,0 +1,3 @@
+G:/FMI/Year 2/fall_winter/SDP/lecture_materials/graphs/cmake-build-debug/CMakeFiles/graphs.dir
+G:/FMI/Year 2/fall_winter/SDP/lecture_materials/graphs/cmake-build-debug/CMakeFiles/edit_cache.dir
+G:/FMI/Year 2/fall_winter/SDP/lecture_materials/graphs/cmake-build-debug/CMakeFiles/rebuild_cache.dir
