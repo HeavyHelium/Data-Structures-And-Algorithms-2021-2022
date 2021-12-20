@@ -2,15 +2,18 @@
 #define HW2_1_INPUT_HANDLER_H
 
 #include "command_parser.h"
-#include "file_parser.h"
+#include "data_parser.h"
 #include "string_operations.h"
 #include <iostream>
 #include "interface.h"
 #include <vector>
+#include <unordered_map>
+#include <string>
 
+/// deals with command-line interface
 class input_handler
 {
-    std::vector<Hierarchy*> branches;
+    std::unordered_map<std::string, Hierarchy*> branches;
     bool getting_input = false;
 public:
     input_handler() = default;
@@ -45,26 +48,46 @@ private:
             }
             case command_type::Load:
             {
-                std::string input = data_parser::file_to_string(c.arguments[1]);
+                std::string input = (data_parser::file_data(c.arguments[1]));
                 Hierarchy* temp = new Hierarchy(input);
-                temp->add_name(c.arguments[0]);
-                branches.push_back(temp);
+                branches.insert({ c.arguments[0], temp });
                 std::cout << "Successfully loaded branch "
                           << c.arguments[0] << '\n';
                 break;
             }
+            case command_type::Load_1arg:
+            {
+                std::string input = (data_parser::console_data());
+                Hierarchy* temp = new Hierarchy(input);
+                branches.insert({ c.arguments[0], temp });
+                std::cout << "Successfully loaded branch "
+                          << c.arguments[0] << '\n';
+                break;
+            }
+            case command_type::Save:
+            {
+                std::ofstream oFile(c.arguments[1]);
+                auto br = branches.find(c.arguments[0]);
+                if(br == branches.end()) throw std::invalid_argument("no such branch");
+                oFile << br->second->print();
+                break;
+            }
+            case command_type::Save_1arg:
+            {
+                auto br = branches.find(c.arguments[0]);
+                if(br == branches.end()) throw std::invalid_argument("no such branch");
+                std::cout << br->second->print();
+                break;
+            }
             case command_type::Manager:
             {
-                for(Hierarchy* branch : branches)
+                for(const auto& b : branches)
                 {
-                    if(branch->get_name() == c.arguments[0])
-                    {
-                        std::string temp = branch->manager(c.arguments[1]);
-                        std::cout << "The manager of "
-                                  << c.arguments[1] << " is "
-                                  << temp
-                                  << ".\n";
-                    }
+                    std::string temp = b.second->manager(c.arguments[1]);
+                    std::cout << "The manager of "
+                              << c.arguments[1] << " is "
+                              << temp
+                              << ".\n";
                 }
                 break;
             }
@@ -81,8 +104,8 @@ private:
 public:
     ~input_handler()
     {
-        for(Hierarchy*& branch : branches)
-            delete branch;
+        for(auto& b: branches)
+            delete b.second;
     }
 };
 

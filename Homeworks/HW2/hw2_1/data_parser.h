@@ -1,5 +1,5 @@
-#ifndef HW2_1_FILE_PARSER
-#define HW2_1_FILE_PARSER
+#ifndef HW2_1_DATA_PARSER
+#define HW2_1_DATA_PARSER
 #include <vector>
 #include <string>
 #include <fstream>
@@ -18,6 +18,7 @@ struct manager_subordinate
                  << "-"
                  << p.subordinate;
     }
+    /// Do not look ar this abomination, it is not even used
     friend std::istream& operator>>(std::istream& is,
                                     manager_subordinate& p)
     {
@@ -55,26 +56,20 @@ class data_parser
     std::vector<manager_subordinate> ms_pairs;
     std::size_t line = 1;
 public:
-    data_parser() = default;
-    static std::string file_to_string(const std::string& path)
+    static std::string console_data()
     {
-        std::ifstream ifile(path.c_str(), std::ios_base::in);
-        if(!ifile)
-            throw std::runtime_error("failed to open input file with path \"" +
-                                     path + '\"');
-        std::string line, text;
-        while(std::getline(ifile, line)) text += line + '\n';
+        std::string text;
+        std::string line;
+        while(std::getline(std::cin, line)) {
+            text += line;
+            text.push_back('\n');
+        }
+        std::cin.clear();
         return text;
     }
-    static std::string console_input_to_string()
-    {
-        std::string line, text;
-        while(std::getline(std::cin, line)) text += line + '\n';
-        return text;
-    }
+    static std::string file_data(const std::string& path) { return file_to_string(path); }
     void parse_text(const std::string& text)
     {
-        //std::cout << text << std::endl;
         const char* str = text.c_str();
         while(*str)
         {
@@ -95,6 +90,14 @@ public:
             }
         }
     }
+    data_parser() = default;
+    const std::vector<manager_subordinate>& pairs() { return ms_pairs; }
+    void clear_states()
+    {
+        line = 1;
+        ms_pairs.clear();
+    }
+private:
     static std::vector<std::string> parse_line(const char*& text)
     {
         //std::cout << text << std::endl;
@@ -111,8 +114,14 @@ public:
         skip_spaces_and_tabs(text);
         words.push_back(word);
         word.clear();
-        while(*text && !is_white_space(*text))
-            word.push_back(*text++);
+        if(words[0] == "load" || words[0] == "save")
+        {
+            while(*text && *text != '\n')
+                word.push_back(*text);
+        }
+        else
+            while(*text && !is_white_space(*text))
+                word.push_back(*text++);
         skip_spaces_and_tabs(text);
         if(word.empty() || *text && *text != '\n')
         {
@@ -122,11 +131,19 @@ public:
         words.push_back(word);
         return words;
     }
-    const std::vector<manager_subordinate>& pairs() { return ms_pairs; }
-private:
+    static std::string file_to_string(const std::string& path)
+    {
+        std::ifstream ifile(path.c_str(), std::ios_base::in);
+        if(!ifile)
+            throw std::runtime_error("failed to open input file with path \"" +
+                                     path + '\"');
+        std::string line, text;
+        while(std::getline(ifile, line)) text += line + '\n';
+        return text;
+    }
 };
 
-#endif //HW2_1_FILE_PARSER
+#endif //HW2_1_DATA_PARSER
 
 //
 //

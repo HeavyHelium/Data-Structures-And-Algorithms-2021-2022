@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include "binary_tree.h"
-#include "file_parser.h"
+#include "data_parser.h"
 
 using std::string;
 

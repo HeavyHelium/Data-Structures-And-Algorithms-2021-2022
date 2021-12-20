@@ -288,7 +288,7 @@ private:
             q.pop();
             for(const node* it = current->child; it; it = it->brother)
             {
-                result += current->key + "-" + it->key;
+                result += current->key + "-" + it->key += "\n";
                 q.push(it);
             }
         }

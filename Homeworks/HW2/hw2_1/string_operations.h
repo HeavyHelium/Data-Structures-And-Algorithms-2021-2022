@@ -21,13 +21,11 @@ void skip_white_space(const char*& str)
     while(*str && is_white_space(*str))
         ++str;
 }
-
 void skip_spaces_and_tabs(const char*& str)
 {
     while(*str && is_white_space(*str) && *str != '\n')
         ++str;
 }
-
 std::string extract_word(const char*& str)
 {
     std::string word;

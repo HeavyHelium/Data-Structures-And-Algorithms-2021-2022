@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "g:/FMI/Year 2/fall_winter/SDP/Homeworks/HW2/hw2_1/cmake-build-debug"
+			"value" : "g:/FMI/Year 2/fall_winter/SDP/lecture_materials/tr/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -623,7 +623,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "G:/FMI/Year 2/fall_winter/SDP/Homeworks/HW2/hw2_1"
+			"value" : "G:/FMI/Year 2/fall_winter/SDP/lecture_materials/tr"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -635,7 +635,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Program Files (x86)/hw2_1"
+			"value" : "C:/Program Files (x86)/tr"
 		},
 		{
 			"name" : "CMAKE_LINKER",
@@ -851,7 +851,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "hw2_1"
+			"value" : "tr"
 		},
 		{
 			"name" : "CMAKE_RANLIB",
@@ -1230,7 +1230,7 @@
 			"value" : "FALSE"
 		},
 		{
-			"name" : "hw2_1_BINARY_DIR",
+			"name" : "tr_BINARY_DIR",
 			"properties" : 
 			[
 				{
@@ -1239,10 +1239,10 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "G:/FMI/Year 2/fall_winter/SDP/Homeworks/HW2/hw2_1/cmake-build-debug"
+			"value" : "G:/FMI/Year 2/fall_winter/SDP/lecture_materials/tr/cmake-build-debug"
 		},
 		{
-			"name" : "hw2_1_IS_TOP_LEVEL",
+			"name" : "tr_IS_TOP_LEVEL",
 			"properties" : 
 			[
 				{
@@ -1254,7 +1254,7 @@
 			"value" : "ON"
 		},
 		{
-			"name" : "hw2_1_SOURCE_DIR",
+			"name" : "tr_SOURCE_DIR",
 			"properties" : 
 			[
 				{
@@ -1263,7 +1263,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "G:/FMI/Year 2/fall_winter/SDP/Homeworks/HW2/hw2_1"
+			"value" : "G:/FMI/Year 2/fall_winter/SDP/lecture_materials/tr"
 		}
 	],
 	"kind" : "cache",
