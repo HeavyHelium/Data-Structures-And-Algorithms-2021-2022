@@ -43,7 +43,7 @@ struct name_info_pair
 };
 struct command
 {
-
+    /// TODO: change to static arrays or parse from a file too
     static inline std::vector<name_info_pair> commands_supported =
             {
                     {
@@ -166,7 +166,15 @@ public:
         skip_white_space(str);
         if(*str) command_name = extract_word(str);
         while(*str)
+        {
+            if((command_name == "load" || command_name == "save") && arguments.size() == 1)
+            {
+                arguments.emplace_back(str);
+                break;
+            }
             arguments.push_back(extract_word(str));
+        }
+
         return inspect();
     }
     void clear()

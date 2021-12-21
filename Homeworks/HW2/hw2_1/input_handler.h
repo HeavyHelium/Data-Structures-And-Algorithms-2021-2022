@@ -70,6 +70,8 @@ private:
                 auto br = branches.find(c.arguments[0]);
                 if(br == branches.end()) throw std::invalid_argument("no such branch");
                 oFile << br->second->print();
+                std::cout << "Successfully saved branch "
+                          << c.arguments[0] << '\n';
                 break;
             }
             case command_type::Save_1arg:

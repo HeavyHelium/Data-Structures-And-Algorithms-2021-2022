@@ -82,14 +82,8 @@ private:
         skip_spaces_and_tabs(text);
         words.push_back(word);
         word.clear();
-        if(words[0] == "load" || words[0] == "save")
-        {
-            while(*text && *text != '\n')
-                word.push_back(*text);
-        }
-        else
-            while(*text && !is_white_space(*text))
-                word.push_back(*text++);
+        while(*text && !is_white_space(*text))
+            word.push_back(*text++);
         skip_spaces_and_tabs(text);
         if(word.empty() || *text && *text != '\n')
             throw std::logic_error("wrong input format");

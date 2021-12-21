@@ -1,6 +1,16 @@
 #include <iostream>
 
+/// for later: implement:
+///------------Traversal------------
+///     * DFS
+///     * BFS
+///----------Shortest path----------
+///     * Floyd's algorithm
+///     * Dijkstra's algorithm
+///     * Bellman-Ford's algorithm
+
+
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+
     return 0;
 }
