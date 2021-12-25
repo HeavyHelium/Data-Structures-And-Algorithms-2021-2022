@@ -1,0 +1,38 @@
+Uspeshnia-Gosho
+Uspeshnia - Misho
+Gosho - Pesho
+Gosho - Dancho
+Pesho - Alex
+Dancho-Boris
+Dancho-Kamen
+Uspeshnia - Slavi
+Slavi - Slav1
+Slavi - Slav2
+Slav1 - Mecho
+Mecho-Q12Adl
+Pesho-Sherlock
+Sherlock-George
+Sherlock-John_Watson
+Sherlock-Ms_Hudson
+Pesho - Slartibarfast
+Pesho-Hercule
+Hercule-Hastings
+Pesho-Elizabeth
+Elizabeth-William
+Elizabeth-Kate
+Elizabeth-Harry
+Elizabeth-Andrew
+Andrew-Fergie
+Elizabeth-Megan
+Megan-Lilibet
+Megan-Archie
+Archie-Doggo1
+Archie-Doggo2
+Archie-Cat1
+Archie-Cat2
+Archie-Cat3
+Lilibet-Doggo3
+Lilibet-Doggo4
+Lilibet-Cat4
+Lilibet-Cat5
+Lilibet-Cat6

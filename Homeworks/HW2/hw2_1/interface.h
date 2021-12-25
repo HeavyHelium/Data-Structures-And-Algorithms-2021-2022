@@ -1,13 +1,12 @@
 #pragma once
 #include <string>
-#include "binary_tree.h"
+#include "tree.h"
 #include "data_parser.h"
 
 using std::string;
 
 class Hierarchy
 {
-    std::string name;
 public:
     Hierarchy(Hierarchy&& r) noexcept;
     Hierarchy(const Hierarchy& r);
@@ -33,20 +32,13 @@ public:
     void modernize();
 
     Hierarchy join(const Hierarchy& right) const;
-
-    void add_name(const std::string& name)
-    { this->name = name; }
-    const std::string& get_name() const
-    {
-        return name;
-    }
     //If you need it - add more public methods here
 private:
     tree<std::string> branch;
 };
 
 Hierarchy::Hierarchy(Hierarchy&& r) noexcept
-    : branch(r.branch)
+    : branch(std::move(r.branch))
 {}
 
 Hierarchy::Hierarchy(const Hierarchy& r)

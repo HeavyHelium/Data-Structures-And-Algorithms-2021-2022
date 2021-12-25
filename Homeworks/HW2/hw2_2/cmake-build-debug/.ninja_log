@@ -1,0 +1,21 @@
+# ninja log v5
+1	11255	6611993324437970	CMakeFiles/tests.dir/tests.cpp.obj	9b10e90ae792468b
+3516	4020	6621600043398484	console.exe	60f4933ff3f2fb69
+11256	12563	6611993335697557	tests.exe	c7cddfa3be478c13
+15	3515	6621600038278475	CMakeFiles/console.dir/console.cpp.obj	911e3912098aed3
+93	1850	6620902823197204	build.ninja	7b46d529f748b9bb
+66	3418	6621600037268470	CMakeFiles/console.dir/implementation.cpp.obj	8756a0f19d1a801e
+27	743	6620903764344625	CMakeFiles/console.dir/string_operations.cpp.obj	ef82010939689c76
+6	2861	6621601363560435	CMakeFiles/console.dir/implementation.cpp.obj	8756a0f19d1a801e
+26	2922	6621601364200464	CMakeFiles/console.dir/console.cpp.obj	911e3912098aed3
+2923	3415	6621601369060401	console.exe	60f4933ff3f2fb69
+6	4037	6621602610194333	CMakeFiles/console.dir/implementation.cpp.obj	8756a0f19d1a801e
+41	4038	6621602610254331	CMakeFiles/console.dir/console.cpp.obj	911e3912098aed3
+4039	4555	6621602615434337	console.exe	60f4933ff3f2fb69
+22	1742	6621606272636578	CMakeFiles/console.dir/implementation.cpp.obj	8756a0f19d1a801e
+5	1826	6621606273476568	CMakeFiles/console.dir/console.cpp.obj	911e3912098aed3
+1827	2173	6621606276886796	console.exe	60f4933ff3f2fb69
+4	1481	6621607203567541	CMakeFiles/console.dir/console.cpp.obj	911e3912098aed3
+1481	1796	6621607206687764	console.exe	60f4933ff3f2fb69
+5	1455	6621607996092890	CMakeFiles/console.dir/console.cpp.obj	911e3912098aed3
+1455	1778	6621607999312882	console.exe	60f4933ff3f2fb69
