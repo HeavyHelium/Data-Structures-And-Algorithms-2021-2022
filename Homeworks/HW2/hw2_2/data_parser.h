@@ -6,6 +6,7 @@
 #include <cstddef>
 #include <cassert>
 #include "string_operations.h"
+#include <iostream>
 
 struct manager_subordinate
 {

@@ -98,14 +98,14 @@ private:
             }
             case command_type::Manager:
             {
-                for(const auto& b : branches)
-                {
-                    std::string temp = b.second->manager(c.arguments[1]);
-                    std::cout << "The manager of "
-                              << c.arguments[1] << " is "
-                              << temp
-                              << ".\n";
-                }
+                auto br = branches.find(c.arguments[0]);
+                if(br == branches.end())
+                    throw std::invalid_argument("no such branch");
+                std::string temp = br->second->manager(c.arguments[1]);
+                std::cout << "The manager of "
+                          << c.arguments[1] << " is "
+                          << temp
+                          << ".\n";
                 break;
             }
             case command_type::Exit:
@@ -172,7 +172,22 @@ private:
                           << cnt << " overloaded employees.\n";
                 break;
             }
-
+            case command_type::Incorporate:
+            {
+                Hierarchy* br = find(c.arguments[0]);
+                if(!br) throw std::invalid_argument("no such branch");
+                br->incorporate();
+                std::cout << "Successfully incorporated " + c.arguments[0] + "\n";
+                break;
+            }
+            case command_type::Modernize:
+            {
+                Hierarchy* br = find(c.arguments[0]);
+                if(!br) throw std::invalid_argument("no such branch");
+                br->modernize();
+                std::cout << "Successfully modernized " + c.arguments[0] + "\n";
+                break;
+            }
             default: std::cout << "not yet implemented\n"; break;
         }
     }

@@ -178,7 +178,7 @@ TEST_CASE("Fire") {
 
     CHECK(loz.find("MishoPetrov"));
     CHECK(loz.num_employees() == 4);
-    
+
     REQUIRE(loz.fire("MishoPetrov"));
 
     REQUIRE(!loz.find("MishoPetrov"));
@@ -218,7 +218,7 @@ TEST_CASE("Hire") {
     REQUIRE(!loz.hire("Ico", "BadName"));
 }
 
-
+/*
 TEST_CASE("Incorporate") {
     Hierarchy loz(lozenec);
 
@@ -316,5 +316,5 @@ TEST_CASE("Join") {
     REQUIRE(joined2.num_subordinates(TheBoss) == 4);
     REQUIRE(joined2.num_overloaded() == 2);
 }
-
+*/
 

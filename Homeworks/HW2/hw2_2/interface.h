@@ -43,7 +43,8 @@ private:
         Node* parent = nullptr;
         std::list<Node*>::iterator child;
     };
-    static std::size_t weight(Node* root);
+    static unsigned long salary(const Node* root);
+    static std::size_t weight(const Node* root);
     static std::size_t height(Node* root);
     Node* find_by_key(const std::string& key) const;
     parent_child find_parent(const std::string& child) const;
@@ -54,7 +55,9 @@ private:
     static Node* find_rec(Node* root, const std::string& name);
     static Node* add_as_child(Node* parent, const std::string& name);
     static int num_overloaded_helper(Node* root, int N, int& overloaded);
+    static void Hierarchy::incorporate_helper(Node* root);
+    static void Hierarchy::modernize_helper(Node* root, bool even = true);
     Node* root = nullptr;
-    std::size_t m_size = 1;
+    std::size_t m_size = 0;
 };
 
