@@ -317,4 +317,4 @@ TEST_CASE("Join") {
     REQUIRE(joined2.num_overloaded() == 2);
 }
 
-
+#include "my_tests.h"

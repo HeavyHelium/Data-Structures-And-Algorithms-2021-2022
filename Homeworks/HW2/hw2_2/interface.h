@@ -33,8 +33,9 @@ public:
 
     void incorporate();
     void modernize();
-    int num_all_subordinates(const string& name) const;
     Hierarchy join(const Hierarchy& right) const;
+
+    int num_all_subordinates(const string& name) const;
 private:
     struct Node
     {
@@ -51,27 +52,35 @@ private:
        const Node* node = nullptr;
        const int level = -1;
     };
-    static unsigned long salary(const Node* root);
-    static std::size_t weight(const Node* root);
-    static std::size_t height(Node* root);
+
     Node* find_by_key(const std::string& key) const;
     parent_child find_parent(const std::string& child) const;
     parent_child find_parent(const std::string& child);
-    static void free(Node* root);
-    static Node* copy(const Node* root);
-    static parent_child find_parent(Node* root, const std::string& child_value);
+
+    static unsigned long salary(const Node* root);
+    static std::size_t weight(const Node* root);
+    static std::size_t height(Node* root);
+
     static const Node* find_rec(const Node* root, const std::string& name);
     static Node* find_rec(Node* root, const std::string& name);
-    static Node* add_as_child(Node* parent, const std::string& name);
-    static int num_overloaded_helper(Node* root, int N, int& overloaded);
-    static void Hierarchy::incorporate_helper(Node* root);
-    static void Hierarchy::modernize_helper(Node* root, bool even = true);
-    static Node* Hierarchy::join_helper(const Node* root1, const Node* root2);
+    static parent_child find_parent(Node* root, const std::string& child_value);
     static Node* is_subordinate(const Node* root, const std::string& key);
     static node_level find_level(const Node* root, const std::string& key);
+
+    static Node* add_as_child(Node* parent, const std::string& name);
+
+    static int num_overloaded_helper(Node* root, int N, int& overloaded);
+
+    static void incorporate_helper(Node* root);
+    static void modernize_helper(Node* root, bool even = true);
+    static Node* join_helper(const Node* root1, const Node* root2);
+
+    static void free(Node* root);
+    static Node* copy(const Node* root);
     void add_root(const std::string& name = boss_name);
     static Node* generate_root(const std::string& name = boss_name);
+
     Node* root = nullptr;
-    std::size_t m_size = 0;
+    int m_size = 0;
 };
 
