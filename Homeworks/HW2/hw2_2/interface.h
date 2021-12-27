@@ -7,9 +7,12 @@ using std::string;
 
 class Hierarchy
 {
+    static inline const std::string boss_name = "Uspeshnia";
+    class Node;
 public:
     Hierarchy(Hierarchy&& r) noexcept;
     Hierarchy(const Hierarchy& r);
+    Hierarchy(Node* root);
     Hierarchy(const string& data);
     ~Hierarchy() noexcept;
     void operator=(const Hierarchy&) = delete;
@@ -43,6 +46,11 @@ private:
         Node* parent = nullptr;
         std::list<Node*>::iterator child;
     };
+    struct node_level
+    {
+       const Node* node = nullptr;
+       const int level = -1;
+    };
     static unsigned long salary(const Node* root);
     static std::size_t weight(const Node* root);
     static std::size_t height(Node* root);
@@ -52,11 +60,17 @@ private:
     static void free(Node* root);
     static Node* copy(const Node* root);
     static parent_child find_parent(Node* root, const std::string& child_value);
+    static const Node* find_rec(const Node* root, const std::string& name);
     static Node* find_rec(Node* root, const std::string& name);
     static Node* add_as_child(Node* parent, const std::string& name);
     static int num_overloaded_helper(Node* root, int N, int& overloaded);
     static void Hierarchy::incorporate_helper(Node* root);
     static void Hierarchy::modernize_helper(Node* root, bool even = true);
+    static Node* Hierarchy::join_helper(const Node* root1, const Node* root2);
+    static Node* is_subordinate(const Node* root, const std::string& key);
+    static node_level find_level(const Node* root, const std::string& key);
+    void add_root(const std::string& name = boss_name);
+    static Node* generate_root(const std::string& name = boss_name);
     Node* root = nullptr;
     std::size_t m_size = 0;
 };

@@ -32,6 +32,7 @@ public:
             try{ execute_command(parser.parse_line(str)); }
             catch(const std::exception& e)
             { std::cout << "error: " << e.what() << "\n"; continue; }
+            std::cout << "\n";
         }
 
     }
@@ -167,7 +168,6 @@ private:
                 Hierarchy* br = find(c.arguments[0]);
                 if(!br) throw std::invalid_argument("no such branch");
                 int cnt = br->num_overloaded();
-                std::cout << cnt << std::endl;
                 std::cout << "in " + c.arguments[0] + " there are "
                           << cnt << " overloaded employees.\n";
                 break;
@@ -185,7 +185,22 @@ private:
                 Hierarchy* br = find(c.arguments[0]);
                 if(!br) throw std::invalid_argument("no such branch");
                 br->modernize();
-                std::cout << "Successfully modernized " + c.arguments[0] + "\n";
+                std::cout << "Successfully modernized " + c.arguments[0] + "!" + "\n";
+                break;
+            }
+            case command_type::Join:
+            {
+                Hierarchy* br1 = find(c.arguments[0]);
+                Hierarchy* br2 = find(c.arguments[1]);
+                if(!br1) throw std::invalid_argument(c.arguments[0] + " -- no such branch");
+                if(!br2) throw std::invalid_argument(c.arguments[1] + " -- no such branch");
+                if(find(c.arguments[2]))
+                    throw std::invalid_argument(c.arguments[0] + " already exists");
+                branches.insert({ c.arguments[2], new Hierarchy(br1->join(*br2)) });
+                std::cout << "Successfully joined "
+                                + c.arguments[0] + " "
+                                + c.arguments[1] + " into "
+                                + c.arguments[2] + "!\n";
                 break;
             }
             default: std::cout << "not yet implemented\n"; break;

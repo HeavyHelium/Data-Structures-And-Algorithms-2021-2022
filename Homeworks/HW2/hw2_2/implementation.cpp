@@ -16,12 +16,15 @@ Hierarchy::Hierarchy(const Hierarchy& r)
         : root{copy(r.root)}, m_size(r.m_size)
 {}
 
+Hierarchy::Hierarchy(Node* root)
+    : root(root)
+{ m_size = weight(root); }
+
 Hierarchy::Hierarchy(const string& data)
 {
     if(data != "")
     {
-
-        root = new Node{"Uspeshnia"};
+        add_root();
         ++m_size;
         // can have a person only once as subordinate,
         // i.e. if they are in tree already, cannot add them again
@@ -70,7 +73,6 @@ Hierarchy::Node* Hierarchy::copy(const Node* root)
         res->subordinates.emplace_back(copy(direct_subordinate));
     return res;
 }
-
 /// performs a BFS
 string Hierarchy::print() const
 {
@@ -109,12 +111,9 @@ int Hierarchy::num_overloaded(int level) const
 int Hierarchy::num_overloaded_helper(Node* root, int N, int& overloaded)
 {
     if(!root) return -1;
-//std::cout << "debug: " << overloaded << "\n";
     int cnt = root->subordinates.size();
     for(auto& child : root->subordinates)
-    {
         cnt += num_overloaded_helper(child, N, overloaded);
-    }
     if(cnt > N) ++overloaded;
     return cnt;
 }
@@ -203,11 +202,11 @@ void Hierarchy::incorporate()
 void Hierarchy::incorporate_helper(Node* root)
 {
     if(!root) return;
-    if(root->subordinates.size() < 2)
-        return;
     root->subordinates.sort([](Node* a, Node* b){ return a->name < b->name; });
     for(Node* subordinate : root->subordinates)
         incorporate_helper(subordinate);
+    if(root->subordinates.size() <  2)
+        return;
     std::list<Node*>::iterator new_boss = root->subordinates.begin();
     unsigned long new_boss_salary = salary(*new_boss);
     for(auto iter = root->subordinates.begin();
@@ -233,14 +232,17 @@ void Hierarchy::incorporate_helper(Node* root)
 
 }
 void Hierarchy::modernize()
-{ modernize_helper(root, true); }
+{
+    modernize_helper(root, true);
+    m_size = weight(root);
+}
 
 void Hierarchy::modernize_helper(Node* root, bool even)
 {
     assert(root);
     if(even)
     {
-        std::cout << "before loop\n";
+//std::cout << "before loop\n";
         for (Node *subordinate: root->subordinates)
             modernize_helper(subordinate, false);
         /// the subordinates of its subordinates become its subordinates
@@ -249,8 +251,8 @@ void Hierarchy::modernize_helper(Node* root, bool even)
         for(std::list<Node*>::iterator iter = root->subordinates.begin();
             iter != root->subordinates.end()  && i < num_subordinates; ++i)
         {
-            std::cout << "in loop" << root->name << "\n";
-            std::cout << "iter: " << (*iter)->name << "\n";
+//std::cout << "in loop" << root->name << "\n";
+//std::cout << "iter: " << (*iter)->name << "\n";
             if(((*iter)->subordinates.empty())) { ++iter; continue; }
             root->subordinates.splice(root->subordinates.end(), (*iter)->subordinates);
             std::list<Node*>::iterator temp = iter;
@@ -269,18 +271,95 @@ void Hierarchy::modernize_helper(Node* root, bool even)
 
 Hierarchy Hierarchy::join(const Hierarchy& right) const
 {
-    return Hierarchy("");
+    return join_helper(root, right.root); // uses converting ctor
 }
 
-Hierarchy::Node* Hierarchy::find_rec(Node* root, const std::string& name)
+Hierarchy::Node* Hierarchy::generate_root(const std::string& name)
+{
+    return new Node{ name };
+}
+/// performs a real time BFS traversal of result tree
+Hierarchy::Node* Hierarchy::join_helper(const Node* root1, const Node* root2)
+{
+    Node* result = generate_root();
+    std::queue<Node*> q;
+    q.push(result);
+    while(!q.empty())
+    {
+        Node* current = q.front();
+        q.pop();
+        node_level in_first_tree = find_level(root1, current->name);
+        node_level in_second_tree = find_level(root2, current->name);
+        // check_for_conflict(in_first_tree.node, root2)
+        // check_for_conflict(in_second_tree.node, root1)
+        if(in_first_tree.node)
+        {
+            for(Node* child : in_first_tree.node->subordinates)
+                if(!find_rec(result, child->name))
+                    q.push(add_as_child(current, child->name));
+        }
+        if(in_second_tree.node)
+        {
+            for(Node* child : in_second_tree.node->subordinates)
+                if(!find_rec(result, child->name))
+                    q.push(add_as_child(current, child->name));
+        }
+    }
+    return result;
+}
+Hierarchy::node_level Hierarchy::find_level(const Node* root, const std::string& key)
+{
+    assert(root);
+    std::queue<const Node*> q;
+    q.push(root);
+    q.push(nullptr);
+    int level = 0;
+    while(!q.empty())
+    {
+        const Node* top = q.front();
+        q.pop();
+        if(!top)
+        {
+            if(q.empty()) return node_level{};
+            ++level;
+            q.push(nullptr);
+        }
+        else
+        {
+            if(top->name == key)
+                return node_level{ top, level };
+            for(Node* child : top->subordinates)
+                q.push(child);
+        }
+    }
+    return node_level{};
+}
+Hierarchy::Node* Hierarchy::is_subordinate(const Node* root, const std::string& key)
+{
+    assert(root);
+    for(Node* child : root->subordinates)
+    {
+        if(child->name == key)
+            return child;
+        Node* depth = is_subordinate(child, key);
+        if(depth) return depth;
+    }
+    return nullptr;
+}
+
+const Hierarchy::Node* Hierarchy::find_rec(const Node* root, const std::string& name)
 {
 //std::cout << "find_rec called\n";
     if(!root || root->name == name) return root;
     for(Node* direct_subordinate : root->subordinates) {
-        Node* find_res = find_rec(direct_subordinate, name);
+        const Node* find_res = find_rec(direct_subordinate, name);
         if(find_res) return find_res;
     }
     return nullptr;
+}
+Hierarchy::Node* Hierarchy::find_rec(Node* root, const std::string& name)
+{
+    return const_cast<Node*>(find_rec(const_cast<const Node*>(root), name));
 }
 Hierarchy::parent_child Hierarchy::find_parent(Node* root, const std::string& child_value)
 {
@@ -344,3 +423,5 @@ int Hierarchy::num_all_subordinates(const string& name) const
     if(!root) return -1;
     return weight(root) - 1;
 }
+void Hierarchy::add_root(const std::string& name)
+{ root = generate_root(name); }
