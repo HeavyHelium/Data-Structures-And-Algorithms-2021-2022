@@ -7,9 +7,9 @@ using std::string;
 
 class Hierarchy
 {
-    static inline const std::string boss_name = "Uspeshnia";
     class Node;
 public:
+    static inline const std::string boss_name = "Uspeshnia";
     Hierarchy(Hierarchy&& r) noexcept;
     Hierarchy(const Hierarchy& r);
     Hierarchy(Node* root);

@@ -14,7 +14,7 @@ void input_handler::getInput()
         command_parser parser;
         try{ execute_command(parser.parse_line(str)); }
         catch(const std::exception& e)
-        { std::cout << "error: " << e.what() << "\n"; continue; }
+        { std::cout << "error: " << e.what() << "\n\n"; continue; }
         std::cout << "\n";
     }
 
@@ -58,7 +58,7 @@ void input_handler::execute_command(const command& c)
         case command_type::Find:
         {
             Hierarchy* br = find(c.arguments[0]);
-            if(!br) throw std::invalid_argument("no such branch");
+            if(!br) throw std::invalid_argument(c.arguments[0] + " is an unknown office!");
             br->find(c.arguments[1]) ?
             (std::cout << c.arguments[1] + " is employed in " + c.arguments[0] + "\n"):
             (std::cout << c.arguments[1] + " is not employed in " + c.arguments[0] + "\n");
@@ -68,7 +68,7 @@ void input_handler::execute_command(const command& c)
         {
             std::ofstream oFile(c.arguments[1]);
             auto br = branches.find(c.arguments[0]);
-            if(br == branches.end()) throw std::invalid_argument("no such branch");
+            if(br == branches.end()) throw std::invalid_argument(c.arguments[0] + " is an unknown office!");
             oFile << br->second->print();
             std::cout << "Successfully saved branch "
                       << c.arguments[0] << '\n';
@@ -77,7 +77,7 @@ void input_handler::execute_command(const command& c)
         case command_type::Save_1arg:
         {
             auto br = branches.find(c.arguments[0]);
-            if(br == branches.end()) throw std::invalid_argument("no such branch");
+            if(br == branches.end()) throw std::invalid_argument(c.arguments[0] + " is an unknown office!");
             std::cout << br->second->print();
             break;
         }
@@ -85,12 +85,16 @@ void input_handler::execute_command(const command& c)
         {
             auto br = branches.find(c.arguments[0]);
             if(br == branches.end())
-                throw std::invalid_argument("no such branch");
+                throw std::invalid_argument(c.arguments[0] + " is an unknown office!");
+            if(c.arguments[0] == Hierarchy::boss_name)
+                throw std::logic_error(Hierarchy::boss_name + " has no boss!");
             std::string temp = br->second->manager(c.arguments[1]);
-            std::cout << "The manager of "
-                      << c.arguments[1] << " is "
-                      << temp
-                      << ".\n";
+            if(!temp.empty())
+                std::cout << "The manager of "
+                          << c.arguments[1] << " is "
+                          << temp
+                        << ".\n";
+            else throw std::logic_error("There is no " + c.arguments[1] + " in " + c.arguments[0] + ".");
             break;
         }
         case command_type::Exit:
@@ -102,15 +106,18 @@ void input_handler::execute_command(const command& c)
         case command_type::Hire:
         {
             Hierarchy* br = find(c.arguments[0]);
-            if(!br) throw std::invalid_argument("no such branch");
-            br->hire(c.arguments[1], c.arguments[2]);
-            std::cout << "Successfully added " + c.arguments[1] + " in branch\n";
+            if(!br) throw std::invalid_argument(c.arguments[0] + " is an unknown office!");
+            if(c.arguments[1] == c.arguments[2])
+                throw std::logic_error("manger cannot be subordinate of themselves.");
+            if(br->hire(c.arguments[1], c.arguments[2]))
+                std::cout << "Successfully added " + c.arguments[1] + " in branch\n";
+            else throw std::logic_error("There is no " + c.arguments[2] + " in " + c.arguments[0] + ".");
             break;
         }
         case command_type::Fire:
         {
             Hierarchy* br = find(c.arguments[0]);
-            if(!br) throw std::invalid_argument("no such branch");
+            if(!br) throw std::invalid_argument(c.arguments[0] + " is an unknown office!");
             br->fire(c.arguments[1]);
             std::cout << "Successfully fired " + c.arguments[1] + " from branch\n";
             break;
@@ -118,7 +125,7 @@ void input_handler::execute_command(const command& c)
         case command_type::Num_subordinates:
         {
             Hierarchy* br = find(c.arguments[0]);
-            if(!br) throw std::invalid_argument("no such branch");
+            if(!br) throw std::invalid_argument(c.arguments[0] + " is an unknown office!");
             std::cout << c.arguments[1] + " has "
                       << br->num_subordinates(c.arguments[1]) << " subordinates\n";
             break;
@@ -126,7 +133,7 @@ void input_handler::execute_command(const command& c)
         case command_type::Num_employees:
         {
             Hierarchy* br = find(c.arguments[0]);
-            if(!br) throw std::invalid_argument("no such branch");
+            if(!br) throw std::invalid_argument(c.arguments[0] + " is an unknown office!");
             std::cout << c.arguments[0] + " has "
                       << br->num_employees() << " people employed\n";
             break;
@@ -134,7 +141,7 @@ void input_handler::execute_command(const command& c)
         case command_type::Longest_chain:
         {
             Hierarchy* br = find(c.arguments[0]);
-            if(!br) throw std::invalid_argument("no such branch");
+            if(!br) throw std::invalid_argument(c.arguments[0] + " is an unknown office!");
             std::cout << c.arguments[0] + "'s longest chain has length: "
                       << br->longest_chain() << "\n";
             break;
@@ -142,15 +149,17 @@ void input_handler::execute_command(const command& c)
         case command_type::Salary:
         {
             Hierarchy* br = find(c.arguments[0]);
-            if(!br) throw std::invalid_argument("no such branch");
+            if(!br) throw std::invalid_argument(c.arguments[0] + " is an unknown office!");
             int salary = br->getSalary(c.arguments[1]);
+            if(salary == -1)
+                throw std::logic_error("There is no " + c.arguments[1] + " in " + c.arguments[0] + ".");
             std::cout << c.arguments[1] + "'s salary is " << salary << std::endl;
             break;
         }
         case command_type::Overloaded:
         {
             Hierarchy* br = find(c.arguments[0]);
-            if(!br) throw std::invalid_argument("no such branch");
+            if(!br) throw std::invalid_argument(c.arguments[0] + " is an unknown office!");
             int cnt = br->num_overloaded();
             std::cout << "in " + c.arguments[0] + " there are "
                       << cnt << " overloaded employees.\n";
@@ -159,7 +168,7 @@ void input_handler::execute_command(const command& c)
         case command_type::Incorporate:
         {
             Hierarchy* br = find(c.arguments[0]);
-            if(!br) throw std::invalid_argument("no such branch");
+            if(!br) throw std::invalid_argument(c.arguments[0] + " is an unknown office!");
             br->incorporate();
             std::cout << "Successfully incorporated " + c.arguments[0] + "\n";
             break;
@@ -167,7 +176,7 @@ void input_handler::execute_command(const command& c)
         case command_type::Modernize:
         {
             Hierarchy* br = find(c.arguments[0]);
-            if(!br) throw std::invalid_argument("no such branch");
+            if(!br) throw std::invalid_argument(c.arguments[0] + " is an unknown office!");
             br->modernize();
             std::cout << "Successfully modernized " + c.arguments[0] + "!" + "\n";
             break;
@@ -176,18 +185,22 @@ void input_handler::execute_command(const command& c)
         {
             Hierarchy* br1 = find(c.arguments[0]);
             Hierarchy* br2 = find(c.arguments[1]);
-            if(!br1) throw std::invalid_argument(c.arguments[0] + " -- no such branch");
-            if(!br2) throw std::invalid_argument(c.arguments[1] + " -- no such branch");
+            if(!br1) throw std::invalid_argument(c.arguments[0] + " is an unknown office!");
+            if(!br2) throw std::invalid_argument(c.arguments[1] + " is an unknown office!");
             if(find(c.arguments[2]))
-                throw std::invalid_argument(c.arguments[0] + " already exists");
-            branches.insert({ c.arguments[2], new Hierarchy(br1->join(*br2)) });
-            std::cout << "Successfully joined "
-                         + c.arguments[0] + " "
-                         + c.arguments[1] + " into "
-                         + c.arguments[2] + "!\n";
+                throw std::invalid_argument(c.argumentss[0] + " already exists");
+            Hierarchy* resultant = new Hierarchy(br1->join(*br2));
+            if(resultant->num_employees() != 0)
+            {
+                branches.insert({ c.arguments[2], resultant });
+                std::cout << "Successfully joined "
+                             + c.arguments[0] + " with "
+                             + c.arguments[1] + " into "
+                             + c.arguments[2] + "!\n";
+            }
             break;
         }
-        default: std::cout << "not yet implemented\n"; break;
+        default: std::cout << "not yet implemented/added\n"; break;
     }
 }
 

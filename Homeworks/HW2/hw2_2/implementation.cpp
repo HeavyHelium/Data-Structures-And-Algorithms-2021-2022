@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <queue>
 
-// Rule of 5
+// Rule of 5(minus operator=)
 Hierarchy::~Hierarchy() noexcept
 { free(root); }
 
@@ -122,12 +122,13 @@ string Hierarchy::manager(const string& name) const
 {
     if(name == boss_name)
     {
-        throw std::logic_error("how dare you, he is the boss of the bosses!");
+//throw std::logic_error("how dare you, he is the boss of the bosses!");
         return "";
     }
     Node* manager = find_parent(name).parent;
     if(!manager)
-        throw std::runtime_error(name + " is not employed in current branch.");
+        return "";
+//throw std::runtime_error(name + " is not employed in current branch.");
     return manager->name;
 }
 
@@ -143,7 +144,7 @@ unsigned long Hierarchy::getSalary(const string& who) const
     Node* temp = find_by_key(who);
     if(!temp)
     {
-        throw std::logic_error(who + " is not employed in current branch.");
+//throw std::logic_error(who + " is not employed in current branch.");
         return -1;
     }
     return salary(temp);
@@ -161,13 +162,13 @@ bool Hierarchy::fire(const string& who)
 {
     if(who == boss_name)
     {
-        throw std::logic_error("how dare you!");
+//throw std::logic_error("how dare you!");
         return false;
     }
     parent_child temp = find_parent(who);
     if(!temp.parent)
     {
-        throw std::logic_error("no such person is employed in current branch");
+//throw std::logic_error("no such person is employed in current branch");
         return false;
     }
     temp.parent->subordinates.splice(temp.parent->subordinates.end(), (*temp.child)->subordinates);
@@ -179,10 +180,11 @@ bool Hierarchy::fire(const string& who)
 
 bool Hierarchy::hire(const string& who, const string& boss)
 {
+    if(who == boss) return false;
     Node* manager = find_by_key(boss);
     if(!manager)
     {
-        throw std::logic_error(boss + " is not employed in current branch");
+//throw std::logic_error(boss + " is not employed in current branch");
         return false;
     }
     parent_child temp = find_parent(who);
@@ -284,7 +286,7 @@ Hierarchy::Node* Hierarchy::join_helper(const Node* root1, const Node* root2)
 {
     Node* result = generate_root();
     std::queue<left_right> q;
-    q.push({ root1, result, root2 });
+    q.push({ root1, result, root2, 0 });
     while(!q.empty())
     {
         left_right front = q.front();
@@ -293,8 +295,10 @@ Hierarchy::Node* Hierarchy::join_helper(const Node* root1, const Node* root2)
         if((front.left_tree && check_for_conflict(front.left_tree, root2))
             || (front.right_tree && check_for_conflict(front.right_tree, root1)))
         {
-            free(result); // so as to prevent memory leak
-            throw std::runtime_error("Joining of the two hierarchies is impossible");
+            free(result); // so as to prevent a memory leak
+            std::cerr << "joning of the two hierarchies is impossible\n";
+            return nullptr;
+//throw std::runtime_error("Joining of the two hierarchies is impossible");
         }
 
         if(front.left_tree)
@@ -304,15 +308,21 @@ Hierarchy::Node* Hierarchy::join_helper(const Node* root1, const Node* root2)
                 node_level in_other = find_level(root2, child->name);
                 if (!find_rec(result, child->name))
                 {
+//std::cout << in_other.level << " " << front.level + 1 << std::endl;
+//std::cout << "here " + front.current_node->name + child->name + "\n";
                     if (in_other.node && in_other.level == front.level + 1)
                     {
-                        if (front.current_node->name <= in_other.parent->name)
-                            q.push({ child,
-                                     add_as_child(front.current_node, child->name),
-                                     in_other.node,
-                                     front.level + 1 }); // aggregate class initialization
+//std::cout << "same level both trees " + child->name + "\n";
+                        if (front.current_node->name < in_other.parent->name) {
+                            std::cout << front.current_node->name + " " + in_other.parent->name + "\n";
+                            q.push({child,
+                                    add_as_child(front.current_node, child->name),
+                                    in_other.node,
+                                    front.level + 1}); // aggregate initialization
+                        }
 
                         else {
+//std::cout << "here " + child->name + "\n";
                             q.push({ child,
                                      add_as_child(find_rec(result, in_other.parent->name), child->name),
                                      in_other.node,
@@ -321,7 +331,7 @@ Hierarchy::Node* Hierarchy::join_helper(const Node* root1, const Node* root2)
                     }
                     else q.push({ child,
                                   add_as_child(front.current_node, child->name),
-                                  in_other.node });
+                                  in_other.node, front.level + 1 });
                 }
             }
         }
@@ -331,7 +341,7 @@ Hierarchy::Node* Hierarchy::join_helper(const Node* root1, const Node* root2)
                 if(!find_rec(result, child->name))
                     q.push({ child,
                              add_as_child(front.current_node, child->name),
-                             nullptr,
+                             find_rec(root1, child->name),
                              front.level + 1} );
         }
     }
