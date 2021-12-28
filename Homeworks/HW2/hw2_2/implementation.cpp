@@ -279,59 +279,101 @@ Hierarchy Hierarchy::join(const Hierarchy& right) const
 
 Hierarchy::Node* Hierarchy::generate_root(const std::string& name)
 { return new Node{ name }; }
-/// performs a real time BFS traversal of result tree
+/// performs a real time BFS traversal of the resulting tree
 Hierarchy::Node* Hierarchy::join_helper(const Node* root1, const Node* root2)
 {
     Node* result = generate_root();
-    std::queue<Node*> q;
-    q.push(result);
+    std::queue<left_right> q;
+    q.push({ root1, result, root2 });
     while(!q.empty())
     {
-        Node* current = q.front();
+        left_right front = q.front();
         q.pop();
-        node_level in_first_tree = find_level(root1, current->name);
-        node_level in_second_tree = find_level(root2, current->name);
-        // check_for_conflict(in_first_tree.node, root2)
-        // check_for_conflict(in_second_tree.node, root1)
-        if(in_first_tree.node)
+
+        if((front.left_tree && check_for_conflict(front.left_tree, root2))
+            || (front.right_tree && check_for_conflict(front.right_tree, root1)))
         {
-            for(Node* child : in_first_tree.node->subordinates)
-                if(!find_rec(result, child->name))
-                    q.push(add_as_child(current, child->name));
+            free(result); // so as to prevent memory leak
+            throw std::runtime_error("Joining of the two hierarchies is impossible");
         }
-        if(in_second_tree.node)
+
+        if(front.left_tree)
         {
-            for(Node* child : in_second_tree.node->subordinates)
+            for(Node* child : front.left_tree->subordinates)
+            {
+                node_level in_other = find_level(root2, child->name);
+                if (!find_rec(result, child->name))
+                {
+                    if (in_other.node && in_other.level == front.level + 1)
+                    {
+                        if (front.current_node->name <= in_other.parent->name)
+                            q.push({ child,
+                                     add_as_child(front.current_node, child->name),
+                                     in_other.node,
+                                     front.level + 1 }); // aggregate class initialization
+
+                        else {
+                            q.push({ child,
+                                     add_as_child(find_rec(result, in_other.parent->name), child->name),
+                                     in_other.node,
+                                     front.level + 1 });
+                        }
+                    }
+                    else q.push({ child,
+                                  add_as_child(front.current_node, child->name),
+                                  in_other.node });
+                }
+            }
+        }
+        if(front.right_tree)
+        {
+            for(Node* child : front.right_tree->subordinates)
                 if(!find_rec(result, child->name))
-                    q.push(add_as_child(current, child->name));
+                    q.push({ child,
+                             add_as_child(front.current_node, child->name),
+                             nullptr,
+                             front.level + 1} );
         }
     }
     return result;
+}
+bool Hierarchy::check_for_conflict(const Node* node, const Node* other_tree)
+{
+    for(const Node* subordinate : node->subordinates)
+    {
+        if(check_for_conflict(subordinate, other_tree))
+            return true;
+        const Node* in_other_tree = find_rec(other_tree, subordinate->name);
+        if(in_other_tree &&
+           is_subordinate(in_other_tree, node->name))
+            return true;
+    }
+    return false;
 }
 
 Hierarchy::node_level Hierarchy::find_level(const Node* root, const std::string& key)
 {
     assert(root);
-    std::queue<const Node*> q;
-    q.push(root);
-    q.push(nullptr);
+    std::queue<parent_child_ptrs> q;
+    q.push(parent_child_ptrs{ nullptr, root });
+    q.push(parent_child_ptrs{nullptr, nullptr});
     int level = 0;
     while(!q.empty())
     {
-        const Node* top = q.front();
+        parent_child_ptrs top = q.front();
         q.pop();
-        if(!top)
+        if(!top.parent && !top.child)
         {
             if(q.empty()) return node_level{};
             ++level;
-            q.push(nullptr);
+            q.push(parent_child_ptrs{nullptr, nullptr});
         }
         else
         {
-            if(top->name == key)
-                return node_level{ top, level };
-            for(Node* child : top->subordinates)
-                q.push(child);
+            if(top.child->name == key)
+                return node_level{ top.parent, top.child, level };
+            for(Node* child : top.child->subordinates)
+                q.push( parent_child_ptrs{ top.child, child });
         }
     }
     return node_level{};

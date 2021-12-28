@@ -47,10 +47,23 @@ private:
         Node* parent = nullptr;
         std::list<Node*>::iterator child;
     };
+    struct parent_child_ptrs
+    {
+        const Node* parent = nullptr;
+        const Node* child = nullptr;
+    };
     struct node_level
     {
+       const Node* parent = nullptr;
        const Node* node = nullptr;
        const int level = -1;
+    };
+    struct left_right
+    {
+        const Node* left_tree = nullptr;
+        Node* current_node = nullptr;
+        const Node* right_tree = nullptr;
+        int level = -1;
     };
 
     Node* find_by_key(const std::string& key) const;
@@ -72,6 +85,7 @@ private:
     static int num_overloaded_helper(Node* root, int N, int& overloaded);
 
     static void incorporate_helper(Node* root);
+    static bool check_for_conflict(const Node* node, const Node* other_tree);
     static void modernize_helper(Node* root, bool even = true);
     static Node* join_helper(const Node* root1, const Node* root2);
 
