@@ -188,7 +188,7 @@ void input_handler::execute_command(const command& c)
             if(!br1) throw std::invalid_argument(c.arguments[0] + " is an unknown office!");
             if(!br2) throw std::invalid_argument(c.arguments[1] + " is an unknown office!");
             if(find(c.arguments[2]))
-                throw std::invalid_argument(c.argumentss[0] + " already exists");
+                throw std::invalid_argument(c.arguments[0] + " already exists");
             Hierarchy* resultant = new Hierarchy(br1->join(*br2));
             if(resultant->num_employees() != 0)
             {
