@@ -86,15 +86,17 @@ void input_handler::execute_command(const command& c)
             auto br = branches.find(c.arguments[0]);
             if(br == branches.end())
                 throw std::invalid_argument(c.arguments[0] + " is an unknown office!");
-            if(c.arguments[0] == Hierarchy::boss_name)
-                throw std::logic_error(Hierarchy::boss_name + " has no boss!");
-            std::string temp = br->second->manager(c.arguments[1]);
-            if(!temp.empty())
-                std::cout << "The manager of "
-                          << c.arguments[1] << " is "
-                          << temp
-                        << ".\n";
-            else throw std::logic_error("There is no " + c.arguments[1] + " in " + c.arguments[0] + ".");
+            try {
+                std::string temp = br->second->manager(c.arguments[1]);
+                if (!temp.empty())
+                    std::cout << "The manager of "
+                              << c.arguments[1] << " is "
+                              << temp
+                              << ".\n";
+                else std::cout << Hierarchy::boss_name + " has no boss.\n";
+            }
+            catch(const std::exception& e)
+            { throw std::logic_error( std::string(e.what()) + " in " + c.arguments[0] + "."); }
             break;
         }
         case command_type::Exit:

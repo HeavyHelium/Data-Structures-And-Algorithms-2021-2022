@@ -122,13 +122,12 @@ string Hierarchy::manager(const string& name) const
 {
     if(name == boss_name)
     {
-//throw std::logic_error("how dare you, he is the boss of the bosses!");
         return "";
     }
     Node* manager = find_parent(name).parent;
     if(!manager)
-        return "";
-//throw std::runtime_error(name + " is not employed in current branch.");
+        throw std::runtime_error("There is no " + name);
+        //return "";
     return manager->name;
 }
 
@@ -184,7 +183,7 @@ bool Hierarchy::hire(const string& who, const string& boss)
     Node* manager = find_by_key(boss);
     if(!manager)
     {
-//throw std::logic_error(boss + " is not employed in current branch");
+    //throw std::logic_error(boss + " is not employed in current branch");
         return false;
     }
     parent_child temp = find_parent(who);
@@ -296,7 +295,7 @@ Hierarchy::Node* Hierarchy::join_helper(const Node* root1, const Node* root2)
             || (front.right_tree && check_for_conflict(front.right_tree, root1)))
         {
             free(result); // so as to prevent a memory leak
-            std::cerr << "joning of the two hierarchies is impossible\n";
+            std::cerr << "error: joning of the two hierarchies is impossible\n";
             return nullptr;
 //throw std::runtime_error("Joining of the two hierarchies is impossible");
         }
