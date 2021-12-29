@@ -70,7 +70,11 @@ std::vector<std::string> data_parser::parse_line(const char*& text)
     words.push_back(word);
     word.clear();
     while(*text && !is_white_space(*text))
+    {
+        if(*text == '-')
+            throw std::logic_error("wrong input format");
         word.push_back(*text++);
+    }
     skip_spaces_and_tabs(text);
     if(word.empty() || *text && *text != '\n')
         throw std::logic_error("wrong input format");

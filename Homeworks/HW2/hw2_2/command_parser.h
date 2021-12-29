@@ -63,15 +63,13 @@ struct command
                 command_type::Save,
                 "save",
                 {"branch name", "filename"},
-                "saves information about the branch in a file; if filename is empty, "
-                "then outputs information on the standard output"
+                "saves information about the branch in a file;"
         },
         {
                 command_type::Save_1arg,
                 "save",
                 {"branch name", "filename"},
-                "saves information about the branch in a file; if filename is empty"
-                "then outputs information on the standard output"
+                "provides information about a given branch on the standard output"
         },
         {
                 command_type::Find,
@@ -149,7 +147,7 @@ struct command
                 command_type::Exit,
                 "exit",
                 {},
-                "reminds about unsaved files and asks user if they really want to exit"
+                "reminds about unsaved files and exits the program"
         }
     };
     command_type type;

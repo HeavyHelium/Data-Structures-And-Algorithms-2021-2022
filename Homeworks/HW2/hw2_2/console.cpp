@@ -8,4 +8,7 @@ int main()try
     return 0;
 }
 catch(const std::exception& e)
-{ std::cerr << "an unexpected error occurred with message: " << e.what(); }
+{
+    std::cerr << "an unexpected error occurred with message: "
+              << e.what();
+}

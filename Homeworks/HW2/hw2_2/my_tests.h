@@ -2,13 +2,6 @@
 #define HW2_1_MY_TESTS_H
 #include <stdexcept>
 
-/*
-int throws()
-{
-    throw std::runtime_error("joker");
-    return -1;
-}*/
-
 TEST_CASE("more on incorporate", "[Hierarchy]")
 {
     SECTION("example")

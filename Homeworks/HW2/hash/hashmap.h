@@ -1,0 +1,4 @@
+#ifndef HASH_HASHMAP_H
+#define HASH_HASHMAP_H
+
+#endif //HASH_HASHMAP_H

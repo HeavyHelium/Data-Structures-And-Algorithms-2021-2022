@@ -182,10 +182,7 @@ bool Hierarchy::hire(const string& who, const string& boss)
     if(who == boss) return false;
     Node* manager = find_by_key(boss);
     if(!manager)
-    {
-    //throw std::logic_error(boss + " is not employed in current branch");
         return false;
-    }
     parent_child temp = find_parent(who);
     if(!temp.parent)
     {
@@ -297,7 +294,6 @@ Hierarchy::Node* Hierarchy::join_helper(const Node* root1, const Node* root2)
             free(result); // so as to prevent a memory leak
             std::cerr << "error: joning of the two hierarchies is impossible\n";
             return nullptr;
-//throw std::runtime_error("Joining of the two hierarchies is impossible");
         }
 
         if(front.left_tree)
@@ -307,11 +303,8 @@ Hierarchy::Node* Hierarchy::join_helper(const Node* root1, const Node* root2)
                 node_level in_other = find_level(root2, child->name);
                 if (!find_rec(result, child->name))
                 {
-//std::cout << in_other.level << " " << front.level + 1 << std::endl;
-//std::cout << "here " + front.current_node->name + child->name + "\n";
                     if (in_other.node && in_other.level == front.level + 1)
                     {
-//std::cout << "same level both trees " + child->name + "\n";
                         if (front.current_node->name < in_other.parent->name) {
                             std::cout << front.current_node->name + " " + in_other.parent->name + "\n";
                             q.push({child,
@@ -321,7 +314,6 @@ Hierarchy::Node* Hierarchy::join_helper(const Node* root1, const Node* root2)
                         }
 
                         else {
-//std::cout << "here " + child->name + "\n";
                             q.push({ child,
                                      add_as_child(find_rec(result, in_other.parent->name), child->name),
                                      in_other.node,

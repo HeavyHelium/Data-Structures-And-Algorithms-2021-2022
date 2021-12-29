@@ -1,0 +1,7 @@
+# ninja log v5
+1	1392	6624999030899081	CMakeFiles/hash.dir/main.cpp.obj	16e91b7ca927d5ee
+1408	2919	6624963218727270	hash.exe	87019ff2331b3407
+0	1363	6624998809974024	CMakeFiles/hash.dir/implementation.cpp.obj	a8316469bbcf12a0
+26	1267	6624999548213118	CMakeFiles/hash.dir/string_operations.cpp.obj	4cc09415b91474f0
+1	1625	6624999551853321	CMakeFiles/hash.dir/data_parser.cpp.obj	379b7a0eb4c08b2e
+1625	2421	6624999557518535	hash.exe	f19ac7f612cf37c2
