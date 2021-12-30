@@ -18,15 +18,15 @@ public:
     {
         std::string name;
         Hierarchy* hierarchy = nullptr;
-        std::string file_path;
+        //std::string file_path;
         bool saved = false;
         hierarchy_state(Hierarchy* h, const std::string& name, bool saved = false);
-        ~hierarchy_state();
     };
     input_handler() = default;
     ~input_handler();
     void getInput();
 private:
+    typename std::vector<input_handler::hierarchy_state>::iterator find_message(const std::string& name);
     typename std::vector<input_handler::hierarchy_state>::iterator find(const std::string& name);
     void execute_command(const command& c);
     std::vector<hierarchy_state> hierarchies;
