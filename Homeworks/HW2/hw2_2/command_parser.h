@@ -68,7 +68,7 @@ struct command
         {
                 command_type::Save_1arg,
                 "save",
-                {"branch name", "filename"},
+                {"branch name"},
                 "provides information about a given branch on the standard output"
         },
         {
