@@ -306,7 +306,6 @@ Hierarchy::Node* Hierarchy::join_helper(const Node* root1, const Node* root2)
                     if (in_other.node && in_other.level == front.level + 1)
                     {
                         if (front.current_node->name < in_other.parent->name) {
-                            std::cout << front.current_node->name + " " + in_other.parent->name + "\n";
                             q.push({child,
                                     add_as_child(front.current_node, child->name),
                                     in_other.node,

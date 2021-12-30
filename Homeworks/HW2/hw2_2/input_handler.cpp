@@ -100,7 +100,7 @@ void input_handler::execute_command(const command& c) {
         case command_type::Exit: {
             for (const hierarchy_state &h: hierarchies) {
                 if (!h.saved) {
-                    std::cout << h.name + " has been modified, but not saved\n"
+                    std::cout << h.name + " has been modified, but not saved.\n"
                                  + "Please, enter filename to save it: \n";
                     std::string line;
                     while (std::cout << "> " &&
