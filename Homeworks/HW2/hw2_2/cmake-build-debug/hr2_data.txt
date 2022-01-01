@@ -1,0 +1,12 @@
+Uspeshnia-Gosho
+Gosho-Dancho
+Gosho-Misho
+Gosho-Slavi
+Dancho-Boris
+Dancho-Pesho
+Slavi-Slav1
+Boris-Kamen
+Pesho-Alex
+Slav1-Mecho
+Slav1-Slav2
+Mecho-Q12Adl

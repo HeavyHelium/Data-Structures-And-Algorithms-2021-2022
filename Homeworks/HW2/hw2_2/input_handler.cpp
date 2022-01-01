@@ -163,6 +163,18 @@ void input_handler::execute_command(const command& c) {
                     throw std::logic_error("There is no " + c.arguments[1] + " in " + c.arguments[0] + ".");
                 break;
             }
+            case command_type::Num_all_subordinates:
+            {
+                auto iter = find_message(c.arguments[0]);
+                if (iter == hierarchies.end()) return;
+                int num = iter->hierarchy->num_all_subordinates(c.arguments[1]);
+                if (num != -1)
+                    std::cout << c.arguments[1] + " has "
+                              << num << " subordinates.\n";
+                else
+                    throw std::logic_error("There is no " + c.arguments[1] + " in " + c.arguments[0] + ".");
+                break;
+            }
             case command_type::Num_employees: {
                 auto iter = find_message(c.arguments[0]);
                 if (iter == hierarchies.end()) return;
@@ -200,7 +212,7 @@ void input_handler::execute_command(const command& c) {
                 if (iter == hierarchies.end()) return;
                 iter->hierarchy->incorporate();
                 iter->saved = false;
-                std::cout << "Successfully incorporated " + c.arguments[0] + "\n";
+                std::cout << "Successfully incorporated " + c.arguments[0] + "!\n";
                 break;
             }
             case command_type::Modernize: {
@@ -219,13 +231,13 @@ void input_handler::execute_command(const command& c) {
                 if (iter2 == hierarchies.end()) return;
                 Hierarchy* resultant = new Hierarchy(iter1->hierarchy->join(*iter2->hierarchy));
                 if (resultant->num_employees() != 0) {
-                    hierarchies.emplace_back(resultant, c.arguments[2]);
                     auto iter = find(c.arguments[2]);
                     if(iter != hierarchies.end())
                     {
                         delete iter->hierarchy;
                         hierarchies.erase(iter);
                     }
+                    hierarchies.emplace_back(resultant, c.arguments[2]);
                     std::cout << "Successfully joined "
                                  + c.arguments[0] + " with "
                                  + c.arguments[1] + " into "

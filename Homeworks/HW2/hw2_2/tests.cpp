@@ -145,7 +145,6 @@ TEST_CASE("Simple selectors") {
     }
 }
 
-
 TEST_CASE("Overloaded") {
     Hierarchy h (large);
     Hierarchy loz(lozenec);

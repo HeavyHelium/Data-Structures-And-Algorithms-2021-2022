@@ -25,6 +25,7 @@ enum command_type
     Incorporate,
     Modernize,
     Longest_chain,
+    Num_all_subordinates,
     Exit
 };
 
@@ -142,6 +143,12 @@ struct command
                 "longest_chain",
                 {"branch name"},
                 "outputs the longest manager-subordinate chain in branch"
+        },
+        {
+                command_type::Num_all_subordinates,
+                "num_all_subordinates",
+                {"branch name", "employee"},
+                "outputs the total number of subordinates of an employee in a given branch"
         },
         {
                 command_type::Exit,
