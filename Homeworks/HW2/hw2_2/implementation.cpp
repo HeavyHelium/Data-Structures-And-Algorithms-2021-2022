@@ -37,7 +37,7 @@ Hierarchy::Hierarchy(const string& data)
             {
                 free(root);// so as to prevent a memory leak
                 throw std::invalid_argument(pair.subordinate
-                                            + " is already a subordinate in the current branch.");
+                                            + " is already added to current branch.");
             }
             Node* manager = find_by_key(pair.manager);
             if(!manager)
@@ -180,6 +180,8 @@ bool Hierarchy::fire(const string& who)
 bool Hierarchy::hire(const string& who, const string& boss)
 {
     if(who == boss) return false;
+    if(m_size == 0)
+        add_root();
     Node* manager = find_by_key(boss);
     if(!manager)
         return false;
