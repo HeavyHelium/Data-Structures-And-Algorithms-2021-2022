@@ -1,0 +1,8 @@
+# ninja log v5
+34	2413	6627790123222663	CMakeFiles/console.dir/string_operations.cpp.obj	b3a8dd0aaa8e83a1
+64	2460	6627790123322667	CMakeFiles/console.dir/command_parser.cpp.obj	7d9a169d92d471ed
+28	2475	6627790123692672	CMakeFiles/console.dir/input_handler.cpp.obj	18267f5111fe673b
+23	2528	6627790124352667	CMakeFiles/console.dir/console.cpp.obj	c5653a2552edacce
+1	2608	6627790125252679	CMakeFiles/console.dir/implementation.cpp.obj	476c36ea9e5a7eda
+38	2637	6627790125812664	CMakeFiles/console.dir/data_parser.cpp.obj	b48078d9fed1036a
+2637	4267	6627790141133084	console.exe	4fa863f320ce22c0
