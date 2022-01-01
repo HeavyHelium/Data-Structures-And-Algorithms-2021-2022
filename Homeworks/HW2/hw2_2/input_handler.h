@@ -18,7 +18,6 @@ public:
     {
         std::string name;
         Hierarchy* hierarchy = nullptr;
-        //std::string file_path;
         bool saved = false;
         hierarchy_state(Hierarchy* h, const std::string& name, bool saved = false);
     };

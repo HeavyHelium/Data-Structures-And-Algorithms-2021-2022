@@ -1,5 +1,7 @@
 #include "input_handler.h"
 
+using iter_type = std::vector<input_handler::hierarchy_state>::iterator;
+
 void input_handler::getInput()
 {
     getting_input = true;
@@ -20,12 +22,11 @@ void input_handler::getInput()
     std::cout << "Goodbye!\n...press any key to close the program\n";
     char ch;
     std::cin.get(ch);
-
 }
 
-typename std::vector<input_handler::hierarchy_state>::iterator input_handler::find_message(const std::string& name)
+iter_type input_handler::find_message(const std::string& name)
 {
-    auto iter = find(name);
+    iter_type iter = find(name);
     if(iter == hierarchies.end())
         std::cerr << "error: " << name + " is an unknown office!\n";
     return iter;
@@ -34,14 +35,14 @@ typename std::vector<input_handler::hierarchy_state>::iterator input_handler::fi
 void input_handler::execute_command(const command& c) {
     switch (c.type) {
         case command_type::Help: {
-            for (const auto &elem: command::commands_supported)
+            for (const name_info_pair &elem: command::commands_supported)
                 std::cout << elem.get_info() << std::endl;
             break;
         }
         case command_type::Load: {
             std::string input = (data_parser::file_data(c.arguments[1]));
             Hierarchy *temp = new Hierarchy(input);
-            auto iter = find(c.arguments[0]);
+            iter_type iter = find(c.arguments[0]);
             if(iter != hierarchies.end())
             {
                 delete iter->hierarchy;
@@ -55,7 +56,7 @@ void input_handler::execute_command(const command& c) {
         case command_type::Load_1arg: {
             std::string input = (data_parser::console_data());
             Hierarchy *temp = new Hierarchy(input);
-            auto iter = find(c.arguments[0]);
+            iter_type iter = find(c.arguments[0]);
             if(iter != hierarchies.end())
             {
                 delete iter->hierarchy;
@@ -67,7 +68,7 @@ void input_handler::execute_command(const command& c) {
             break;
         }
         case command_type::Find: {
-            auto iter = find_message(c.arguments[0]);
+            iter_type iter = find_message(c.arguments[0]);
             if (iter == hierarchies.end()) return;
             iter->hierarchy->find(c.arguments[1]) ?
             (std::cout << c.arguments[1] + " is employed in " + c.arguments[0] + ".\n") :
@@ -76,7 +77,7 @@ void input_handler::execute_command(const command& c) {
         }
         case command_type::Save: {
             std::ofstream oFile(c.arguments[1]);
-            auto iter = find_message(c.arguments[0]);
+            iter_type iter = find_message(c.arguments[0]);
             if (iter == hierarchies.end()) return;
             oFile << iter->hierarchy->print();
             iter->saved = true;
@@ -85,13 +86,13 @@ void input_handler::execute_command(const command& c) {
             break;
         }
         case command_type::Save_1arg: {
-            auto iter = find_message(c.arguments[0]);
+            iter_type iter = find_message(c.arguments[0]);
             if (iter == hierarchies.end()) return;
             std::cout << iter->hierarchy->print();
             break;
         }
         case command_type::Manager: {
-            auto iter = find_message(c.arguments[0]);
+            iter_type iter = find_message(c.arguments[0]);
             if (iter == hierarchies.end()) return;
             try {
                 std::string temp = iter->hierarchy->manager(c.arguments[1]);
@@ -129,7 +130,7 @@ void input_handler::execute_command(const command& c) {
                 break;
             }
             case command_type::Hire: {
-                auto iter = find_message(c.arguments[0]);
+                iter_type iter = find_message(c.arguments[0]);
                 if (iter == hierarchies.end()) return;
                 if (c.arguments[1] == c.arguments[2])
                     throw std::logic_error("Manger cannot be subordinate of themselves.");
@@ -141,7 +142,7 @@ void input_handler::execute_command(const command& c) {
                 break;
             }
             case command_type::Fire: {
-                auto iter = find_message(c.arguments[0]);
+                iter_type iter = find_message(c.arguments[0]);
                 if (iter == hierarchies.end()) return;
                 if (iter->hierarchy->fire(c.arguments[1])) {
                     iter->saved = false;
@@ -153,7 +154,7 @@ void input_handler::execute_command(const command& c) {
                 break;
             }
             case command_type::Num_subordinates: {
-                auto iter = find_message(c.arguments[0]);
+                iter_type iter = find_message(c.arguments[0]);
                 if (iter == hierarchies.end()) return;
                 int num = iter->hierarchy->num_subordinates(c.arguments[1]);
                 if (num != -1)
@@ -165,7 +166,7 @@ void input_handler::execute_command(const command& c) {
             }
             case command_type::Num_all_subordinates:
             {
-                auto iter = find_message(c.arguments[0]);
+                iter_type iter = find_message(c.arguments[0]);
                 if (iter == hierarchies.end()) return;
                 int num = iter->hierarchy->num_all_subordinates(c.arguments[1]);
                 if (num != -1)
@@ -176,7 +177,7 @@ void input_handler::execute_command(const command& c) {
                 break;
             }
             case command_type::Num_employees: {
-                auto iter = find_message(c.arguments[0]);
+                iter_type iter = find_message(c.arguments[0]);
                 if (iter == hierarchies.end()) return;
                 int num = iter->hierarchy->num_employees();
                 std::cout << c.arguments[0] + " has "
@@ -184,14 +185,14 @@ void input_handler::execute_command(const command& c) {
                 break;
             }
             case command_type::Longest_chain: {
-                auto iter = find_message(c.arguments[0]);
+                iter_type iter = find_message(c.arguments[0]);
                 if (iter == hierarchies.end()) return;
                 std::cout << c.arguments[0] + "'s longest chain has length: "
                           << iter->hierarchy->longest_chain() << "\n";
                 break;
             }
             case command_type::Salary: {
-                auto iter = find_message(c.arguments[0]);
+                iter_type iter = find_message(c.arguments[0]);
                 if (iter == hierarchies.end()) return;
                 int salary = iter->hierarchy->getSalary(c.arguments[1]);
                 if (salary == -1)
@@ -200,7 +201,7 @@ void input_handler::execute_command(const command& c) {
                 break;
             }
             case command_type::Overloaded: {
-                auto iter = find_message(c.arguments[0]);
+                iter_type iter = find_message(c.arguments[0]);
                 if (iter == hierarchies.end()) return;
                 int cnt = iter->hierarchy->num_overloaded();
                 std::cout << "In " + c.arguments[0] + " there are "
@@ -208,7 +209,7 @@ void input_handler::execute_command(const command& c) {
                 break;
             }
             case command_type::Incorporate: {
-                auto iter = find_message(c.arguments[0]);
+                iter_type iter = find_message(c.arguments[0]);
                 if (iter == hierarchies.end()) return;
                 iter->hierarchy->incorporate();
                 iter->saved = false;
@@ -216,7 +217,7 @@ void input_handler::execute_command(const command& c) {
                 break;
             }
             case command_type::Modernize: {
-                auto iter = find_message(c.arguments[0]);
+                iter_type iter = find_message(c.arguments[0]);
                 if (iter == hierarchies.end()) return;
                 iter->hierarchy->modernize();
                 iter->saved = false;
@@ -224,14 +225,14 @@ void input_handler::execute_command(const command& c) {
                 break;
             }
             case command_type::Join: {
-                auto iter1 = find_message(c.arguments[0]);
+                iter_type iter1 = find_message(c.arguments[0]);
                 if (iter1 == hierarchies.end()) return;
 
-                auto iter2 = find_message(c.arguments[1]);
+                iter_type iter2 = find_message(c.arguments[1]);
                 if (iter2 == hierarchies.end()) return;
                 Hierarchy* resultant = new Hierarchy(iter1->hierarchy->join(*iter2->hierarchy));
                 if (resultant->num_employees() != 0) {
-                    auto iter = find(c.arguments[2]);
+                    iter_type iter = find(c.arguments[2]);
                     if(iter != hierarchies.end())
                     {
                         delete iter->hierarchy;
@@ -257,8 +258,8 @@ input_handler::~input_handler()
         delete h.hierarchy;
 }
 
-typename std::vector<input_handler::hierarchy_state>::iterator input_handler::find(const string &name) {
-    for(std::vector<input_handler::hierarchy_state>::iterator iter = hierarchies.begin();
+typename iter_type input_handler::find(const string &name) {
+    for(iter_type iter = hierarchies.begin();
         iter != hierarchies.end(); ++iter)
         if(iter->name == name)
             return iter;

@@ -15,6 +15,7 @@ enum command_type
     Save_1arg,
     Find,
     Num_subordinates,
+    Num_all_subordinates,
     Manager,
     Num_employees,
     Overloaded,
@@ -25,7 +26,6 @@ enum command_type
     Incorporate,
     Modernize,
     Longest_chain,
-    Num_all_subordinates,
     Exit
 };
 
@@ -81,8 +81,14 @@ struct command
         {
                 command_type::Num_subordinates,
                 "num_subordinates",
-                {"branch name", "manger"},
+                {"branch name", "employee"},
                 "gives the number of direct subordinates of manager"
+        },
+        {
+                command_type::Num_all_subordinates,
+                "num_all_subordinates",
+                {"branch name", "employee"},
+                "outputs the total number of subordinates of an employee in a given branch"
         },
         {
                 command_type::Manager,
@@ -142,13 +148,7 @@ struct command
                 command_type::Longest_chain,
                 "longest_chain",
                 {"branch name"},
-                "outputs the longest manager-subordinate chain in branch"
-        },
-        {
-                command_type::Num_all_subordinates,
-                "num_all_subordinates",
-                {"branch name", "employee"},
-                "outputs the total number of subordinates of an employee in a given branch"
+                "outputs the length of the longest manager-subordinate chain in branch"
         },
         {
                 command_type::Exit,

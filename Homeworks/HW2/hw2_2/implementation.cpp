@@ -29,7 +29,7 @@ Hierarchy::Hierarchy(const string& data)
         // i.e. if they are in tree already, cannot add them again
         data_parser parser;
         parser.parse_text(data);
-        for(const auto& pair : parser.pairs())
+        for(const manager_subordinate& pair : parser.pairs())
         {
             Node* found_in_branch = find_by_key(pair.subordinate);
             if(found_in_branch)
@@ -105,13 +105,13 @@ int Hierarchy::num_overloaded(int level) const
     num_overloaded_helper(root, level, result);
     return result;
 }
-/// does not make unnecessary steps
+
 /// returns the weight and accumulates number of overloaded employees in a parameter
 int Hierarchy::num_overloaded_helper(Node* root, int N, int& overloaded)
 {
     if(!root) return 0;
     int cnt = root->subordinates.size();
-    for(auto& child : root->subordinates)
+    for(Node* child : root->subordinates)
         cnt += num_overloaded_helper(child, N, overloaded);
     if(cnt > N) ++overloaded;
     return cnt;
@@ -126,7 +126,6 @@ string Hierarchy::manager(const string& name) const
     Node* manager = find_parent(name).parent;
     if(!manager)
         throw std::runtime_error("There is no " + name);
-        //return "";
     return manager->name;
 }
 
@@ -140,11 +139,7 @@ int Hierarchy::num_subordinates(const string& name) const
 unsigned long Hierarchy::getSalary(const string& who) const
 {
     Node* temp = find_by_key(who);
-    if(!temp)
-    {
-//throw std::logic_error(who + " is not employed in current branch.");
-        return -1;
-    }
+    if(!temp) return -1;
     return salary(temp);
 }
 
@@ -158,17 +153,9 @@ unsigned long Hierarchy::salary(const Node* root)
 
 bool Hierarchy::fire(const string& who)
 {
-    if(who == boss_name)
-    {
-//throw std::logic_error("how dare you!");
-        return false;
-    }
+    if(who == boss_name) return false;
     parent_child temp = find_parent(who);
-    if(!temp.parent)
-    {
-//throw std::logic_error("no such person is employed in current branch");
-        return false;
-    }
+    if(!temp.parent) return false;
     temp.parent->subordinates.splice(temp.parent->subordinates.end(), (*temp.child)->subordinates);
     delete *temp.child;
     temp.parent->subordinates.erase(temp.child);
@@ -213,9 +200,9 @@ void Hierarchy::incorporate_helper(Node* root)
     if(root->subordinates.size() <  2)
         return;
     std::list<Node*>::iterator new_boss = root->subordinates.begin();
-    /// linearly find the new manager
+    // linearly find the new manager
     unsigned long new_boss_salary = salary(*new_boss);
-    for(auto iter = root->subordinates.begin();
+    for(std::list<Node*>::iterator iter = root->subordinates.begin();
         iter != root->subordinates.end();
         ++iter)
     {
@@ -336,7 +323,7 @@ Hierarchy::Node* Hierarchy::join_helper(const Node* root1, const Node* root2)
                     q.push({ child,
                              add_as_child(front.current_node, child->name),
                              find_rec(root1, child->name),
-                             front.level + 1} );
+                             front.level + 1 } );
         }
     }
     return result;
@@ -370,17 +357,17 @@ Hierarchy::node_level Hierarchy::find_level(const Node* root, const std::string&
         {
             if(q.empty()) return node_level{};
             ++level;
-            q.push(parent_child_ptrs{nullptr, nullptr});
+            q.push(parent_child_ptrs{ nullptr, nullptr });
         }
         else
         {
             if(top.child->name == key)
-                return node_level{ top.parent, top.child, level };
+                return { top.parent, top.child, level };
             for(Node* child : top.child->subordinates)
                 q.push( parent_child_ptrs{ top.child, child });
         }
     }
-    return node_level{};
+    return {};
 }
 
 Hierarchy::Node* Hierarchy::is_subordinate(const Node* root, const std::string& key)
@@ -412,7 +399,7 @@ Hierarchy::Node* Hierarchy::find_rec(Node* root, const std::string& name)
 Hierarchy::parent_child Hierarchy::find_parent(Node* root, const std::string& child_value)
 {
     if(!root) return {};
-    for(auto iter = root->subordinates.begin();
+    for(std::list<Node*>::iterator iter = root->subordinates.begin();
         iter!=root->subordinates.end();
         ++iter)
     {
@@ -437,7 +424,6 @@ std::size_t Hierarchy::weight(const Node* root)
 std::size_t Hierarchy::height(Node* root)
 {
     if(!root) return 0;
-    std::size_t cnt = 1;
     std::size_t best_child_height = 0;
     for(Node* child : root->subordinates)
     {
