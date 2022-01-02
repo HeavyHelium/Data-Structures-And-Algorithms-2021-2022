@@ -136,7 +136,7 @@ void input_handler::execute_command(const command& c) {
                     throw std::logic_error("Manger cannot be subordinate of themselves.");
                 if (iter->hierarchy->hire(c.arguments[1], c.arguments[2])) {
                     iter->saved = false;
-                    std::cout << "Successfully hired " + c.arguments[1] + " in branch\n";
+                    std::cout << "Successfully hired " + c.arguments[1] + " in branch!\n";
                 } else
                     throw std::logic_error("There is no " + c.arguments[2] + " in " + c.arguments[0] + ".");
                 break;
@@ -179,7 +179,6 @@ void input_handler::execute_command(const command& c) {
             case command_type::Num_employees: {
                 iter_type iter = find_message(c.arguments[0]);
                 if (iter == hierarchies.end()) return;
-                int num = iter->hierarchy->num_employees();
                 std::cout << c.arguments[0] + " has "
                           << iter->hierarchy->num_employees() << " employees.\n";
                 break;

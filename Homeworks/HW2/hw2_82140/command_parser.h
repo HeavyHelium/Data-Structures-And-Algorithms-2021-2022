@@ -82,7 +82,7 @@ struct command
                 command_type::Num_subordinates,
                 "num_subordinates",
                 {"branch name", "employee"},
-                "gives the number of direct subordinates of manager"
+                "ouputs the number of direct subordinates of an employee in a given branch"
         },
         {
                 command_type::Num_all_subordinates,

@@ -22,7 +22,7 @@ Hierarchy::Hierarchy(Node* root)
 
 Hierarchy::Hierarchy(const string& data)
 {
-    if(data != "")
+    if(!data.empty())
     {
         add_root();
         // can have a person only once as subordinate,

@@ -1,4 +1,0 @@
-G:/FMI/Year 2/fall_winter/SDP/Homeworks/HW2/for_submission/cmake-build-debug/CMakeFiles/tests.dir
-G:/FMI/Year 2/fall_winter/SDP/Homeworks/HW2/for_submission/cmake-build-debug/CMakeFiles/console.dir
-G:/FMI/Year 2/fall_winter/SDP/Homeworks/HW2/for_submission/cmake-build-debug/CMakeFiles/edit_cache.dir
-G:/FMI/Year 2/fall_winter/SDP/Homeworks/HW2/for_submission/cmake-build-debug/CMakeFiles/rebuild_cache.dir
