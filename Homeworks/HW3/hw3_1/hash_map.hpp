@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <vector>
 #include <forward_list>
+#include <cmath>
 #include <set>
 /// separate chaining implementation of hashset
 template<typename Key, typename Value, typename hasher = std::hash<Key>>
@@ -20,14 +21,13 @@ public:
 private:
     using bucket = std::forward_list<pair>;
     using bucket_iterator = typename std::forward_list<pair>::iterator;
-    using const_bucket_iterator = typename std::forward_list<pair>::const_iterator;
 
     static constexpr std::size_t INITIAL_BUCKET_CNT = 8;
     static constexpr std::size_t INITIAL_MAX_LOAD_FACTOR = 1;
     static constexpr std::size_t RESIZE_FACTOR = 2;
 
-    std::size_t m_size = 0;
     std::vector<bucket> buckets_array;
+    std::size_t m_size = 0;
     float m_max_load_factor = INITIAL_MAX_LOAD_FACTOR;
 public:
     void print() const {
@@ -98,7 +98,7 @@ public:
     }
 
     pair* insert(const pair& p) {
-        if(contains(p.k)) return false;
+        if(contains(p.k)) return nullptr;
         std::size_t index = hash_value(p.k);
         if(float (m_size + 1) / bucket_count() > max_load_factor())
             rehash(RESIZE_FACTOR * 2);

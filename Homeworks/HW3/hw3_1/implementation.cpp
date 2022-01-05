@@ -1,20 +1,20 @@
-#include "interface.h"
-#include "hash_map.hpp"
 #include <cctype>
 #include <iostream>
 #include <cassert>
 #include <set>
+#include "interface.h"
+#include "hash_map.hpp"
 
 bool WordsMultiset::contains(const std::string &word) const {
     return table.contains(word);
 }
 
 void WordsMultiset::add(const std::string &word, size_t times) {
-    while(times) {
+    if(times) {
         auto found = table.find(word);
-        if(found) ++(found -> v);
-        else table.insert({ word, 1 });
-        --times;
+        if(found) (found -> v += times);
+        else table.insert({ word, times });
+        m_total_word_cnt += times;
     }
 }
 
@@ -37,8 +37,12 @@ std::multiset<std::string> WordsMultiset::words() const {
     return s;
 }
 
+std::size_t WordsMultiset::total_word_cnt() const {
+    return m_total_word_cnt;
+}
+
 ComparisonReport Comparator::compare(std::istream& a, std::istream& b) {
-    file_parser p1;
+    data_parser p1;
     p1.parse(a);
     p1.parse(b);
     WordsMultiset common;
@@ -56,15 +60,12 @@ ComparisonReport Comparator::compare(std::istream& a, std::istream& b) {
     return { common, { unique[0], unique[1] } };
 }
 
-
-void file_parser::parse(std::istream& stream) {
+void data_parser::parse(std::istream& stream) {
     static std::size_t calls = 0;
     std::string word;
     char ch;
-    //std::cout << "here at least\n";
     while(stream.get(ch))
     {
-        //std::cout << "hello\n";
         if(!isspace(ch)) word.push_back(ch);
         else if(!word.empty())
         {
@@ -79,17 +80,19 @@ void file_parser::parse(std::istream& stream) {
     ++calls;
 }
 
-void file_parser::add_word(const std::string& word) {
+void data_parser::add_word(const std::string& word) {
     auto found = words.find(word);
     if(first)
     {
         if(found) ++(found -> v.cnt1);
         else words.insert({ word, { 1, 0 } });
+        ++word_cnt1;
     }
     else
     {
         if(found) ++(found -> v.cnt2);
         else words.insert({ word, { 0, 1 } });
+        ++word_cnt2;
     }
 }
 

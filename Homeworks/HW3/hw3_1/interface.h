@@ -21,6 +21,7 @@ struct amount_pair
 
 class WordsMultiset {
     hash_table<std::string, std::size_t> table;
+    std::size_t m_total_word_cnt = 0;
 public:
 	/// Adds times occurrences of word to the container
 	///
@@ -40,7 +41,7 @@ public:
 	/// Returns a multiset of all words in the container
 	std::multiset<std::string> words() const;
 	
-	// You can add additional members if you need to
+	std::size_t total_word_cnt() const;
 };
 
 ///
@@ -69,8 +70,10 @@ public:
 
 };
 
-struct file_parser{
+struct data_parser{
     bool first = true;
+    std::size_t word_cnt1 = 0;
+    std::size_t word_cnt2 = 0;
     hash_table<std::string, amount_pair> words;
     void parse(std::istream& stream);
     void add_word(const std::string& word);

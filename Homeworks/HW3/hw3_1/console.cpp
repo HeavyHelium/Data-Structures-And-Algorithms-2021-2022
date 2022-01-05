@@ -1,31 +1,35 @@
 #include <iostream>
-#include <set>
-#include "interface.h"
-#include <sstream>
+#include <fstream>
+#include "input_output_handler.h"
 
-int main()
-{
-    std::stringstream a("one two three four two one");
-    std::stringstream b("two one four one one");
+int main(int argc, char** argv)try {
+    if(argc != 3) {
+        std::cerr << "usage: <program> <filename1> <filename2>\n";
+        return -1;
+    }
+    std::ifstream file1(argv[1]);
+    std::ifstream file2(argv[2]);
 
-    Comparator c;
-    ComparisonReport report = c.compare(a, b);
-    std::cout << report.commonWords.countOfUniqueWords() << "\n";
-    std::cout << report.uniqueWords[0].countOfUniqueWords() << "\n";
-    std::cout << report.uniqueWords[1].countOfUniqueWords() << "\n";
-    //h.to_multiset();
-/*
-    for(typename hash_table<std::string, int>::const_iterator iter = h.begin(); iter != h.end(); ++iter)
-    {
-        std::cout << iter->k << ", " << iter->v << std::endl;
-    }*/
-    /*
-    /*
-    if(argc != 3)
-        std::cerr << "error: wrong argument count\n"
-                  << "\t usage: <program path> <filepath1> <filepath2>\n";*/
-    //std::string_view v1(argv[0]);
-    //std::cout << argv[0] << std::endl;
+    if(!file1.is_open()) {
+        std::cerr << "error: failed to open file with path: \""
+                  << argv[0] << "\"\n";
+        return -1;
+    }
+    if(!file2.is_open()) {
+        std::cerr << "error: failed to open file with path: \""
+                  << argv[1] << "\"\n";
+        return -1;
+    }
+
+    input_output_handler h;
+    h.handle_input(file1, file2);
+    h.handle_output(argv[1], argv[2]);
+    input_output_handler::say_goodbye();
+
     return 0;
+}
+catch(const std::exception& e) {
+    std::cerr << "an unexpected error occurred with message: "
+              << e.what() << "\n";
 }
 
