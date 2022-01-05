@@ -103,7 +103,7 @@ TEST_CASE("The multiset of words in an empty WordsMultiset object is also empty"
 	WordsMultiset wl;
 	REQUIRE(wl.words().empty());
 }
-/*
+
 TEST_CASE("Comparator works correctly for empty streams")
 {
 	std::stringstream a, b;
@@ -170,4 +170,4 @@ TEST_CASE("Comparator works correctly for the streams [one two three] and []")
 		std::multiset<std::string> expected{ "one","two","three" };
 		REQUIRE(report.uniqueWords[0].words() == expected);
 	}
-}*/
+}

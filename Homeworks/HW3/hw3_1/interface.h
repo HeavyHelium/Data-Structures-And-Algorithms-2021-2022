@@ -11,7 +11,14 @@
 /// check out the corresponding unit tests
 ///
 /// Implement all methods of this class
-/// 
+///
+
+struct amount_pair
+{
+    std::size_t cnt1 = 0;
+    std::size_t cnt2 = 0;
+};
+
 class WordsMultiset {
     hash_table<std::string, std::size_t> table;
 public:
@@ -63,6 +70,8 @@ public:
 };
 
 struct file_parser{
-    hash_table<std::string, std::size_t> words;
+    bool first = true;
+    hash_table<std::string, amount_pair> words;
     void parse(std::istream& stream);
+    void add_word(const std::string& word);
 };

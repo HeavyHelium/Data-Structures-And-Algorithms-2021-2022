@@ -50,16 +50,16 @@ The CXX compiler identification is MSVC, found in "G:/FMI/Year 2/fall_winter/SDP
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: G:/FMI/Year 2/fall_winter/SDP/Homeworks/HW3/hw3_1/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/Program Files/JetBrains/CLion 2021.3/bin/ninja/win/ninja.exe cmTC_3c8a1 && [1/2] Building C object CMakeFiles\cmTC_3c8a1.dir\CMakeCCompilerABI.c.obj
-[2/2] Linking C executable cmTC_3c8a1.exe
+Run Build Command(s):C:/Program Files/JetBrains/CLion 2021.3/bin/ninja/win/ninja.exe cmTC_becd0 && [1/2] Building C object CMakeFiles\cmTC_becd0.dir\CMakeCCompilerABI.c.obj
+[2/2] Linking C executable cmTC_becd0.exe
 
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: G:/FMI/Year 2/fall_winter/SDP/Homeworks/HW3/hw3_1/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/Program Files/JetBrains/CLion 2021.3/bin/ninja/win/ninja.exe cmTC_a9e09 && [1/2] Building CXX object CMakeFiles\cmTC_a9e09.dir\CMakeCXXCompilerABI.cpp.obj
-[2/2] Linking CXX executable cmTC_a9e09.exe
+Run Build Command(s):C:/Program Files/JetBrains/CLion 2021.3/bin/ninja/win/ninja.exe cmTC_76096 && [1/2] Building CXX object CMakeFiles\cmTC_76096.dir\CMakeCXXCompilerABI.cpp.obj
+[2/2] Linking CXX executable cmTC_76096.exe
 
 
 

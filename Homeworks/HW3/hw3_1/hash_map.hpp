@@ -30,49 +30,6 @@ private:
     std::vector<bucket> buckets_array;
     float m_max_load_factor = INITIAL_MAX_LOAD_FACTOR;
 public:
-    class const_iterator
-    {
-        friend class hash_table;
-        const hash_table& t;
-        std::size_t table_index;
-        const_bucket_iterator iter;
-
-    public:
-        const_iterator(const hash_table& t,
-                       std::size_t table_index,
-                       const bucket_iterator& iter)
-                       : t(t),
-                         table_index(table_index),
-                         iter(iter)
-        {}
-        const pair& operator*() {
-            return *iter;
-        }
-        const_bucket_iterator operator->() {
-            return iter;
-        }
-        bool operator == (const const_iterator& other) const {
-            return table_index == other.table_index &&
-                   iter == other.iter;
-        }
-        bool operator != (const const_iterator& other) const {
-            return ! (*this == other);
-        }
-        const_iterator& operator++() {
-            if(!(t.bucket_count() == table_index + 1 && iter == t.buckets_array[table_index].end())) {
-                if(iter == t.buckets_array[table_index].end()){
-                    ++table_index;
-                    iter = t.buckets_array[table_index].begin();
-                }
-                else ++iter;
-            }
-            return *this;
-        }
-    public:
-
-
-    };
-public:
     void print() const {
         for(const bucket& b : buckets_array) {
             for (const pair& p : b )
@@ -184,23 +141,42 @@ public:
         if(found) return found->v;
         throw std::runtime_error("no element with such key in hash table");
     }
-    const_iterator begin() const {
-        return const_iterator(*this, 0, buckets_array[0].begin());
+    typename std::vector<bucket>::const_iterator begin() const {
+        return buckets_array.begin();
     }
-    const_iterator end() const {
-        return const_iterator(*this, m_size - 1, buckets_array[m_size - 1].begin());
-    }
-
-    std::multiset<Key> to_multiset() const
-    {
-        std::multiset<Key> s;
-        for(const bucket& b : buckets_array)
-            for(const pair& p : b)
-                for(std::size_t i = 0; i < p.v; ++i)
-                    s.insert(p.k);
-        return s;
+    typename std::vector<bucket>::const_iterator end() const {
+        return buckets_array.end();
     }
 
 };
+/*
+const_iterator(const hash_table& t,
+               std::size_t table_index,
+               const bucket_iterator& iter)
+        : t(t),
+          table_index(table_index),
+          iter(iter)
+{}
 
+const_bucket_iterator operator->() {
+    return iter;
+}
+bool operator == (const const_iterator& other) const {
+    return table_index == other.table_index &&
+           iter == other.iter;
+}
+bool operator != (const const_iterator& other) const {
+    return ! (*this == other);
+}
+const_iterator& operator++() {
+    if(!(t.bucket_count() == table_index + 1 && iter == t.buckets_array[table_index].end())) {
+        if(iter == t.buckets_array[table_index].end()){
+            ++table_index;
+            iter = t.buckets_array[table_index].begin();
+        }
+        else ++iter;
+    }
+    return *this;
+}
+*/
 #endif //hash_table_HPP

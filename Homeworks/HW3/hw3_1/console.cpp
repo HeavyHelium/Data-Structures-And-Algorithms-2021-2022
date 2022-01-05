@@ -1,16 +1,20 @@
 #include <iostream>
 #include <set>
 #include "interface.h"
+#include <sstream>
 
 int main()
 {
-    hash_table<std::string, int> h;
-    h.insert({ "hello", 1 });
-    h.insert({ "madafaka", 2 });
-    h.insert({ "bitch better have my money", 10000000 });
-    h.insert({ "douglas adams", 42 });
-    h.to_multiset();
-    /*
+    std::stringstream a("one two three four two one");
+    std::stringstream b("two one four one one");
+
+    Comparator c;
+    ComparisonReport report = c.compare(a, b);
+    std::cout << report.commonWords.countOfUniqueWords() << "\n";
+    std::cout << report.uniqueWords[0].countOfUniqueWords() << "\n";
+    std::cout << report.uniqueWords[1].countOfUniqueWords() << "\n";
+    //h.to_multiset();
+/*
     for(typename hash_table<std::string, int>::const_iterator iter = h.begin(); iter != h.end(); ++iter)
     {
         std::cout << iter->k << ", " << iter->v << std::endl;
