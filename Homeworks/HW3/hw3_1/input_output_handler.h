@@ -3,6 +3,7 @@
 #define HW3_1_INPUT_OUTPUT_HANDLER_H
 #include <cstddef>
 #include <fstream>
+#include "interface.h"
 
 class input_output_handler {
     ///TODO: Refactor, make them pairs
@@ -21,6 +22,10 @@ public:
     void handle_input(std::ifstream& ifile1, std::ifstream& ifile2);
     void handle_output(const char* filename1,
                        const char* filename2) const;
+    void save_as_hashed_and_sorted(const ComparisonReport& rep,
+                                          const char* filepath1 = "u1.txt",
+                                          const char* filepath2 = "u2.txt",
+                                          const char* filepath3 = "c.txt");
     static void say_goodbye();
 };
 

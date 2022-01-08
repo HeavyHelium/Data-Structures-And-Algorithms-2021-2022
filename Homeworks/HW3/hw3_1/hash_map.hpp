@@ -23,7 +23,7 @@ private:
     using bucket_iterator = typename std::forward_list<pair>::iterator;
 
     static constexpr std::size_t INITIAL_BUCKET_CNT = 8;
-    static constexpr std::size_t INITIAL_MAX_LOAD_FACTOR = 1;
+    static constexpr float INITIAL_MAX_LOAD_FACTOR = 0.75;
     static constexpr std::size_t RESIZE_FACTOR = 2;
 
     std::vector<bucket> buckets_array;

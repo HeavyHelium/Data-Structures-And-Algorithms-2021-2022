@@ -1,4 +1,8 @@
-﻿#include <iostream>
+﻿#pragma once
+#ifndef INTERFACE_H
+#define INTERFACE_H
+
+#include <iostream>
 #include <set>
 #include <string>
 #include <vector>
@@ -78,3 +82,4 @@ struct data_parser{
     void parse(std::istream& stream);
     void add_word(const std::string& word);
 };
+#endif

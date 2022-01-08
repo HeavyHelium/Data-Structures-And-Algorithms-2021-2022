@@ -2,6 +2,7 @@
 #include <cmath>
 #include "input_output_handler.h"
 #include "interface.h"
+#define SAVE_RESULTS
 
 void input_output_handler::handle_input(std::ifstream& ifile1, std::ifstream& ifile2)
 {
@@ -19,6 +20,9 @@ void input_output_handler::handle_input(std::ifstream& ifile1, std::ifstream& if
 
     similarity_rate1 = total_common * 100.0 / fst_total;
     similarity_rate2 = total_common * 100.0 / snd_total;
+#ifdef SAVE_RESULTS
+    save_as_hashed_and_sorted(report);
+#endif
 
 }
 void input_output_handler::handle_output(const char* filename1,
@@ -43,4 +47,22 @@ void input_output_handler::say_goodbye()
     std::cout << "\n\n...Goodbye!\n...press any key to close the program..." << std::endl;
     char ch;
     std::cin.get(ch);
+}
+
+void input_output_handler::save_as_hashed_and_sorted(const ComparisonReport& rep,
+                                                     const char* filepath1,
+                                                     const char* filepath2,
+                                                     const char* filepath3) {
+    std::ofstream f1(filepath1);
+    std::ofstream f2(filepath2);
+    std::ofstream f3(filepath3);
+    const auto& uset1 = rep.uniqueWords[0].words();
+    const auto& uset2 = rep.uniqueWords[1].words();
+    const auto& common = rep.commonWords.words();
+    for(const auto& word : uset1)
+        f1 << word << '\n';
+    for(const auto& word : uset2)
+        f2 << word << '\n';
+    for(const auto& word : common)
+        f3 << word << '\n';
 }
