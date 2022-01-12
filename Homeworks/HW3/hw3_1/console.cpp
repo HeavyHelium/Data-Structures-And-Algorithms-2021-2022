@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 //#define GENERATE_FILE
-#define SAVE_RESULTS
+//#define SAVE_RESULTS
 #include "input_output_handler.h"
 
 void generate_words(std::ostream& os, std::size_t cnt = 18'000'000, bool modify = false)

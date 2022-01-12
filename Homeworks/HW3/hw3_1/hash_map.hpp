@@ -99,11 +99,13 @@ public:
 
     pair* insert(const pair& p) {
         if(contains(p.k)) return nullptr;
-        std::size_t index = hash_value(p.k);
         if(float (m_size + 1) / bucket_count() > max_load_factor())
             rehash(RESIZE_FACTOR * 2);
+        std::size_t index = hash_value(p.k);
         buckets_array[index].push_front(p);
         ++m_size;
+        //std::cout << "here\n";
+        assert(find(p.k));
         return &buckets_array[index].front();
     }
     bool erase(const Key& key) {

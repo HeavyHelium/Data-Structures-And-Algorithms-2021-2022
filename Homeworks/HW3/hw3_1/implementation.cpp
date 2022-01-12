@@ -45,8 +45,10 @@ ComparisonReport Comparator::compare(std::istream& a, std::istream& b) {
     data_parser p1;
     p1.parse(a);
     p1.parse(b);
+    //p1.print();
     WordsMultiset common;
     WordsMultiset unique[2];
+
     for(const auto& b : p1.words)
     {
         for(const auto& w : b){
@@ -57,42 +59,49 @@ ComparisonReport Comparator::compare(std::istream& a, std::istream& b) {
                 unique[1].add(w.k, w.v.cnt2 - w.v.cnt1);
         }
     }
+    //std::cout << "d: " << common.total_word_cnt() << ", " << unique[0].total_word_cnt() << ", " << unique[1].total_word_cnt() << std::endl;
     return { common, { unique[0], unique[1] } };
 }
 
 void data_parser::parse(std::istream& stream) {
-    static std::size_t calls = 0;
+    //static std::size_t calls = 0;
     std::string word;
-    char ch;
-    while(stream.get(ch))
-    {
-        if(!isspace(ch)) word.push_back(ch);
-        else if(!word.empty())
-        {
-            add_word(word);
-            word.clear();
-        }
-    }
-    if(!word.empty())
+    while(stream >> word) {
+        //std::cout << word << std::endl;
         add_word(word);
-
+        word.clear();
+    }
     if(first) first = false;
-    ++calls;
+    //std::cout << word_cnt1 << ", " << word_cnt2 << std::endl;
+    //++calls;
 }
 
 void data_parser::add_word(const std::string& word) {
     auto found = words.find(word);
-    if(first)
-    {
+    //std::cout << "h: " << word << std::endl;
+    //std::cout << "f: " << (bool) found << std::endl;
+    if(first) {
         if(found) ++(found -> v.cnt1);
-        else words.insert({ word, { 1, 0 } });
+        else {
+            //std::cout << "fins\n";
+            assert(words.insert({ word, { 1, 0 } }));
+            assert(words.find(word));
+        }
         ++word_cnt1;
     }
-    else
-    {
+    else {
         if(found) ++(found -> v.cnt2);
         else words.insert({ word, { 0, 1 } });
         ++word_cnt2;
+    }
+}
+
+void data_parser::print() const {
+    for(const auto& b: words){
+        for(const auto& elem: b)
+            std::cout << elem.k << ", "
+                      << elem.v.cnt1 << " vs "
+                      << elem.v.cnt2 << std::endl;
     }
 }
 

@@ -81,5 +81,6 @@ struct data_parser{
     hash_table<std::string, amount_pair> words;
     void parse(std::istream& stream);
     void add_word(const std::string& word);
+    void print() const;
 };
 #endif
