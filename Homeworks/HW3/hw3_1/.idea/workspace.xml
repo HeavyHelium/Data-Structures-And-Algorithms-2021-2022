@@ -13,26 +13,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="36de7b9e-8ae1-47f2-ae14-e0e074be8def" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../../../seminars/hash_table/.idea/hash_table.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/console.dir/console.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/console.dir/console.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/console.dir/implementation.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/console.dir/implementation.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/console.dir/input_output_handler.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/console.dir/input_output_handler.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/console.dir/vc140.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/console.dir/vc140.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/tests.dir/implementation.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/tests.dir/implementation.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/tests.dir/test.cpp.obj" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/tests.dir/test.cpp.obj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/tests.dir/vc140.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/tests.dir/vc140.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/console.ilk" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/console.ilk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/console.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/console.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/tests.ilk" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/tests.ilk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/tests.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/tests.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/console.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/console.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hash_map.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/hash_map.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/implementation.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/implementation.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/interface.h" beforeDir="false" afterPath="$PROJECT_DIR$/interface.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../seminars/hash_table/sp_hash_table.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../../../seminars/hash_table/sp_hash_table.hpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

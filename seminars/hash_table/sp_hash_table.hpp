@@ -227,10 +227,4 @@ private:
     }
 };
 
-
-//-----------------------------Definitions-----------------------------
-
-
-
-
 #endif //HASH_TABLE_SP_HASH_TABLE_HPP
