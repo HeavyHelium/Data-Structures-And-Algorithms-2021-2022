@@ -11,5 +11,6 @@ int main() {
         std::cout << elem.first << std::endl;
     }
     assert(t1.contains("gosho"));
+    assert(t1["gosho"] == 25);
 
 }
