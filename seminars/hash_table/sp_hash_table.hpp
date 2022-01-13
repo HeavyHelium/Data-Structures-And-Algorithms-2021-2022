@@ -5,6 +5,7 @@
 #include <functional>
 #include <vector>
 #include <forward_list>
+#include <initializer_list>
 
 template<typename K, typename V>
 struct sp_hash_table {
@@ -23,9 +24,6 @@ struct sp_hash_table {
     static_assert(INITIAL_BUCKET_COUNT > 0);
     static_assert(REHASH_FACTOR > 1);
 
-    Table table;
-    int count = 0;
-
     struct iterator {
         friend struct hash_table;
     private:
@@ -42,7 +40,7 @@ struct sp_hash_table {
 
     public:
         iterator(table_iterator b, bucket_iterator e, table_iterator end)
-            : bucket(b), element(e), end(end) {
+                : bucket(b), element(e), end(end) {
             find_next_valid();
         }
         iterator& operator++() {
@@ -100,11 +98,11 @@ struct sp_hash_table {
             find_next_valid();
             return copy;
         }
-        bool operator==(const_iterator& other) const {
+        bool operator==(const const_iterator& other) const {
             return bucket == other.bucket &&
                    element == other.element;
         }
-        bool operator!=(const_iterator& other) const {
+        bool operator!=(const const_iterator& other) const {
             return !(*this == other);
         }
         const Item& operator*() {
@@ -182,6 +180,12 @@ struct sp_hash_table {
         bucket->emplace_front(key, value);
         ++count;
     }
+    void insert(const Item& item) {
+        insert(item.first, item.second);
+    }
+    void insert(Item&& item){
+        insert(std::move(item.first), std::move(item.second));
+    }
     void erase(const K& key) {
         table_iterator bucket = get_bucket(key);
         for(bucket_iterator it = bucket->before_begin(); it != bucket->end(); ) {
@@ -204,7 +208,7 @@ struct sp_hash_table {
         if(should_resize()) {
             resize();
         }
-        bucket->emplace_front(key, V());
+        bucket->push_front({ key, V()});
         ++count;
         return bucket->front().second;
     }
@@ -225,6 +229,8 @@ private:
     table_iterator get_bucket(const K& key) {
         return table.begin() + get_index(key);
     }
+    Table table;
+    int count = 0;
 };
 
 #endif //HASH_TABLE_SP_HASH_TABLE_HPP
