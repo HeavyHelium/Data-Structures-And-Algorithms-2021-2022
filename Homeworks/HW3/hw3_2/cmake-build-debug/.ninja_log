@@ -13,3 +13,8 @@
 1	3198	6637372614979330	CMakeFiles/tests.dir/implementation.cpp.obj	ea1ebe0b6c26b92e
 40	8707	6637372671489317	CMakeFiles/tests.dir/test.cpp.obj	519483262dd4d73a
 8708	12150	6637372701914662	tests.exe	21ad7c7fdc529929
+35	4672	6637383654115304	CMakeFiles/console.dir/implementation.cpp.obj	1b8163a6847fa77d
+40	4677	6637383654265285	CMakeFiles/console.dir/input_output_handler.cpp.obj	f0a81777691237ef
+19	1588	6637392015190425	CMakeFiles/console.dir/input_output_handler.cpp.obj	f0a81777691237ef
+1	1593	6637392015200414	CMakeFiles/console.dir/console.cpp.obj	b0b08672071c5bc3
+1594	3130	6637392029824375	console.exe	3b8a56eaf8fe4133

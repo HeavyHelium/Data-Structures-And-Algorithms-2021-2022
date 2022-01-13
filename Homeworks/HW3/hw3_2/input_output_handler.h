@@ -17,6 +17,7 @@ class input_output_handler {
 
     double similarity_rate1 = 0;
     double similarity_rate2 = 0;
+    ComparisonReport r;
 public:
     input_output_handler() = default;
     void handle_input(std::ifstream& ifile1, std::ifstream& ifile2);
@@ -27,6 +28,9 @@ public:
                                           const char* filepath2 = "u2.txt",
                                           const char* filepath3 = "c.txt");
     static void say_goodbye();
+private:
+    void handle_output_helper(const char* filename1,
+                       const char* filename2, const ComparisonReport& r) const;
 };
 
 

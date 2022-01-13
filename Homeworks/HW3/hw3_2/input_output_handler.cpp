@@ -2,6 +2,8 @@
 #include <cmath>
 #include "input_output_handler.h"
 #include "interface.h"
+#include <utility>
+#include <algorithm>
 //#define SAVE_RESULTS
 
 void input_output_handler::handle_input(std::ifstream& ifile1, std::ifstream& ifile2) {
@@ -19,10 +21,10 @@ void input_output_handler::handle_input(std::ifstream& ifile1, std::ifstream& if
 
     similarity_rate1 = total_common * 100.0 / fst_total;
     similarity_rate2 = total_common * 100.0 / snd_total;
+    r = std::move(report);
 #ifdef SAVE_RESULTS
     save_as_hashed_and_sorted(report);
 #endif
-
 }
 void input_output_handler::handle_output(const char* filename1,
                                          const char* filename2) const {
@@ -40,8 +42,31 @@ void input_output_handler::handle_output(const char* filename1,
               << " words and " << total_common << " of them are also contained "
               << "in " << filename1 << ".\n"
               << "\tSimilarity rate: " << std::floor(similarity_rate2)
-              << " %.\n";
+              << " %.\n\n";
+
+    std::cout << "\t---------------------------------------------------\n";
+    std::cout << "\tCommon words: \n";
+    std::cout << "\t---------------------------------------------------\n";
+    for(const auto& word : r.commonWords.words()) {
+        std::cout << "\t" << word << "\n";
+    }
+
+    std::cout << "\t---------------------------------------------------\n";
+    std::cout << "\tUnique words " << filename1 << ": \n";
+    std::cout << "\t---------------------------------------------------\n";
+    for(const auto& word : r.uniqueWords[0].words()) {
+        std::cout << "\t" << word << "\n";
+    }
+
+    std::cout << "\t---------------------------------------------------\n";
+    std::cout << "\tUnique words " << filename2 << ": \n";
+    std::cout << "\t---------------------------------------------------\n";
+    for(const auto& word : r.uniqueWords[1].words()) {
+        std::cout << "\t" << word << "\n";
+    }
+
 }
+
 void input_output_handler::say_goodbye() {
     std::cout << "\n\n...Goodbye!\n...press any key to close the program..." << std::endl;
     char ch;
@@ -65,3 +90,5 @@ void input_output_handler::save_as_hashed_and_sorted(const ComparisonReport& rep
     for(const auto& word : common)
         f3 << word << '\n';
 }
+
+
