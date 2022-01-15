@@ -8,6 +8,7 @@
 #include <forward_list>
 #include <cmath>
 #include <set>
+#include <initializer_list>
 /// separate chaining implementation of hashset
 template<typename Key, typename Value, typename hasher = std::hash<Key>>
 class hash_table
@@ -30,6 +31,7 @@ private:
     std::size_t m_size = 0;
     float m_max_load_factor = INITIAL_MAX_LOAD_FACTOR;
 public:
+
     void print() const {
         for(const bucket& b : buckets_array) {
             for (const pair& p : b )

@@ -16,6 +16,18 @@ void generate_words(std::ostream& os, std::size_t cnt = 18'000'000, bool modify 
 
 }
 
+#if 0
+int main() {
+    sp_hash_table<std::string, int> t{ { std::string("hello"), 5},  { std::string("hello2"), 6 } };
+    for(auto& elem : t) {
+        std::cout << elem.first << " " << elem.second << std::endl;
+    }
+    return 0;
+}
+
+#endif
+
+#if 1
 int main(int argc, char** argv)try {
 #ifdef GENERATE_FILE
     const int word_cnt = 3'000'000;
@@ -53,4 +65,4 @@ catch(const std::exception& e) {
     std::cerr << "an unexpected error occurred with message: "
               << e.what() << "\n";
 }
-
+#endif

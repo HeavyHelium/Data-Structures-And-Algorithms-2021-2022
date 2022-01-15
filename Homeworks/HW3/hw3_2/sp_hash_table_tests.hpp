@@ -1,3 +1,4 @@
+#pragma once
 #ifndef HW3_2_SP_HASH_TABLE_HPP
 #define HW3_2_SP_HASH_TABLE_HPP
 
@@ -79,6 +80,33 @@ TEST_CASE("Insertion of items works correctly", "[sp_hash_table]") {
         REQUIRE(t.find("key4")->first == "key4");
         REQUIRE(t.find("key5")->first == "key5");
         REQUIRE(t.find("key6")->first == "key6");
+
+        REQUIRE(t.find("key1")->second == 1);
+        REQUIRE(t.find("key2")->second == 2);
+        REQUIRE(t.find("key3")->second == 3);
+        REQUIRE(t.find("key4")->second == 4);
+        REQUIRE(t.find("key5")->second == 5);
+        REQUIRE(t.find("key6")->second == 6);
+    }
+    SECTION("When initializing with initializer list") {
+        sp_hash_table<key_type, value_type> t{ { std::string("key1"), 1 },
+                                               { std::string("key2"), 2 },
+                                               { std::string("key3"), 3 },
+                                               { std::string("key4"), 4 } };
+        REQUIRE(t.find("key1") != t.end());
+        REQUIRE(t.find("key2") != t.end());
+        REQUIRE(t.find("key3") != t.end());
+        REQUIRE(t.find("key4") != t.end());
+        REQUIRE(t.find("key1")->first == "key1");
+        REQUIRE(t.find("key2")->first == "key2");
+        REQUIRE(t.find("key3")->first == "key3");
+        REQUIRE(t.find("key4")->first == "key4");
+
+        REQUIRE(t.find("key1")->second == 1);
+        REQUIRE(t.find("key2")->second == 2);
+        REQUIRE(t.find("key3")->second == 3);
+        REQUIRE(t.find("key4")->second == 4);
+
     }
     SECTION("when inserting an element with a key already in table") {
         sp_hash_table<key_type, value_type> t;
@@ -178,12 +206,5 @@ TEST_CASE("Access operator functions correctly", "[sp_hash_table]") {
         REQUIRE(t.size() == 7);
     }
 }
-
-
-
-
-
-
-
 
 #endif //HW3_2_SP_HASH_TABLE_HPP

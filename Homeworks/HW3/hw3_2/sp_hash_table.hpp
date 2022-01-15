@@ -1,3 +1,4 @@
+#pragma once
 #ifndef HASH_TABLE_SP_HASH_TABLE_HPP
 #define HASH_TABLE_SP_HASH_TABLE_HPP
 
@@ -113,6 +114,12 @@ struct sp_hash_table {
         }
     };
 
+    sp_hash_table(std::initializer_list<Item> lst)
+        : sp_hash_table() {
+        for(const Item& elem : lst)
+            insert(elem);
+    }
+
     sp_hash_table() {
         table.resize(INITIAL_BUCKET_COUNT);
     }
@@ -133,21 +140,19 @@ struct sp_hash_table {
     int bucket_count() const {
         return table.size();
     }
-    const_iterator find(const K& key) const{
+    const_iterator find(const K& key) const {
         const_iterator e = end();
-        for(const_iterator it = begin(); it != e; ++it){
-            if(it->first == key) {
+        for(const_iterator it = begin(); it != e; ++it) {
+            if(it->first == key)
                 return it;
-            }
         }
         return e;
     }
     iterator find(const K& key) {
         iterator e = end();
-        for(iterator it = begin(); it != e; ++it){
-            if(it->first == key) {
+        for(iterator it = begin(); it != e; ++it) {
+            if(it->first == key)
                 return it;
-            }
         }
         return e;
     }
@@ -183,9 +188,6 @@ struct sp_hash_table {
     void insert(const Item& item) {
         insert(item.first, item.second);
     }
-    void insert(Item&& item){
-        insert(std::move(item.first), std::move(item.second));
-    }
     void erase(const K& key) {
         table_iterator bucket = get_bucket(key);
         for(bucket_iterator it = bucket->before_begin(); it != bucket->end(); ) {
@@ -201,13 +203,10 @@ struct sp_hash_table {
     V& operator[](const K& key) {
         table_iterator bucket = get_bucket(key);
         for(bucket_iterator it = bucket->begin(); it != bucket-> end(); ++it) {
-            if(it->first == key) {
+            if(it->first == key)
                 return it->second;
-            }
         }
-        if(should_resize()) {
-            resize();
-        }
+        if(should_resize()) resize();
         bucket->push_front({ key, V()});
         ++count;
         return bucket->front().second;
@@ -229,6 +228,7 @@ private:
     table_iterator get_bucket(const K& key) {
         return table.begin() + get_index(key);
     }
+
     Table table;
     int count = 0;
 };
