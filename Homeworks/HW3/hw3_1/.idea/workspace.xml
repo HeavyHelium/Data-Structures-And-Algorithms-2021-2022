@@ -14,19 +14,6 @@
   <component name="ChangeListManager">
     <list default="true" id="36de7b9e-8ae1-47f2-ae14-e0e074be8def" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hash_map.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/hash_map.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hw3_2/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/../hw3_2/cmake-build-debug/.ninja_deps" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hw3_2/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/../hw3_2/cmake-build-debug/.ninja_log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hw3_2/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/../hw3_2/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hw3_2/cmake-build-debug/console.ilk" beforeDir="false" afterPath="$PROJECT_DIR$/../hw3_2/cmake-build-debug/console.ilk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hw3_2/cmake-build-debug/console.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../hw3_2/cmake-build-debug/console.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hw3_2/cmake-build-debug/tests.ilk" beforeDir="false" afterPath="$PROJECT_DIR$/../hw3_2/cmake-build-debug/tests.ilk" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hw3_2/cmake-build-debug/tests.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/../hw3_2/cmake-build-debug/tests.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hw3_2/console.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../hw3_2/console.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hw3_2/my_tests.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../hw3_2/my_tests.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hw3_2/sp_hash_table.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../hw3_2/sp_hash_table.hpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hw3_2/sp_hash_table_tests.hpp" beforeDir="false" afterPath="$PROJECT_DIR$/../hw3_2/sp_hash_table_tests.hpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +105,7 @@
       <updated>1641400014804</updated>
       <workItem from="1641400016756" duration="39169000" />
       <workItem from="1642148329437" duration="709000" />
-      <workItem from="1642260430750" duration="806000" />
+      <workItem from="1642260430750" duration="808000" />
     </task>
     <servers />
   </component>
