@@ -106,7 +106,6 @@ public:
         std::size_t index = hash_value(p.k);
         buckets_array[index].push_front(p);
         ++m_size;
-        //std::cout << "here\n";
         assert(find(p.k));
         return &buckets_array[index].front();
     }
