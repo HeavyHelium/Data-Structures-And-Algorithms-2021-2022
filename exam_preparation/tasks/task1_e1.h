@@ -1,6 +1,7 @@
 #ifndef TASKS_TASK1_E1_H
 #define TASKS_TASK1_E1_H
 
+#include <iostream>
 #include "list.h"
 
 bool less_than(int a, int b) {
