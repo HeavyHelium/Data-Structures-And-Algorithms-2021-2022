@@ -125,18 +125,14 @@ command_type command_parser::parse_name(const char*& line) {
         throw std::invalid_argument("line is empty");
     }
     const char* begin = line;
-    bool found_command = false;
     for(auto& c : command_parser::supported_commands) {
         const char* pos = is_prefix(line, c.first.c_str());
         if(pos != line) {
-            found_command = true;
             line = pos;
             return c.second.t;
         }
     }
-    if(!found_command) {
-        throw std::invalid_argument("unrecognized command");
-    }
+    throw std::invalid_argument("unrecognized command\n");
 }
 
 string_slice command_parser::get_next_word(const char*& line) {
