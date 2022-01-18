@@ -59,13 +59,11 @@ command command_parser::parse(const char* line) {
         case save: {
             skip_white_space(line);
             if(!(*line)) {
-                std::cout << "here\n";
                 throw std::invalid_argument("wrong argument count\n");
             }
             string_slice filename = get_next_word(line);
             skip_white_space(line);
             if(*line) {
-                std::cout << "e: " << line << std::endl;
                 throw std::invalid_argument("wrong argument count\n");
             }
             return command{ type, { std::string(filename.begin, filename.length) } };
