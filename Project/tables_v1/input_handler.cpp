@@ -6,7 +6,9 @@
 void input_handler::get_input() {
     getting_input = true;
     std::string line;
-    while(getting_input && std::cout << "> " && std::getline(std::cin, line)) {
+    while(getting_input &&
+          std::cout << "> " &&
+          std::getline(std::cin, line)) {
         if(is_line_empty(line)){
             continue;
         }
