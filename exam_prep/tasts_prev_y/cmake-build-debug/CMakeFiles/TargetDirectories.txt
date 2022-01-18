@@ -1,3 +1,0 @@
-G:/FMI/Year 2/fall_winter/SDP/exam_prep/tasts_prev_y/cmake-build-debug/CMakeFiles/tasts_prev_y.dir
-G:/FMI/Year 2/fall_winter/SDP/exam_prep/tasts_prev_y/cmake-build-debug/CMakeFiles/edit_cache.dir
-G:/FMI/Year 2/fall_winter/SDP/exam_prep/tasts_prev_y/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,4 @@
+#ifndef TASKS_TASK2_E1_H
+#define TASKS_TASK2_E1_H
+
+#endif //TASKS_TASK2_E1_H
