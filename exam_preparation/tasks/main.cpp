@@ -145,8 +145,65 @@ public:
     const_iterator end() const {
         return { nullptr };
     }
-    list filter() {
-        list result;
+    void reverse() {
+        Node* prev = nullptr;
+        Node* current = first;
+        Node* next = nullptr;
+        while(current) {
+            next = current->next;
+            current->next = prev;
+            prev = current;
+            current = next;
+        }
+        last = first;
+        first = prev;
+    }
+    void to_set() {
+        Node* slow, * fast, * detach;
+        slow = first;
+        while(slow && slow->next) {
+            fast = slow;
+            while(fast && fast->next) {
+                detach = fast->next;
+                if(detach->val == fast->val) {
+                    fast->next = detach->next;
+                    delete detach;// и чиста работа :Д
+                    --m_size;
+                }
+                else fast = fast->next;
+            }
+            slow = slow->next;
+        }
+        last = slow;
+    }
+    template<typename T>
+    void filter(T predicate) {
+        Node dummy;
+        Node* current = &dummy;
+        Node* to_delete = nullptr;
+        for(Node* iter = first; iter; iter = iter->next) {
+            if(to_delete)
+                std::cout << "deleted " << to_delete->val << std::endl;
+            delete to_delete;
+            current->next = iter;
+            if(predicate(iter->val)) {
+                current = current->next;
+                to_delete = nullptr;
+            }
+            else {
+                to_delete = iter;
+                --m_size;
+            }
+        }
+        if(m_size) {
+            std::cout << "cv: " << current->val << std::endl;
+            current->next = nullptr;
+            first = dummy.next;
+            last = current;
+        }
+        else {
+            first = last = nullptr;
+        }
     }
 private:
     void copy_chain(const Node* other) {
@@ -181,8 +238,10 @@ private:
 };
 
 int main() {
-    list l1{ 1, 2, 3, 4, 5 };
-
+    list l1{ 1, 1, 2, 3, 3, 4, 5, 6, 7, 7, 8, 8 };
+    //l1.reverse();
+    //l1.to_set();
+    l1.filter([](int a){ return a % 2 != 0; });
     for( int i : l1) {
         std::cout << i << ", ";
     }
