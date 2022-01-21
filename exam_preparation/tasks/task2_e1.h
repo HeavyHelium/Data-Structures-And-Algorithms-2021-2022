@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <initializer_list>
+
 class bst {
     struct Node {
         int value;
