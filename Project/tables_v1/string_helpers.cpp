@@ -1,3 +1,4 @@
+#include "string_helpers.hpp"
 #include <string>
 #include <cstring>
 #include <iostream>
@@ -42,4 +43,37 @@ const char* is_prefix(const char* str, const char* word) {
         }
     }
     return str;
+}
+
+bool is_digit(const char ch) {
+    return ch == '0' || ch == '1' ||
+           ch == '2' || ch == '3' ||
+           ch == '4' || ch == '5' ||
+           ch == '6' || ch == '7' ||
+           ch == '8' || ch == '9';
+}
+
+type determine_type(const char* str) {
+    while(*str) {
+        while(*str && is_digit(*str)) {
+            ++str;
+        }
+        if(!*str) {
+            return type::Int;
+        }
+        if(*str == '.') {
+            ++str;
+            if(!str) {
+                return type::String;
+            }
+            while(*str && is_digit(*str)) {
+                ++str;
+            }
+            if(!*str) {
+                return type::Double;
+            }
+            return type::String;
+        }
+    }
+    return type::String;
 }

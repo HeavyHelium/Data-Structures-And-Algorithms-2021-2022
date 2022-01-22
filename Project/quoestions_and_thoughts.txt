@@ -1,0 +1,7 @@
+-> make the table
+-> make basic operations
+-> start working on basic formula evaluation
+--------------------------------------------------------
+Здравей, имам няколко въпроса отностно посоката, която съм поела в направата на проекта си:
+->Относно това как да пазим таблицата:
+	- std::unordered_map<std::size_t, std::unordered_map, Cell> подхоцящ избор ли е?

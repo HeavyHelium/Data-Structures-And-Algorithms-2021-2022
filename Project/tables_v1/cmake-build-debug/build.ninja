@@ -77,6 +77,13 @@ build CMakeFiles\tables_v1.dir\command_handler.cpp.obj: CXX_COMPILER__tables_v1_
   TARGET_COMPILE_PDB = CMakeFiles\tables_v1.dir\
   TARGET_PDB = tables_v1.pdb
 
+build CMakeFiles\tables_v1.dir\Cell.cpp.obj: CXX_COMPILER__tables_v1_Debug G$:\FMI\Year$ 2\fall_winter\SDP\Project\tables_v1\Cell.cpp || cmake_object_order_depends_target_tables_v1
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -MDd -std:c++17
+  OBJECT_DIR = CMakeFiles\tables_v1.dir
+  OBJECT_FILE_DIR = CMakeFiles\tables_v1.dir
+  TARGET_COMPILE_PDB = CMakeFiles\tables_v1.dir\
+  TARGET_PDB = tables_v1.pdb
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target tables_v1
@@ -85,7 +92,7 @@ build CMakeFiles\tables_v1.dir\command_handler.cpp.obj: CXX_COMPILER__tables_v1_
 #############################################
 # Link the executable tables_v1.exe
 
-build tables_v1.exe: CXX_EXECUTABLE_LINKER__tables_v1_Debug CMakeFiles\tables_v1.dir\main.cpp.obj CMakeFiles\tables_v1.dir\string_helpers.cpp.obj CMakeFiles\tables_v1.dir\input_handler.cpp.obj CMakeFiles\tables_v1.dir\command_handler.cpp.obj
+build tables_v1.exe: CXX_EXECUTABLE_LINKER__tables_v1_Debug CMakeFiles\tables_v1.dir\main.cpp.obj CMakeFiles\tables_v1.dir\string_helpers.cpp.obj CMakeFiles\tables_v1.dir\input_handler.cpp.obj CMakeFiles\tables_v1.dir\command_handler.cpp.obj CMakeFiles\tables_v1.dir\Cell.cpp.obj
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -MDd
   LINK_FLAGS = /machine:X86 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
@@ -96,6 +103,56 @@ build tables_v1.exe: CXX_EXECUTABLE_LINKER__tables_v1_Debug CMakeFiles\tables_v1
   TARGET_FILE = tables_v1.exe
   TARGET_IMPLIB = tables_v1.lib
   TARGET_PDB = tables_v1.pdb
+
+# =============================================================================
+# Object build statements for EXECUTABLE target tests
+
+
+#############################################
+# Order-only phony target for tests
+
+build cmake_object_order_depends_target_tests: phony || CMakeFiles\tests.dir
+
+build CMakeFiles\tests.dir\tests.cpp.obj: CXX_COMPILER__tests_Debug G$:\FMI\Year$ 2\fall_winter\SDP\Project\tables_v1\tests.cpp || cmake_object_order_depends_target_tests
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -MDd -std:c++17
+  OBJECT_DIR = CMakeFiles\tests.dir
+  OBJECT_FILE_DIR = CMakeFiles\tests.dir
+  TARGET_COMPILE_PDB = CMakeFiles\tests.dir\
+  TARGET_PDB = tests.pdb
+
+build CMakeFiles\tests.dir\string_helpers.cpp.obj: CXX_COMPILER__tests_Debug G$:\FMI\Year$ 2\fall_winter\SDP\Project\tables_v1\string_helpers.cpp || cmake_object_order_depends_target_tests
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -MDd -std:c++17
+  OBJECT_DIR = CMakeFiles\tests.dir
+  OBJECT_FILE_DIR = CMakeFiles\tests.dir
+  TARGET_COMPILE_PDB = CMakeFiles\tests.dir\
+  TARGET_PDB = tests.pdb
+
+build CMakeFiles\tests.dir\Cell.cpp.obj: CXX_COMPILER__tests_Debug G$:\FMI\Year$ 2\fall_winter\SDP\Project\tables_v1\Cell.cpp || cmake_object_order_depends_target_tests
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -MDd -std:c++17
+  OBJECT_DIR = CMakeFiles\tests.dir
+  OBJECT_FILE_DIR = CMakeFiles\tests.dir
+  TARGET_COMPILE_PDB = CMakeFiles\tests.dir\
+  TARGET_PDB = tests.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target tests
+
+
+#############################################
+# Link the executable tests.exe
+
+build tests.exe: CXX_EXECUTABLE_LINKER__tests_Debug CMakeFiles\tests.dir\tests.cpp.obj CMakeFiles\tests.dir\string_helpers.cpp.obj CMakeFiles\tests.dir\Cell.cpp.obj
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Zi /Ob0 /Od /RTC1 -MDd
+  LINK_FLAGS = /machine:X86 /debug /INCREMENTAL /subsystem:console
+  LINK_LIBRARIES = kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  OBJECT_DIR = CMakeFiles\tests.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\tests.dir\
+  TARGET_FILE = tests.exe
+  TARGET_IMPLIB = tests.lib
+  TARGET_PDB = tests.pdb
 
 
 #############################################
@@ -125,6 +182,8 @@ build rebuild_cache: phony CMakeFiles\rebuild_cache.util
 
 build tables_v1: phony tables_v1.exe
 
+build tests: phony tests.exe
+
 # =============================================================================
 # Folder targets.
 
@@ -133,7 +192,7 @@ build tables_v1: phony tables_v1.exe
 #############################################
 # Folder: G:/FMI/Year 2/fall_winter/SDP/Project/tables_v1/cmake-build-debug
 
-build all: phony tables_v1.exe
+build all: phony tables_v1.exe tests.exe
 
 # =============================================================================
 # Built-in targets
