@@ -46,11 +46,7 @@ const char* is_prefix(const char* str, const char* word) {
 }
 
 bool is_digit(const char ch) {
-    return ch == '0' || ch == '1' ||
-           ch == '2' || ch == '3' ||
-           ch == '4' || ch == '5' ||
-           ch == '6' || ch == '7' ||
-           ch == '8' || ch == '9';
+    return ch >= '0' && ch <= '9';
 }
 
 type determine_type(const char* str) {
@@ -76,4 +72,69 @@ type determine_type(const char* str) {
         }
     }
     return type::String;
+}
+// extract a non-negative number
+string_slice extract_number(const char*& str) {
+    const char* current =  str;
+    skip_white_space(current);
+    const char* beg = current;
+    std::size_t len = 0;
+    while(is_digit(*current)) {
+        ++current;
+        ++len;
+    }
+    str = current;
+    return { beg, len };
+}
+
+bool string_slice::operator==(const string_slice &other) const {
+    if(len != other.len)
+        return false;
+    int iter = len;
+    const char* l_iter = beg;
+    const char* r_iter = other.beg;
+    while(iter--) {
+        if(*(l_iter++) != *(r_iter++)) {
+            return false;
+        }
+    }
+    return true;
+}
+/// undefined behaviour in case of sl not representing a non-negative number
+int slice_to_i(const string_slice& sl) {
+    std::size_t len = sl.len;
+    const char* iter = sl.beg;
+    int number = 0;
+    while(len--) {
+       number *= 10;
+       number += *iter++ - '0';
+    }
+    return number;
+}
+
+valid_value valid_string(const char* str) {
+    std::string value;
+    if(*str != '\"') return { false };
+    const char* current = str;
+    ++current;
+    while(*current) {
+        while(*current && *current != '\"' && *current != '\\') {
+            value.push_back(*current);
+            ++current;
+        }
+        if(*current == '\"' && !*(current + 1)) {
+            return { true, value };
+        }
+        if(*current == '\"') {
+            return { false };
+        }
+        if(*current == '\\' && *(current + 1) == '\"' ||
+           *current == '\\' && *(current + 1) == '\\') {
+            value.push_back(*(current + 1));
+            ++++current;
+            continue;
+        }
+        return { false };
+    }
+    return { false };
 }
