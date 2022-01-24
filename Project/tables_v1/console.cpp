@@ -8,6 +8,7 @@
 int main() {
     numeric_value v;
     string_cell str1("42.5");
+    std::cout << str1.save_value() << std::endl;
     //int_cell i1(18);
     //double_cell d1(42.5);
     std::cout << str1.get_numeric().V.d_val << std::endl;
