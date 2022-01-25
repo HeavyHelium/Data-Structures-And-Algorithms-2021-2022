@@ -1,7 +1,10 @@
+#pragma once
 #ifndef TABLES_V1_TABLE_HPP
 #define TABLES_V1_TABLE_HPP
 #include <unordered_map>
-#include "Cell.hpp"
+#include "cellname.hpp"
+
+class base_cell;
 
 using table_iterator = std::unordered_multimap<absolute_cellname, base_cell*>::iterator;
 using const_table_iterator = std::unordered_multimap<absolute_cellname, base_cell*>::const_iterator;

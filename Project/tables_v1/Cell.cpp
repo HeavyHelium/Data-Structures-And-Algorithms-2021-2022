@@ -1,7 +1,7 @@
 #include "Cell.hpp"
 #include "string_helpers.hpp"
-
-class table;
+#include "table.hpp"
+#include <iostream>
 
 string_cell::string_cell(const std::string& str)
         : val(str) {
@@ -32,7 +32,7 @@ std::string string_cell::save_value() const {
     const char* current = val.c_str();
     res.push_back('\"');
     while(*current) {
-        while(*current != '\\' && *current != '\"') {
+        while(*current && *current != '\\' && *current != '\"') {
             res.push_back(*current);
             ++current;
         }
@@ -44,8 +44,9 @@ std::string string_cell::save_value() const {
             res.push_back('\\');
             res.push_back('\\');
         }
-        ++current;
+        if(*current) ++current;
     }
+    res.push_back('\"');
     return res;
 }
 
@@ -72,14 +73,7 @@ base_cell* make_cell(const std::string& value, const cellname& name, table& t) {
     const char* current = value.c_str();
     valid_value v = valid_string(current);
     if(v.valid) return new string_cell(v.value);
-
+    return nullptr;
 }
 
-base_token::base_token(const int precedence, const bool left_associative)
-    : precedence(precedence), left_associative(left_associative)
-{}
 
-operator_token::operator_token(const std::string &value, const int precedence, const bool left_associative)
-    : base_token(precedence, left_associative) {
-
-}

@@ -15,7 +15,7 @@ command command_parser::parse(const char* line) {
             if(!(*line)) {
                 throw std::invalid_argument("wrong argument count\n");
             }
-            return command{ type, { std::string(address.begin, address.length), line } };
+            return command{ type, { std::string(address.beg, address.len), line } };
 
         }
         case print_val: {
@@ -28,7 +28,7 @@ command command_parser::parse(const char* line) {
             if(*line) {
                 throw std::invalid_argument("wrong argument count\n");
             }
-            return command{ type, { std::string(address.begin, address.length) } };
+            return command{ type, { std::string(address.beg, address.len) } };
         }
         case print_expr: {
             skip_white_space(line);
@@ -40,7 +40,7 @@ command command_parser::parse(const char* line) {
             if(*line) {
                 throw std::invalid_argument("wrong argument count\n");
             }
-            return command{ type, { std::string(address.begin, address.length) } };
+            return command{ type, { std::string(address.beg, address.len) } };
         }
         case print_val_all: {
             skip_white_space(line);
@@ -66,7 +66,7 @@ command command_parser::parse(const char* line) {
             if(*line) {
                 throw std::invalid_argument("wrong argument count\n");
             }
-            return command{ type, { std::string(filename.begin, filename.length) } };
+            return command{ type, { std::string(filename.beg, filename.len) } };
         }
         case load: {
             skip_white_space(line);
@@ -78,7 +78,7 @@ command command_parser::parse(const char* line) {
             if(*line) {
                 throw std::invalid_argument("wrong argument count\n");
             }
-            return command{ type, { std::string(filename.begin, filename.length) } };
+            return command{ type, { std::string(filename.beg, filename.len) } };
         }
         case incr: {
             skip_white_space(line);
@@ -90,7 +90,7 @@ command command_parser::parse(const char* line) {
             if(*line) {
                 throw std::invalid_argument("wrong argument count\n");
             }
-            return command{ type, { std::string(address.begin, address.length) } };
+            return command{ type, { std::string(address.beg, address.len) } };
         }
         case dcr: {
             skip_white_space(line);
@@ -102,7 +102,7 @@ command command_parser::parse(const char* line) {
             if(*line) {
                 throw std::invalid_argument("wrong argument count\n");
             }
-            return command{ type, { std::string(address.begin, address.length) } };
+            return command{ type, { std::string(address.beg, address.len) } };
         }
         default: {
             std::cout << "not yet implemented/added\n";
@@ -123,10 +123,11 @@ command_type command_parser::parse_name(const char*& line) {
         throw std::invalid_argument("line is empty");
     }
     const char* begin = line;
-    for(auto& c : command_parser::supported_commands) {
-        const char* pos = is_prefix(line, c.first.c_str());
-        if(pos != line) {
-            line = pos;
+    for(const_command_info& c : command_parser::supported_commands) {
+        string_slice sl = is_prefix(line, c.first.c_str());
+        if(sl.len) {
+            line = sl.beg;
+            line += sl.len;
             return c.second.t;
         }
     }

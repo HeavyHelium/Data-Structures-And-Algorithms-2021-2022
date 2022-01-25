@@ -1,3 +1,4 @@
+#pragma once
 #ifndef TABLES_V1_INPUT_HANDLER_HPP
 #define TABLES_V1_INPUT_HANDLER_HPP
 #include <iostream>

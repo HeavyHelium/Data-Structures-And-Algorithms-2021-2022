@@ -1,8 +1,10 @@
+#pragma once
 #ifndef TABLES_V1_COMMAND_HANDLER_HPP
 #define TABLES_V1_COMMAND_HANDLER_HPP
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include "string_helpers.hpp"
 
 enum command_type {
     set,
@@ -27,10 +29,8 @@ struct type_args {
     std::vector<std::string> args;
 };
 
-struct string_slice {
-    const char* begin = nullptr;
-    std::size_t length = 0;
-};
+using command_info = std::pair<std::string, type_args>;
+using const_command_info = const std::pair<std::string, type_args>;
 
 struct command_parser {
     using arguments_info = std::vector<std::string> ;

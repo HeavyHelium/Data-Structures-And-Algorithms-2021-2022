@@ -1,3 +1,4 @@
+#pragma once
 #ifndef TABLES_V1_STRING_OPERATIONS_TESTS_HPP
 #define TABLES_V1_STRING_OPERATIONS_TESTS_HPP
 #include "catch.hpp"

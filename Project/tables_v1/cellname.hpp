@@ -1,3 +1,4 @@
+#pragma once
 #ifndef TABLES_V1_CELLNAME_HPP
 #define TABLES_V1_CELLNAME_HPP
 #include <cstddef>

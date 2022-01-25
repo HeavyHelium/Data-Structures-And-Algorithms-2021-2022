@@ -1,60 +1,13 @@
 #pragma once
 #ifndef TABLES_V1_CELL_HPP
 #define TABLES_V1_CELL_HPP
+
 #include <string>
 #include "string_helpers.hpp"
 #include "cellname.hpp"
 #include <unordered_map>
+#include "expression_token.h"
 
-struct base_token
-{
-    const int precedence = -1;
-    const bool left_associative = false;
-    base_token(const int precedence, const bool left_associative);
-    virtual std::string save_value() const = 0;
-};
-
-enum function_type {
-    If,
-    Sum,
-    Count
-};
-
-struct function_token : base_token {
-    function_type t;
-    std::vector<std::string> arguments;
-    function_token(const std::string& value, const int precedence = 0, const bool left_associative = true);
-    std::string save_value() const override;
-};
-
-enum operator_type {
-    plus,
-    u_plus,
-    minus,
-    u_minus,
-    multiply,
-    div,
-};
-
-struct operator_token : base_token {
-    const std::string value;
-    operator_token(const std::string& value,
-                   const int precedence = 0,
-                   const bool left_associative = true);
-    std::string save_value() const override;
-};
-
-struct int_token : base_token {
-    const int value;
-    int_token(int value);
-    std::string save_value() const override;
-};
-
-struct double_token : base_token {
-    const double value;
-    double_token(double value);
-    std::string save_value() const override;
-};
 
 class table;
 
@@ -72,6 +25,7 @@ class base_cell {
 public:
     virtual numeric_value get_numeric() const = 0;
     virtual std::string save_value() const = 0;
+    virtual ~base_cell() = default;
 };
 
 

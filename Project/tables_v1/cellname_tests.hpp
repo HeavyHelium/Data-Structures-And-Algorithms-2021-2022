@@ -1,3 +1,4 @@
+#pragma once
 #ifndef TABLES_V1_CELLNAME_TESTS_HPP
 #define TABLES_V1_CELLNAME_TESTS_HPP
 #include "catch.hpp"

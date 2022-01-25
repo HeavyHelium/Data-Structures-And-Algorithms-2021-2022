@@ -35,14 +35,16 @@ std::string extract_word(const char*& str)
     return word;
 }
 
-const char* is_prefix(const char* str, const char* word) {
-    const char* temp = str;
+string_slice is_prefix(const char* str, const char* word) {
+    const char* beg = str;
+    std::size_t len = 0;
     while(*word) {
         if(*str++ != *word++) {
-            return temp;
+            return { beg, 0 };
         }
+        ++len;
     }
-    return str;
+    return { beg, len };
 }
 
 bool is_digit(const char ch) {
@@ -68,8 +70,8 @@ type determine_type(const char* str) {
             if(!*str) {
                 return type::Double;
             }
-            return type::String;
         }
+        return type::String;
     }
     return type::String;
 }

@@ -1,5 +1,6 @@
 #include "table.hpp"
 #include "string_helpers.hpp"
+#include "Cell.hpp"
 
 //second is the base_cell*
 void table::set(const absolute_cellname&n, const std::string &value) {
