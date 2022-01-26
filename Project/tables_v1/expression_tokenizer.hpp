@@ -18,8 +18,8 @@ class expression_tokenizer {
        { "*",  operator_token(operator_type::Multiply,  3, true) },
        { "+",  operator_token(operator_type::Plus,      2, true) },
        { "-",  operator_token(operator_type::Minus,     2, true) },
-       { "-",  operator_token(operator_type::U_minus,   4, true) },
-       { "+",  operator_token(operator_type::U_plus,    4, true) },
+       { "-",  operator_token(operator_type::U_minus,   4, false) },
+       { "+",  operator_token(operator_type::U_plus,    4, false) },
        { "//", operator_token(operator_type::Div,       3, true) },
        { "==", operator_token(operator_type::Equals,    0, true) },
        { "!=", operator_token(operator_type::NotEquals, 0, true) },
@@ -30,7 +30,6 @@ class expression_tokenizer {
 
     };
 
-    static inline const char* functions[] = { "if", "and", "not", "or", "sum", "count" };
 public:
     expression_tokenizer() = default;
     void parse(const std::string& text);

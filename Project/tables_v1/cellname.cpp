@@ -42,16 +42,19 @@ int absolute_cellname::row() const {
 int absolute_cellname::column() const {
     return m_column;
 }
-
+///@throws when a coordinate is negative
 absolute_cellname::absolute_cellname(int r, int c)
-    : cellname(r, c)
-{}
+    : cellname(r, c) {
+    if(r < 0 || c < 0) {
+        throw std::invalid_argument("Negative coordinates are not allowed in absolute cellnames!");
+    }
+}
 
 std::string absolute_cellname::to_name() const {
-    return std::string("R[") +
+    return std::string("R") +
            std::to_string(m_row) +
-           "]C[" +
-           std::to_string(m_column) + "]";
+           "C" +
+           std::to_string(m_column);
 }
 
 relative_cellname::relative_cellname(const std::string &text) {
@@ -113,9 +116,16 @@ int relative_cellname::column() const {
     return m_column;
 }
 
+std::string relative_cellname::to_name() const {
+    return std::string("R[") +
+           std::to_string(m_row) +
+           "]C[" + std::to_string(m_column) + "]";
+}
+
+relative_cellname::relative_cellname(int r, int c)
+    : cellname(r, c) {
+}
+
 cellname::cellname(int r, int c)
     : m_row(r), m_column(c) {
-    if(r < 0 || c < 0) {
-        throw std::invalid_argument("negative coordinates are not allowed!");
-    }
 }

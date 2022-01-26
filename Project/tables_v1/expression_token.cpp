@@ -12,6 +12,10 @@ std::string operator_token::save_value() const {
     return std::string();
 }
 
+operator_token* operator_token::clone() const {
+    return new operator_token(*this);
+}
+
 std::string function_token::save_value() const {
     return std::string();
 }
@@ -21,12 +25,20 @@ function_token::function_token(const std::string &value, const int precedence, c
 
 }
 
+function_token* function_token::clone() const {
+    return new function_token(*this);
+}
+
 std::string int_token::save_value() const {
     return std::string();
 }
 
-int_token::int_token(int value) : value(value)  {
+int_token::int_token(int value) : value(value) {
 
+}
+
+int_token* int_token::clone() const {
+    return new int_token(*this);
 }
 
 std::string double_token::save_value() const {
@@ -35,4 +47,8 @@ std::string double_token::save_value() const {
 
 double_token::double_token(double value) : value(value) {
 
+}
+
+double_token* double_token::clone() const {
+    return new double_token(*this);
 }

@@ -31,7 +31,6 @@ TEST_CASE("validity of strings is estimated correctly") {
     const char* str1 = " alabalanitsa 25 \" neshto";
     REQUIRE(!valid_string(str1).valid);
     const char* str2 = "\"yes \\\"hello world\\\" slartibartfast\"";
-    std::cout << str2 << std::endl;
     valid_value v = valid_string(str2);
     REQUIRE(v.valid);
     REQUIRE(v.value == "yes \"hello world\" slartibartfast");

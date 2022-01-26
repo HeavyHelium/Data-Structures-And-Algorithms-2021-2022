@@ -3,3 +3,4 @@
 #include "string_operations_tests.hpp"
 #include "cellname_tests.hpp"
 #include "string_cell_tests.hpp"
+#include "table_tests.hpp"
