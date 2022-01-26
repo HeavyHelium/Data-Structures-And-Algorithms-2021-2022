@@ -7,22 +7,9 @@
 #include "cellname.hpp"
 #include <unordered_set>
 #include "expression_token.h"
+#include "numeric_value.hpp"
 
 class table;
-
-union value {
-    int i_val;
-    double d_val;
-};
-
-struct numeric_value {
-    type T;
-    value V;
-    std::string print_value() const;
-    void increment();
-    void decrement();
-};
-
 class base_cell {
 public:
     virtual numeric_value get_numeric() const = 0;
@@ -41,6 +28,7 @@ public:
     numeric_value get_numeric() const override;
     std::string save_value() const override;
     std::string print_value() const override;
+    type get_type() const;
     void increment_value();
     void decrement_value();
     string_cell* clone() const override;

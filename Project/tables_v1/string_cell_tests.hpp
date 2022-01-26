@@ -7,7 +7,7 @@
 TEST_CASE("String cells are created correctly", "[string_cell]") {
     SECTION("string values are interpreted correctly") {
         string_cell c("42 hello world 42");
-        REQUIRE(c.get_numeric().T == type::String);
+        REQUIRE(c.get_numeric().T == type::Int);
         REQUIRE(c.get_numeric().V.i_val == 0);
         REQUIRE(c.save_value() == "\"42 hello world 42\"");
 

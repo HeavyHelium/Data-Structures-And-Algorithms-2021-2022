@@ -13,7 +13,7 @@ using coordinates = std::pair<int, int>;
 /// Matrix is represented as a dictionary of keys
 using cell_map = std::map<std::pair<int, int>, base_cell*>;
 using table_iterator = cell_map::iterator;
-using const_table_iterator = cell_map::iterator;
+using const_table_iterator = cell_map::const_iterator;
 
 
 enum cell_type {
@@ -45,7 +45,10 @@ public:
     void load(const std::string& ifilename);
     void incr(const absolute_cellname& address);
     void dcr(const absolute_cellname& address);
+    numeric_value sum_area(const absolute_cellname& address1, const absolute_cellname& address2) const;
+    int count_area(const absolute_cellname& address1, const absolute_cellname& address2) const;
     bool valid_address(const std::string& address) const;
+    const_table_iterator find_cell(const absolute_cellname& n) const;
     int count() const;
 private:
     void validate_address(const absolute_cellname& address) const;

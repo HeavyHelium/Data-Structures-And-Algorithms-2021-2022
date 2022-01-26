@@ -72,8 +72,9 @@ void table::incr(const absolute_cellname& address) {
             return;
         }
     } else {
-        if(found->second->get_numeric().T == type::Int) {
-            dynamic_cast<string_cell*>(found->second)->increment_value();
+        string_cell* temp = dynamic_cast<string_cell*>(found->second);
+        if(temp->get_type() == type::Int) {
+            temp->increment_value();
             return;
         }
         throw std::invalid_argument("cannot increment cell");
@@ -197,4 +198,30 @@ numeric_value table::get_num_value(const absolute_cellname &n) const {
     } else {
         return found->second->get_numeric();
     }
+}
+
+numeric_value table::sum_area(const absolute_cellname& address1, const absolute_cellname& address2) const {
+    validate_address(address1);
+    validate_address(address2);
+    if(address1.row() > address2.row() ||
+       address1.column() > address2.row()) {
+        throw std::invalid_argument("invalid cell area corners");
+    }
+    auto iter1 = find_cell(address1);
+    auto iter2 = find_cell(address2);
+    numeric_value sum;
+    sum.V.i_val = 0;
+    bool d = false;
+    for(auto iter = iter1; iter != iter2; ++iter) {
+         sum += iter->second->get_numeric();
+    }
+    return sum;
+}
+
+int table::count_area(const absolute_cellname &address1, const absolute_cellname &address2) const {
+    return 0;
+}
+
+const_table_iterator table::find_cell(const absolute_cellname &n) const {
+    return t.find({ n.row(), n.column() });
 }

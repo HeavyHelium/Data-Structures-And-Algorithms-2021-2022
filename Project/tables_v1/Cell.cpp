@@ -24,7 +24,9 @@ string_cell::string_cell(const std::string& str)
 }
 
 numeric_value string_cell::get_numeric() const {
-    return num_value;
+    return num_value.T == type::String ?
+                          numeric_value{ type::Int, num_value.V } :
+                          num_value;
 }
 
 std::string string_cell::save_value() const {
@@ -70,6 +72,10 @@ void string_cell::decrement_value() {
         num_value.decrement();
         val = std::to_string(num_value.V.i_val);
     }
+}
+
+type string_cell::get_type() const {
+    return num_value.T;
 }
 
 expression_cell::expression_cell(const absolute_cellname &name, table& table_link, const std::string& text)
@@ -163,45 +169,5 @@ base_cell* make_cell(const std::string& value, const absolute_cellname& name, ta
     valid_value v = valid_string(current);
     if(v.valid) return new string_cell(v.value);
     return new expression_cell(name, t, value);
-}
-
-
-std::string numeric_value::print_value() const {
-    switch(T) {
-        case type::Int : {
-            return std::to_string(V.i_val);
-            break;
-        }
-        case type::Double : {
-            return std::to_string(V.d_val);
-            break;
-        }
-    }
-}
-
-void numeric_value::increment() {
-    switch(T) {
-        case type::Int : {
-            V.i_val += 1;
-            break;
-        }
-        case type::Double : {
-            V.d_val += 1;
-            break;
-        }
-    }
-}
-
-void numeric_value::decrement() {
-    switch(T) {
-        case type::Int : {
-            V.i_val -= 1;
-            break;
-        }
-        case type::Double : {
-            V.d_val -= 1;
-            break;
-        }
-    }
 }
 
