@@ -23,6 +23,7 @@ enum cell_type {
 };
 
 class table {
+    friend class expression_cell;
     cell_map t;
     int max_column = 0;
     int max_row = 0;

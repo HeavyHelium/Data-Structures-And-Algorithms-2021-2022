@@ -2,7 +2,7 @@
 #ifndef TABLES_V1_STRING_CELL_TESTS_HPP
 #define TABLES_V1_STRING_CELL_TESTS_HPP
 #include "catch.hpp"
-#include "Cell.hpp"
+#include "string_cell.hpp"
 
 TEST_CASE("String cells are created correctly", "[string_cell]") {
     SECTION("string values are interpreted correctly") {

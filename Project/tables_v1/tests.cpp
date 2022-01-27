@@ -5,3 +5,4 @@
 #include "string_cell_tests.hpp"
 #include "table_tests.hpp"
 #include "numeric_value_tests.hpp"
+#include "expression_cell_tests.hpp"

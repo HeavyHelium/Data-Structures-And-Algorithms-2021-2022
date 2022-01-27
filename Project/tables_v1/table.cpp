@@ -2,6 +2,8 @@
 #include "table.hpp"
 #include "string_helpers.hpp"
 #include "Cell.hpp"
+#include "expression_cell.hpp"
+#include "string_cell.hpp"
 #include <iostream>
 #include <fstream>
 
@@ -194,7 +196,9 @@ numeric_value table::get_num_value(const absolute_cellname &n) const {
     validate_address(n);
     auto found = t.find({ n.row(), n.column() });
     if(found == t.end()) {
-        throw std::invalid_argument("cell is empty");
+        numeric_value res{ type::Int };
+        res.V.i_val = 0;
+        return res;
     } else {
         return found->second->get_numeric();
     }
@@ -209,8 +213,10 @@ numeric_value table::sum_area(const absolute_cellname& address1, const absolute_
     }
     auto iter1 = find_cell(address1);
     auto iter2 = find_cell(address2);
+    ++iter2;
     numeric_value sum;
     sum.V.i_val = 0;
+    sum.T = type::Int;
     bool d = false;
     for(auto iter = iter1; iter != iter2; ++iter) {
          sum += iter->second->get_numeric();
@@ -219,7 +225,20 @@ numeric_value table::sum_area(const absolute_cellname& address1, const absolute_
 }
 
 int table::count_area(const absolute_cellname &address1, const absolute_cellname &address2) const {
-    return 0;
+    validate_address(address1);
+    validate_address(address2);
+    if(address1.row() > address2.row() ||
+       address1.column() > address2.row()) {
+        throw std::invalid_argument("invalid cell area corners");
+    }
+    auto iter1 = find_cell(address1);
+    auto iter2 = find_cell(address2);
+    ++iter2;
+    int cnt = 0;
+    for(auto iter = iter1; iter != iter2; ++iter) {
+        ++cnt;
+    }
+    return cnt;
 }
 
 const_table_iterator table::find_cell(const absolute_cellname &n) const {

@@ -40,7 +40,7 @@ string_slice is_prefix(const char* str, const char* word) {
     std::size_t len = 0;
     while(*word) {
         if(*str++ != *word++) {
-            return { beg, 0 };
+            return { beg, len };
         }
         ++len;
     }

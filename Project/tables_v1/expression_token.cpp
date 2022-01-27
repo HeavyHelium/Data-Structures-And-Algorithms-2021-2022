@@ -1,54 +1,117 @@
 #include "expression_token.h"
 
-base_token::base_token(const int precedence, const bool left_associative)
-        : precedence(precedence), left_associative(left_associative)
-{}
-
-operator_token::operator_token(operator_type t, const int precedence, const bool left_associative)
-        : t(t), base_token(precedence, left_associative)
-{}
-
 std::string operator_token::save_value() const {
-    return std::string();
+    switch(t) {
+        case operator_type::Plus : {
+            return "+";
+        }
+        case operator_type::U_plus : {
+            return "+";
+        }
+        case operator_type::Minus : {
+            return "-";
+        }
+        case operator_type::U_minus : {
+            return "-";
+        }
+        case operator_type::Multiply : {
+            return "*";
+        }case operator_type::Div : {
+            return "/";
+        }
+        case operator_type::Equals : {
+            return "==";
+        }case operator_type::NotEquals : {
+            return "!=";
+        }case operator_type::Smaller : {
+            return "<";
+        }
+        case operator_type::Greater : {
+            return ">";
+        }
+        case operator_type::L_paren : {
+            return "(";
+        }
+        case operator_type::R_paren : {
+            return ")";
+        }
+        case operator_type::Separator : {
+            return ",";
+        }
+    }
 }
 
 operator_token* operator_token::clone() const {
     return new operator_token(*this);
 }
 
-std::string function_token::save_value() const {
-    return std::string();
+operator_token::operator_token(operator_type t, const int precedence, const bool left_associative)
+    : t(t), precedence(precedence), left_associative(left_associative) {
 }
 
-function_token::function_token(const std::string &value, const int precedence, const bool left_associative)
-    : base_token(precedence, left_associative) {
-
+std::string function_token::save_value() const {
+    switch(t) {
+        case function_type::Sum : {
+            return "sum";
+        }
+        case function_type::If : {
+            return "if";
+        }
+        case function_type::Count : {
+            return "count";
+        }
+        case function_type::And : {
+            return "and";
+        }
+        case function_type::Not : {
+            return "not";
+        }
+        case function_type::Or : {
+            return "or";
+        }
+    }
 }
 
 function_token* function_token::clone() const {
     return new function_token(*this);
 }
 
-std::string int_token::save_value() const {
-    return std::string();
+function_token::function_token(function_type t, int arg_cnt)
+    : t(t), argument_count(arg_cnt) {
 }
 
-int_token::int_token(int value) : value(value) {
-
+std::string int_token::save_value() const {
+    return val.print_value();
 }
 
 int_token* int_token::clone() const {
     return new int_token(*this);
 }
 
-std::string double_token::save_value() const {
-    return std::string();
+int_token::int_token(numeric_value val)
+    : val(val) {
 }
 
-double_token::double_token(double value) : value(value) {
-
+std::string absolute_cellname_token::save_value() const {
+    return name.to_name();
 }
 
-double_token* double_token::clone() const {
-    return new double_token(*this);
+absolute_cellname_token *absolute_cellname_token::clone() const {
+    return new absolute_cellname_token(*this);
+}
+
+absolute_cellname_token::absolute_cellname_token(int r, int c)
+    : name(r, c) {
+}
+
+std::string relative_cellname_token::save_value() const {
+    return name.to_name();
+}
+
+relative_cellname_token *relative_cellname_token::clone() const {
+    return new relative_cellname_token(*this);
+}
+
+relative_cellname_token::relative_cellname_token(int r, int c)
+    : name(r, c) {
 }

@@ -57,6 +57,11 @@ std::string absolute_cellname::to_name() const {
            std::to_string(m_column);
 }
 
+bool absolute_cellname::operator==(const absolute_cellname &other) const {
+    return m_row == other.m_row &&
+           m_column == other.m_column;
+}
+
 relative_cellname::relative_cellname(const std::string &text) {
     const char* current = text.c_str();
     skip_white_space(current);

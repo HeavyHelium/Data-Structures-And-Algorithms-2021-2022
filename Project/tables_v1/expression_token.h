@@ -4,12 +4,11 @@
 #include <string>
 #include <vector>
 #include "cellname.hpp"
+#include <unordered_map>
+#include "numeric_value.hpp"
 
 struct base_token
 {
-    const int precedence = -1;
-    const bool left_associative = false;
-    base_token(const int precedence, const bool left_associative);
     base_token() = default;
     virtual std::string save_value() const = 0;
     virtual base_token* clone() const = 0;
@@ -19,14 +18,17 @@ struct base_token
 enum function_type {
     If,
     Sum,
-    Count
+    Count,
+    And,
+    Or,
+    Not
 };
 
 
 struct function_token : base_token {
     function_type t;
-    std::vector<std::string> arguments;
-    function_token(const std::string& value, const int precedence = 0, const bool left_associative = true);
+    int argument_count = -1;
+    function_token(function_type t, int arg_cnt);
     std::string save_value() const override;
     function_token* clone() const override;
 };
@@ -42,10 +44,15 @@ enum operator_type {
     NotEquals,
     Greater,
     Smaller,
+    L_paren,
+    R_paren,
+    Separator,
 };
 
 struct operator_token : base_token {
     operator_type t;
+    const int precedence = -1;
+    const bool left_associative = true;
     operator_token(operator_type t,
                    const int precedence = 0,
                    const bool left_associative = true);
@@ -54,25 +61,24 @@ struct operator_token : base_token {
 };
 
 struct int_token : base_token {
-    const int value;
-    int_token(int value);
+    numeric_value val;
     std::string save_value() const override;
     int_token* clone() const override;
-};
-
-struct double_token : base_token {
-    const double value;
-    double_token(double value);
-    std::string save_value() const override;
-    double_token* clone() const override;
+    int_token(numeric_value val);
 };
 
 struct absolute_cellname_token : base_token {
     absolute_cellname name;
+    std::string save_value() const override;
+    absolute_cellname_token* clone() const override;
+    absolute_cellname_token(int r, int c);
 };
 
 struct relative_cellname_token : base_token {
     relative_cellname name;
+    std::string save_value() const override;
+    relative_cellname_token* clone() const override;
+    relative_cellname_token(int r, int c);
 };
 
 

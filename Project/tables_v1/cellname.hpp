@@ -24,7 +24,7 @@ public:
     int row() const override;
     int column() const override;
     std::string to_name() const override;
-
+    bool operator==(const absolute_cellname& other) const;
 };
 
 class relative_cellname : public cellname {
