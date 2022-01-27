@@ -446,7 +446,150 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
             calculation_stack.push(table_link.get_num_value(actual));
         } else if(isOperator(token)) {
             operator_token* temp = dynamic_cast<operator_token*>(token);
-            if()
+            switch(temp->t) {
+                case operator_type::U_minus : {
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    calculation_stack.top() = -calculation_stack.top();
+                    break;
+                }
+                case operator_type::U_plus : {
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    break;
+                }
+                case operator_type::Plus : {
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    numeric_value operand2 = calculation_stack.top();
+                    calculation_stack.pop();
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    numeric_value operand1 = calculation_stack.top();
+                    calculation_stack.pop();
+                    numeric_value res = operand1 + operand2;
+                    calculation_stack.push(res);
+                    break;
+                }
+                case operator_type::Minus : {
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    numeric_value operand2 = calculation_stack.top();
+                    calculation_stack.pop();
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    numeric_value operand1 = calculation_stack.top();
+                    calculation_stack.pop();
+                    numeric_value res = operand1 - operand2;
+                    calculation_stack.push(res);
+                    break;
+                }
+                case operator_type::Multiply : {
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    numeric_value operand2 = calculation_stack.top();
+                    calculation_stack.pop();
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    numeric_value operand1 = calculation_stack.top();
+                    calculation_stack.pop();
+                    operand1 *= operand2;
+                    calculation_stack.push(operand1);
+                    break;
+                }
+                case operator_type::Div : {
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    numeric_value operand2 = calculation_stack.top();
+                    calculation_stack.pop();
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    numeric_value operand1 = calculation_stack.top();
+                    calculation_stack.pop();
+                    operand1 /= operand2;
+                    calculation_stack.push(operand1);
+                    break;
+                }
+                case operator_type::Equals : {
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    numeric_value operand2 = calculation_stack.top();
+                    calculation_stack.pop();
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    numeric_value operand1 = calculation_stack.top();
+                    calculation_stack.pop();
+                    numeric_value res = operand1 == operand2;
+                    calculation_stack.push(res);
+                    break;
+                }
+                case operator_type::NotEquals : {
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    numeric_value operand2 = calculation_stack.top();
+                    calculation_stack.pop();
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    numeric_value operand1 = calculation_stack.top();
+                    calculation_stack.pop();
+                    numeric_value res = operand1 != operand2;
+                    calculation_stack.push(res);
+                    break;
+                }
+                case operator_type::Smaller : {
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    numeric_value operand2 = calculation_stack.top();
+                    calculation_stack.pop();
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    numeric_value operand1 = calculation_stack.top();
+                    calculation_stack.pop();
+                    numeric_value res = operand1 < operand2;
+                    calculation_stack.push(res);
+                    break;
+                }
+                case operator_type::Greater : {
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    numeric_value operand2 = calculation_stack.top();
+                    calculation_stack.pop();
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression in incorrect");
+                    }
+                    numeric_value operand1 = calculation_stack.top();
+                    calculation_stack.pop();
+                    numeric_value res = operand1 > operand2;
+                    calculation_stack.push(res);
+                    break;
+                }
+                default: {
+                    std::cerr << "i dont't know why we got here\n";
+                    break;
+                }
+            }
+        } else if(isFunc(token)) {
+            function_token* f = dynamic_cast<function_token*>(token);
+            switch(f->t) {
+                case function_type::if
+            }
         }
     }
 }
