@@ -78,3 +78,12 @@
 6	15531	6650155780700326	CMakeFiles/tests.dir/table.cpp.obj	4bb3c14cca7c88ed
 236	15899	6650155784884041	CMakeFiles/tests.dir/expression_cell.cpp.obj	d1aefc573e35a326
 15901	19751	6650155820565503	tests.exe	6b3681671b3aa5c6
+79	4009	6650645194945809	CMakeFiles/tests.dir/Cell.cpp.obj	a43e3ed3f3045f17
+74	4032	6650645194955807	CMakeFiles/tests.dir/cellname.cpp.obj	9a6eecdd345ecff
+84	4033	6650645195185802	CMakeFiles/tests.dir/expression_token.cpp.obj	95666011f191d526
+48	4238	6650645197265799	CMakeFiles/tests.dir/table.cpp.obj	4bb3c14cca7c88ed
+1	7403	6650645228888108	CMakeFiles/tests.dir/tests.cpp.obj	2c467bf8e1c2883c
+23	1941	6650646376243453	CMakeFiles/tests.dir/string_cell.cpp.obj	240c826959a00efd
+27	1942	6650646376403460	CMakeFiles/tests.dir/numeric_value.cpp.obj	fd0b158cd8e0843f
+1	4071	6650646687889275	CMakeFiles/tests.dir/expression_cell.cpp.obj	d1aefc573e35a326
+4072	8664	6650646730411907	tests.exe	6b3681671b3aa5c6

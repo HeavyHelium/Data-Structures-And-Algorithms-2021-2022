@@ -354,3 +354,13 @@ numeric_value::operator bool() const {
         }
     }
 }
+
+numeric_value numeric_value::operator!() const {
+    numeric_value temp = { type::Int };
+    if(*this) {
+        temp.V.i_val = 1;
+    } else {
+        temp.V.i_val = 0;
+    }
+    return temp;
+}

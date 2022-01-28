@@ -115,3 +115,4 @@ relative_cellname_token *relative_cellname_token::clone() const {
 relative_cellname_token::relative_cellname_token(int r, int c)
     : name(r, c) {
 }
+

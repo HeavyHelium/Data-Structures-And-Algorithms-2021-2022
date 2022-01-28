@@ -64,6 +64,8 @@ private:
     static void to_RPN(std::queue<base_token*>& output_queue,
                        const std::vector<base_token*>& tokens);
     void calculate(std::queue<base_token*>& output_queue, table& table_link);
+    std::vector<base_token*> calculate_special_functions(const std::vector<base_token*>& tokens, table& table_link);
+    absolute_cellname to_absolute(const relative_cellname& other_name, table& table_link);
 };
 
 

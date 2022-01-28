@@ -58,7 +58,8 @@ expression_cell* expression_cell::clone() const {
 /// calculates that RPN
 void expression_cell::evaluate(table& table_link) {
     std::queue<base_token*> output_queue;
-    to_RPN(output_queue, tokens);
+    std::vector<base_token*> filtered_tokens = calculate_special_functions(tokens, table_link);
+    to_RPN(output_queue, filtered_tokens);
     /*
     while(!output_queue.empty()) {
         std::cout << output_queue.front()->save_value() << " ";
@@ -67,6 +68,7 @@ void expression_cell::evaluate(table& table_link) {
     std::cout << std::endl;
     */
     calculate(output_queue, table_link);
+    free_tokens(filtered_tokens);
 }
 
 std::string expression_cell::print_value() const {
@@ -403,10 +405,11 @@ void expression_cell::to_RPN(std::queue<base_token *>& output_queue,
 }
 
 void expression_cell::calculate(std::queue<base_token*> &output_queue, table& table_link) {
-    numeric_value result{ type::Int };
     std::stack<numeric_value> calculation_stack;
     while(!output_queue.empty()) {
         base_token* token = output_queue.front();
+        output_queue.pop();
+
         if(isInt(token)) {
             int_token* temp = dynamic_cast<int_token*>(token);
             calculation_stack.push(temp->val);
@@ -428,12 +431,7 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
             calculation_stack.push(table_link.get_num_value(temp->name));
         } else if(isRelCellname(token)) {
             relative_cellname_token* temp = dynamic_cast<relative_cellname_token*>(token);
-            absolute_cellname actual(name.row() + temp->name.row(),
-                                     name.column() + temp->name.column());
-            if(actual == name) {
-                throw std::invalid_argument("cyclic dependencies are not allowed");
-            }
-            table_link.validate_address(actual);
+            absolute_cellname actual(to_absolute(temp->name, table_link));
             auto found_cell = table_link.find_cell(actual);
             if(found_cell != table_link.t.end()) {
                 if(typeid(*found_cell->second) == typeid(expression_cell)) {
@@ -471,8 +469,8 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
                     }
                     numeric_value operand1 = calculation_stack.top();
                     calculation_stack.pop();
-                    numeric_value res = operand1 + operand2;
-                    calculation_stack.push(res);
+                    operand1 += operand2;
+                    calculation_stack.push(operand1);
                     break;
                 }
                 case operator_type::Minus : {
@@ -486,8 +484,8 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
                     }
                     numeric_value operand1 = calculation_stack.top();
                     calculation_stack.pop();
-                    numeric_value res = operand1 - operand2;
-                    calculation_stack.push(res);
+                    operand1 -= operand2;
+                    calculation_stack.push(operand1);
                     break;
                 }
                 case operator_type::Multiply : {
@@ -588,10 +586,152 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
         } else if(isFunc(token)) {
             function_token* f = dynamic_cast<function_token*>(token);
             switch(f->t) {
-                case function_type::if
+                case function_type::If : {
+                    if(f->argument_count != 3) {
+                        throw std::invalid_argument("invalid argument count");
+                    }
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression is incorrect");
+                    }
+                    numeric_value arg3 = calculation_stack.top();
+                    calculation_stack.pop();
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression is incorrect");
+                    }
+                    numeric_value arg2 = calculation_stack.top();
+                    calculation_stack.pop();
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression is incorrect");
+                    }
+                    numeric_value arg1 = calculation_stack.top();
+                    calculation_stack.pop();
+                    numeric_value result = arg1 ? arg2 : arg3;
+                    calculation_stack.push(result);
+                    break;
+                }
+                case function_type::And : {
+                    int arg_cnt = f->argument_count;
+                    if(!f) {
+                        throw std::invalid_argument("wrong argument count");
+                    }
+                    bool res = true;
+                    while(arg_cnt--) {
+                        if(calculation_stack.empty()) {
+                            throw std::invalid_argument("wrong expression format");
+                        }
+                        res = res && calculation_stack.top();
+                        calculation_stack.pop();
+                    }
+                    numeric_value value_res{ type::Int };
+                    value_res.V.i_val = res;
+                    calculation_stack.push(value_res);
+                    break;
+                }
+                case function_type::Or : {
+                    int arg_cnt = f->argument_count;
+                    if(!f) {
+                        throw std::invalid_argument("wrong argument count");
+                    }
+                    bool res = true;
+                    while(arg_cnt--) {
+                        if(calculation_stack.empty()) {
+                            throw std::invalid_argument("wrong expression format");
+                        }
+                        res = res || calculation_stack.top();
+                        calculation_stack.pop();
+                    }
+                    numeric_value value_res{ type::Int };
+                    value_res.V.i_val = res;
+                    calculation_stack.push(value_res);
+                    break;
+                }
+                case function_type::Not : {
+                    if(f->argument_count != 1 || calculation_stack.empty())
+                        throw std::invalid_argument("wrong expression format");
+                    numeric_value top = calculation_stack.top();
+                    calculation_stack.pop();
+                    calculation_stack.push(!top);
+                    break;
+                }
+                default: {
+                    std::cerr << "i don't know why we got here\n";
+                }
             }
         }
     }
+}
+
+std::vector<base_token *> expression_cell::calculate_special_functions(const std::vector<base_token *> &tokens,
+                                                                       table& table_link) {
+    std::vector<base_token*> result;
+    for(std::size_t i = 0; i < tokens.size(); ++i) {
+        if(isFunc(tokens[i])) {
+            const function_token* f = dynamic_cast<const function_token*>(tokens[i]);
+            bool sum = f->t == function_type::Sum;
+            bool count = f->t == function_type::Count;
+            if(sum || count) {
+                if(i + 1 == tokens.size() || !isL_paren(tokens[i + 1])) {
+                    throw std::invalid_argument("wrong expression format");
+                }
+                ++i; // we are now at the left parenthesis
+                if(i + 1 == tokens.size() ||
+                   !isRelCellname(tokens[i + 1]) ||
+                   !isAbsCellname(tokens[i + 1])) {
+                    throw std::invalid_argument("wrong expression format");
+                }
+                ++i; // we are now at the first argument
+                // next must be a separator
+                if(i + 1 == tokens.size() ||
+                   !isSeparator(tokens[i + 1])) {
+                    throw std::invalid_argument("wrong expression format");
+                }
+                ++i; // we are not at the separator
+                // next must be an address
+                if(i + 1 == tokens.size() ||
+                   !isRelCellname(tokens[i + 1]) ||
+                   !isAbsCellname(tokens[i + 1])) {
+                    throw std::invalid_argument("wrong expression format");
+                }
+                ++i; // we are now at the second address
+                // next must be a right parenthesis
+                if(i + 1 == tokens.size() ||
+                   !isR_paren(tokens[i + 1])) {
+                    throw std::invalid_argument("wrong expression format");
+                }
+                ++i; // we are now at the parenthesis
+                absolute_cellname op1(0, 0);
+                absolute_cellname op2(0, 0);
+                if(isAbsCellname(tokens[i - 3])) {
+                    absolute_cellname_token* t = dynamic_cast<absolute_cellname_token*>(tokens[i - 3]);
+                    op1 = t->name;
+                    table_link.validate_address(op1);
+                } else {
+                    relative_cellname_token* t = dynamic_cast<relative_cellname_token*>(tokens[i - 3]);
+                    op1 = to_absolute(t->name, table_link);
+                }
+                if(isAbsCellname(tokens[i - 1])) {
+                    absolute_cellname_token* t = dynamic_cast<absolute_cellname_token*>(tokens[i - 3]);
+                    op2 = t->name;
+                    table_link.validate_address(op2);
+                } else {
+                    relative_cellname_token* t = dynamic_cast<relative_cellname_token*>(tokens[i - 1]);
+                    op2 = to_absolute(t->name, table_link);
+                }
+                numeric_value res;
+                if(sum) res = table_link.sum_area(op1, op2);
+                else {
+                    res.T = type::Int;
+                    int cnt = table_link.count_area(op1, op2);
+                    res.V.i_val = cnt;
+                }
+                int_token* new_token = new int_token(res);
+                result.push_back(new_token);
+            }
+            else result.push_back(tokens[i]->clone());
+        }
+        else result.push_back(tokens[i]->clone());
+    }
+    return result;
 }
 
 bool isL_paren(const base_token* p) {
@@ -664,4 +804,13 @@ bool isRelCellname(const base_token* p) {
         return true;
     }
     return false;
+}
+
+absolute_cellname expression_cell::to_absolute(const relative_cellname& other_name,
+                                               table& table_link) {
+    int actual_r = name.row() + other_name.row();
+    int actual_c = name.column() + other_name.column();
+    absolute_cellname actual(actual_r, actual_c);
+    table_link.validate_address(actual);
+    return actual;
 }

@@ -28,6 +28,7 @@ struct numeric_value {
     numeric_value operator!=(const numeric_value& other) const;
     numeric_value operator>(const numeric_value& other) const;
     numeric_value operator<(const numeric_value& other) const;
+    numeric_value operator!() const;
     operator bool() const;
 };
 
