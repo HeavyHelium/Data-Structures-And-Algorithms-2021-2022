@@ -136,8 +136,7 @@ base_token *expression_cell::extract_token(const char*& current, bool& prev_op) 
     operator_token* op = extract_operator(current, prev_op);
     if(op) {
         if(op->t != operator_type::L_paren &&
-           op->t != operator_type::R_paren &&
-           op->t != operator_type::Separator) {
+           op->t != operator_type::R_paren) {
             //std::cout << "i am here\n";
             prev_op = true;
         }
