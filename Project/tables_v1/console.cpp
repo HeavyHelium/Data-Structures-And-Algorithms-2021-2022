@@ -9,12 +9,14 @@
 #if 1
 int main() try {
     table t1;
-    //t1.set({ 1, 1 }, "5 + - 6  * (7 + 4)");
-    //t1.set({ 1, 1 }, "1 + 7 / -sum(6*5, and(14), 17) * 4");
-    t1.set({1, 1}, "\"42\"");
-    t1.set({1, 2}, "\"15\"");
-    t1.set({1, 20}, "\"69\"");
-    std::cout << t1.count_area({ 1, 1 }, { 1, 20 });
+    t1.set({ 1, 1 }, "\"hello world\"");
+    t1.set({ 1, 3 }, "\"3.14\"");
+    t1.set({ 2, 3 }, "\"42\"");
+    t1.set({ 1, 2 }, "sum(R1C1, R2C3)");
+    //t1.set({1, 1}, "\"42\"");
+    //t1.set({1, 2}, "\"15\"");
+   // t1.set({1, 20}, "\"69\"");
+    //std::cout << t1.count_area({ 1, 1 }, { 1, 20 });
     //assert(c.get_numeric().T == type::Int);
     //assert(c.get_numeric().V.i_val == 0);
     //assert(c.save_value() == "\"42 hello world 42\"");

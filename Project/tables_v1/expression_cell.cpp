@@ -60,13 +60,13 @@ void expression_cell::evaluate(table& table_link) {
     std::queue<base_token*> output_queue;
     std::vector<base_token*> filtered_tokens = calculate_special_functions(tokens, table_link);
     to_RPN(output_queue, filtered_tokens);
-    /*
+/*
     while(!output_queue.empty()) {
         std::cout << output_queue.front()->save_value() << " ";
         output_queue.pop();
     }
     std::cout << std::endl;
-    */
+*/
     calculate(output_queue, table_link);
     free_tokens(filtered_tokens);
 }
@@ -407,6 +407,7 @@ void expression_cell::to_RPN(std::queue<base_token *>& output_queue,
 void expression_cell::calculate(std::queue<base_token*> &output_queue, table& table_link) {
     std::stack<numeric_value> calculation_stack;
     while(!output_queue.empty()) {
+       // std::cout << "way over town\n";
         base_token* token = output_queue.front();
         output_queue.pop();
 
@@ -432,6 +433,9 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
         } else if(isRelCellname(token)) {
             relative_cellname_token* temp = dynamic_cast<relative_cellname_token*>(token);
             absolute_cellname actual(to_absolute(temp->name, table_link));
+            if(actual == name) {
+                throw std::invalid_argument("cyclic dependencies are not allowed");
+            }
             auto found_cell = table_link.find_cell(actual);
             if(found_cell != table_link.t.end()) {
                 if(typeid(*found_cell->second) == typeid(expression_cell)) {
@@ -514,6 +518,9 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
                     }
                     numeric_value operand1 = calculation_stack.top();
                     calculation_stack.pop();
+                    //if(!operand2) {
+                      //  throw std::logic_error("division by zero is not allowed");
+                    //}
                     operand1 /= operand2;
                     calculation_stack.push(operand1);
                     break;
@@ -605,13 +612,13 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
                     }
                     numeric_value arg1 = calculation_stack.top();
                     calculation_stack.pop();
-                    numeric_value result = arg1 ? arg2 : arg3;
-                    calculation_stack.push(result);
+                    numeric_value res = arg1 ? arg2 : arg3;
+                    calculation_stack.push(res);
                     break;
                 }
                 case function_type::And : {
                     int arg_cnt = f->argument_count;
-                    if(!f) {
+                    if(!arg_cnt) {
                         throw std::invalid_argument("wrong argument count");
                     }
                     bool res = true;
@@ -659,6 +666,17 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
             }
         }
     }
+    if(calculation_stack.empty()) {
+        std::cout << "here\n";
+        throw std::invalid_argument("calculation error");
+    }
+    numeric_value res = calculation_stack.top();
+    std::cout << "top: " << calculation_stack.top().print_value() << std::endl;
+    calculation_stack.pop();
+    if(!calculation_stack.empty()) {
+        throw std::invalid_argument("calculation error");
+    }
+    val = res;
 }
 
 std::vector<base_token *> expression_cell::calculate_special_functions(const std::vector<base_token *> &tokens,
@@ -710,7 +728,7 @@ std::vector<base_token *> expression_cell::calculate_special_functions(const std
                     op1 = to_absolute(t->name, table_link);
                 }
                 if(isAbsCellname(tokens[i - 1])) {
-                    absolute_cellname_token* t = dynamic_cast<absolute_cellname_token*>(tokens[i - 3]);
+                    absolute_cellname_token* t = dynamic_cast<absolute_cellname_token*>(tokens[i - 1]);
                     op2 = t->name;
                     table_link.validate_address(op2);
                 } else {

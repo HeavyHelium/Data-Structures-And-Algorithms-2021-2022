@@ -1,3 +1,4 @@
+#include <iostream>
 #include "numeric_value.hpp"
 
 std::string numeric_value::print_value() const {
@@ -267,6 +268,7 @@ numeric_value numeric_value::operator>(const numeric_value &other) const {
             break;
         }
         case Double : {
+
             switch(other.T) {
                 case Int : {
                     res = V.d_val > other.V.i_val;
@@ -358,9 +360,9 @@ numeric_value::operator bool() const {
 numeric_value numeric_value::operator!() const {
     numeric_value temp = { type::Int };
     if(*this) {
-        temp.V.i_val = 1;
-    } else {
         temp.V.i_val = 0;
+    } else {
+        temp.V.i_val = 1;
     }
     return temp;
 }
