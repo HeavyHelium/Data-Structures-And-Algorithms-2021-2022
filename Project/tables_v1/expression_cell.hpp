@@ -10,19 +10,19 @@ class base_cell;
 
 class expression_cell : public base_cell {
     static inline const std::unordered_multimap<const char*, operator_token> operators = {
-            { "*",  operator_token{ operator_type::Multiply,  3, true } },
-            { "+",  operator_token{ operator_type::Plus,      2, true } },
-            { "-",  operator_token{ operator_type::Minus,     2, true } },
-            { "-",  operator_token{ operator_type::U_minus,   4, false} },
-            { "+",  operator_token{ operator_type::U_plus,    4, false} },
-            { "//", operator_token{ operator_type::Div,       3, true } },
-            { "==", operator_token{ operator_type::Equals,    0, true } },
-            { "!=", operator_token{ operator_type::NotEquals, 0, true } },
-            { "<",  operator_token{ operator_type::Smaller,   1, true } },
-            { ">",  operator_token{ operator_type::Greater,   1, true } },
-            { "(",  operator_token{ operator_type::L_paren,  -1, false} },
-            { ")",  operator_token{ operator_type::R_paren,  -1, false} },
-            { ",",  operator_token{ operator_type::Separator,-1, false} },
+            { "*",  operator_token{ operator_type::Multiply,       3, true } },
+            { "+",  operator_token{ operator_type::Plus,           2, true } },
+            { "-",  operator_token{ operator_type::Minus,          2, true } },
+            { "-",  operator_token{ operator_type::U_minus,        5, false} },
+            { "+",  operator_token{ operator_type::U_plus,         5, false} },
+            { "/", operator_token{ operator_type::Div,             3, true } },
+            { "==", operator_token{ operator_type::Equals,         0, true } },
+            { "!=", operator_token{ operator_type::NotEquals,      0, true } },
+            { "<",  operator_token{ operator_type::Smaller,        1, true } },
+            { ">",  operator_token{ operator_type::Greater,        1, true } },
+            { "(",  operator_token{ operator_type::L_paren,       -1, false} },
+            { ")",  operator_token{ operator_type::R_paren,       -1, false} },
+            { ",",  operator_token{ operator_type::Separator,     -1, false} },
     };
     static inline const std::unordered_multimap<const char*, function_token> functions = {
             { "sum",   function_token{ function_type::Sum,   2 } },
@@ -31,6 +31,8 @@ class expression_cell : public base_cell {
             { "and",   function_token{ function_type::And,  -1 } },
             { "or",    function_token{ function_type::Or,   -1 } },
             { "not",   function_token{ function_type::Not,  -1 } },
+            { "sin",   function_token{ function_type::Sin,   1 } },
+            { "cos",   function_token{ function_type::Cos,   1 } },
     };
     numeric_value val;
     absolute_cellname name;
@@ -43,6 +45,7 @@ public:
     void evaluate(table& table_link);
     std::string save_value() const override;
     std::string print_value() const override;
+    std::string print_expr() const override;
     numeric_value get_numeric() const override;
     /// to allow for virtual cloning
     expression_cell* clone() const override;

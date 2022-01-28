@@ -14,6 +14,7 @@ public:
     numeric_value get_numeric() const override;
     std::string save_value() const override;
     std::string print_value() const override;
+    std::string print_expr() const override;
     type get_type() const;
     void increment_value();
     void decrement_value();

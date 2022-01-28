@@ -16,6 +16,7 @@ public:
     virtual numeric_value get_numeric() const = 0;
     virtual std::string save_value() const = 0;
     virtual std::string print_value() const = 0;
+    virtual std::string print_expr() const = 0;
     virtual base_cell* clone() const = 0;
     virtual ~base_cell() = default;
 };

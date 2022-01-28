@@ -74,3 +74,7 @@ void string_cell::decrement_value() {
 type string_cell::get_type() const {
     return num_value.T;
 }
+
+std::string string_cell::print_expr() const {
+    return val;
+}

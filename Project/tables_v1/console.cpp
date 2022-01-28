@@ -12,7 +12,10 @@ int main() try {
     t1.set({ 1, 1 }, "\"hello world\"");
     t1.set({ 1, 3 }, "\"3.14\"");
     t1.set({ 2, 3 }, "\"42\"");
-    t1.set({ 1, 2 }, "if( 5 > 7, if(5 > 3, 18, 9), -3)");
+    t1.set({ 1, 2 }, "if( 75 * 100 == 7500,  10,  11)");
+    std::cout << t1.get_num_value({ 1, 2 }).print_value() << std::endl;
+    t1.print_expr({ 1, 2 });
+    //std::cout << t1.get_num_value({ 2, 1 }).print_value() << std::endl;
     //t1.set({1, 1}, "\"42\"");
     //t1.set({1, 2}, "\"15\"");
    // t1.set({1, 20}, "\"69\"");

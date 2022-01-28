@@ -30,6 +30,8 @@ struct numeric_value {
     numeric_value operator<(const numeric_value& other) const;
     numeric_value operator!() const;
     operator bool() const;
+    static numeric_value sin(const numeric_value& v1);
+    static numeric_value cos(const numeric_value& v1);
 };
 
 #endif //TABLES_V1_NUMERIC_VALUE_HPP

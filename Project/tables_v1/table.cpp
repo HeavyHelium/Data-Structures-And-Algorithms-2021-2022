@@ -38,7 +38,12 @@ void table::print_val(const absolute_cellname& address) const {
 void table::print_expr(const absolute_cellname& address) const {
     validate_address(address);
     //TODO: implement
-    std::cout << "expression\n";
+    auto found = t.find({ address.row(), address.column() });
+    if(found == t.end()) {
+        std::cout << "empty\n";
+    } else {
+        std::cout << found->second->print_expr() << "\n";
+    }
 }
 
 void table::print_val_all(const absolute_cellname& address) const {

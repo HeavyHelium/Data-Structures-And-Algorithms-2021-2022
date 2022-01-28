@@ -36,13 +36,17 @@ std::string extract_word(const char*& str)
 }
 
 string_slice is_prefix(const char* str, const char* word) {
+    //std::cout << str << std::endl;
     const char* beg = str;
     std::size_t len = 0;
-    while(*word) {
+    while(*str && *word) {
         if(*str++ != *word++) {
-            return { beg, len };
+            return { beg, 0 };
         }
         ++len;
+    }
+    if(*str) {
+        return { beg, 0 };
     }
     return { beg, len };
 }

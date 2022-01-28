@@ -69,6 +69,12 @@ std::string function_token::save_value() const {
         case function_type::Or : {
             return "or";
         }
+        case function_type::Sin : {
+            return "sin";
+        }
+        case function_type::Cos : {
+            return "cos";
+        }
     }
 }
 

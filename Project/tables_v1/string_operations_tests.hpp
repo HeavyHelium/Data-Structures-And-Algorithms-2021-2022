@@ -39,7 +39,9 @@ TEST_CASE("validity of strings is estimated correctly") {
 TEST_CASE("is_prefix functions correctly") {
     const char* str1 = "hello world";
     string_slice sl = is_prefix("h", str1);
+    string_slice sl1 = is_prefix("hello no", str1);
     REQUIRE(sl.len == 1);
+    REQUIRE(sl1.len == 0);
 }
 
 #endif //TABLES_V1_STRING_OPERATIONS_TESTS_HPP

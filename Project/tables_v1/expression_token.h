@@ -21,7 +21,9 @@ enum function_type {
     Count,
     And,
     Or,
-    Not
+    Not,
+    Sin,
+    Cos,
 };
 
 

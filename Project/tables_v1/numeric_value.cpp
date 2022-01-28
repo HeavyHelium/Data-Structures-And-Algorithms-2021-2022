@@ -1,5 +1,6 @@
 #include <iostream>
 #include "numeric_value.hpp"
+#include <cmath>
 
 std::string numeric_value::print_value() const {
     switch(T) {
@@ -366,3 +367,35 @@ numeric_value numeric_value::operator!() const {
     }
     return temp;
 }
+
+numeric_value numeric_value::sin(const numeric_value &v1) {
+    numeric_value res { type::Double };
+    switch(v1.T) {
+        case type::Int : {
+            res.V.d_val = std::sin(v1.V.i_val);
+            break;
+            }
+        case type::Double : {
+            res.V.d_val = std::sin(v1.V.d_val);
+            break;
+        }
+    }
+    return res;
+}
+
+numeric_value numeric_value::cos(const numeric_value &v1) {
+    numeric_value res { type::Double };
+    switch(v1.T) {
+        case type::Int : {
+            res.V.d_val = std::cos(v1.V.i_val);
+            break;
+        }
+        case type::Double : {
+            res.V.d_val = std::cos(v1.V.d_val);
+            break;
+        }
+    }
+    return res;
+}
+
+

@@ -90,7 +90,9 @@ expression_cell::~expression_cell() {
 
 std::string expression_cell::save_value() const {
     std::string res;
-    // TODO: implement
+    for(const base_token* ptr : tokens) {
+        res += ptr->save_value();
+    }
     return res;
 }
 
@@ -517,9 +519,9 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
                     }
                     numeric_value operand1 = calculation_stack.top();
                     calculation_stack.pop();
-                    //if(!operand2) {
-                      //  throw std::logic_error("division by zero is not allowed");
-                    //}
+                    if(!operand2) {
+                        throw std::logic_error("division by zero is not allowed");
+                    }
                     operand1 /= operand2;
                     calculation_stack.push(operand1);
                     break;
@@ -585,7 +587,7 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
                     break;
                 }
                 default: {
-                    std::cerr << "i dont't know why we got here\n";
+                    throw std::invalid_argument("invalid expression format");
                     break;
                 }
             }
@@ -659,6 +661,32 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
                     calculation_stack.push(!top);
                     break;
                 }
+                case function_type::Sin : {
+                    if(f->argument_count != 1) {
+                        throw std::invalid_argument("invalid argument count");
+                    }
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression is incorrect");
+                    }
+                    numeric_value arg1 = calculation_stack.top();
+                    calculation_stack.pop();
+                    numeric_value res = numeric_value::sin(arg1);
+                    calculation_stack.push(res);
+                    break;
+                }
+                case function_type::Cos : {
+                    if(f->argument_count != 1) {
+                        throw std::invalid_argument("invalid argument count");
+                    }
+                    if(calculation_stack.empty()) {
+                        throw std::invalid_argument("expression is incorrect");
+                    }
+                    numeric_value arg1 = calculation_stack.top();
+                    calculation_stack.pop();
+                    numeric_value res = numeric_value::cos(arg1);
+                    calculation_stack.push(res);
+                    break;
+                }
                 default: {
                     std::cerr << "i don't know why we got here\n";
                 }
@@ -670,7 +698,6 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
         throw std::invalid_argument("calculation error");
     }
     numeric_value res = calculation_stack.top();
-    std::cout << "top: " << calculation_stack.top().print_value() << std::endl;
     calculation_stack.pop();
     if(!calculation_stack.empty()) {
         throw std::invalid_argument("calculation error");
@@ -687,6 +714,7 @@ std::vector<base_token *> expression_cell::calculate_special_functions(const std
             bool sum = f->t == function_type::Sum;
             bool count = f->t == function_type::Count;
             if(sum || count) {
+            std::cout << "more\n";
                 if(i + 1 == tokens.size() || !isL_paren(tokens[i + 1])) {
                     throw std::invalid_argument("wrong expression format");
                 }
@@ -830,4 +858,14 @@ absolute_cellname expression_cell::to_absolute(const relative_cellname& other_na
     absolute_cellname actual(actual_r, actual_c);
     table_link.validate_address(actual);
     return actual;
+}
+
+std::string expression_cell::print_expr() const {
+    std::string res;
+    bool interval = false;
+    for(const base_token* ptr : tokens) {
+        res += ptr->save_value();
+        res += ' ';
+    }
+    return res;
 }
