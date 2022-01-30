@@ -12,9 +12,9 @@ int main() try {
     t1.set({ 1, 1 }, "\"hello world\"");
     t1.set({ 1, 3 }, "\"3.14\"");
     t1.set({ 2, 3 }, "\"42\"");
-    t1.set({ 1, 2 }, "if( 75 * 100 == 7500,  10,  11)");
+    t1.set({ 1, 2 }, "(5 + R[1]C[1] + sin(3)) / 2");
     std::cout << t1.get_num_value({ 1, 2 }).print_value() << std::endl;
-    t1.print_expr({ 1, 2 });
+   // t1.print_expr({ 1, 2 });
     //std::cout << t1.get_num_value({ 2, 1 }).print_value() << std::endl;
     //t1.set({1, 1}, "\"42\"");
     //t1.set({1, 2}, "\"15\"");

@@ -20,7 +20,7 @@ public:
     bst(const bst& other)
         : root(copy_tree(other.root)),
           m_size(other.m_size) {}
-    bst(bst&& other) {
+    bst(bst&& other) noexcept {
         std::swap(root, other.root);
         std::swap(m_size, other.m_size);
     }
@@ -158,7 +158,7 @@ private:
                height(root->right_child) +
                height(root->left_child);
     }
-    /// saves state in a parameter, return heights;
+    /// saves state in a parameter, returns heights;
     static int balanced_helper(const node* root, bool& balanced) {
         if(!root) {
             return 0;

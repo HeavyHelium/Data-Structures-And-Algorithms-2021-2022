@@ -122,7 +122,6 @@ std::vector<base_token*> expression_cell::tokenize(const char* text) {
     std::vector<base_token*> result;
     skip_white_space(text);
     while(*text) {
-       // std::cout << "prev_op: " << prev_op << std::endl;
         base_token* e = extract_token(text, prev_op);
         if(!e) {
             free_tokens(result);
@@ -139,7 +138,6 @@ base_token *expression_cell::extract_token(const char*& current, bool& prev_op) 
     if(op) {
         if(op->t != operator_type::L_paren &&
            op->t != operator_type::R_paren) {
-            //std::cout << "i am here\n";
             prev_op = true;
         }
         else prev_op = false;
@@ -408,10 +406,8 @@ void expression_cell::to_RPN(std::queue<base_token *>& output_queue,
 void expression_cell::calculate(std::queue<base_token*> &output_queue, table& table_link) {
     std::stack<numeric_value> calculation_stack;
     while(!output_queue.empty()) {
-       // std::cout << "way over town\n";
         base_token* token = output_queue.front();
         output_queue.pop();
-
         if(isInt(token)) {
             int_token* temp = dynamic_cast<int_token*>(token);
             calculation_stack.push(temp->val);
@@ -694,7 +690,6 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
         }
     }
     if(calculation_stack.empty()) {
-        std::cout << "here\n";
         throw std::invalid_argument("calculation error");
     }
     numeric_value res = calculation_stack.top();
@@ -714,7 +709,6 @@ std::vector<base_token *> expression_cell::calculate_special_functions(const std
             bool sum = f->t == function_type::Sum;
             bool count = f->t == function_type::Count;
             if(sum || count) {
-            std::cout << "more\n";
                 if(i + 1 == tokens.size() || !isL_paren(tokens[i + 1])) {
                     throw std::invalid_argument("wrong expression format");
                 }
@@ -845,7 +839,7 @@ bool isAbsCellname(const base_token* p) {
 
 bool isRelCellname(const base_token* p) {
     if(!p) return false;
-    if(typeid(*p) == typeid(absolute_cellname_token)) {
+    if(typeid(*p) == typeid(relative_cellname_token)) {
         return true;
     }
     return false;
