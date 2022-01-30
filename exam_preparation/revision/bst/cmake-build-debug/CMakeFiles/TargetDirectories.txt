@@ -1,0 +1,3 @@
+G:/FMI/Year 2/fall_winter/SDP/exam_preparation/revision/bst/cmake-build-debug/CMakeFiles/bst.dir
+G:/FMI/Year 2/fall_winter/SDP/exam_preparation/revision/bst/cmake-build-debug/CMakeFiles/edit_cache.dir
+G:/FMI/Year 2/fall_winter/SDP/exam_preparation/revision/bst/cmake-build-debug/CMakeFiles/rebuild_cache.dir
