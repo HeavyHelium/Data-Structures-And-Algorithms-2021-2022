@@ -1,3 +1,4 @@
+#pragma once
 #ifndef TABLES_V1_NUMERIC_VALUE_HPP
 #define TABLES_V1_NUMERIC_VALUE_HPP
 #include "string_helpers.hpp"
@@ -6,7 +7,8 @@ union value {
     int i_val;
     double d_val;
 };
-
+///@brief the purpose of this class is to hold an int or a double,
+/// depending on what the operations that are being applied to numbers are
 struct numeric_value {
     type T;
     value V;

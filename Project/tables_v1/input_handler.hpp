@@ -16,16 +16,19 @@ enum action {
     proceed,
     nothing_to_do,
 };
-
+/// deals with command-line interface
 class input_handler {
     bool getting_input = false;
     bool saved = true;
     table t;
 public:
     void get_input();
+    ///@brief executed a command extracted from input
     void execute_command(const command& c);
 private:
+    ///@brief checks whether current file is not saved and asks user if they wish to proceed
     action reassure_saved() const;
+    ///@brief reads a y/n answer
     static binary_answer read_a_binary_answer();
 };
 

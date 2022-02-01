@@ -13,5 +13,13 @@ TEST_CASE("String cells are created correctly", "[string_cell]") {
     }
 }
 
+TEST_CASE("String cells are incremented and decremented correctly", "[string_cell]") {
+    string_cell c("42");
+    c.increment_value();
+    REQUIRE(c.get_numeric().T == type::Int);
+    REQUIRE(c.get_numeric().V.i_val == 43);
+    REQUIRE(c.save_value() == "\"43\"");
+}
+
 
 #endif //TABLES_V1_STRING_CELL_TESTS_HPP

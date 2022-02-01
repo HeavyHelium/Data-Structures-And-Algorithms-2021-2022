@@ -22,7 +22,7 @@ struct std::hash<absolute_cellname>
         return h1 ^ h2;
     }
 };
-/// Matrix is represented as a dictionary of keys
+/// Matrix is represented as a hash table with keys cell coordinates
 using cell_map = std::unordered_map<absolute_cellname, base_cell*>;
 using table_iterator = cell_map::iterator;
 using const_table_iterator = cell_map::const_iterator;
@@ -36,8 +36,8 @@ enum cell_type {
 class table {
     friend class expression_cell;
     cell_map t;
-    int max_column = 0;
-    int max_row = 0;
+    int max_column = -1;
+    int max_row = -1;
     int cell_count = 0;
 public:
     /// Rule of 3
@@ -47,7 +47,7 @@ public:
     table() = default;
     ///@brief sets a cell to a given value
     /// can be a string ot an expression
-    void set(const absolute_cellname& n, const std::string& value);
+    void set(const absolute_cellname& n, const std::string& value, bool check_for_bounds = true);
     ///@brief the stringified value of a cell
     std::string get_value(const absolute_cellname& n) const;
     ///@brief gets the type of a cell
@@ -86,16 +86,19 @@ public:
     const_table_iterator find_cell(const absolute_cellname& n) const;
     ///@brief information method for finding the total number of non-empty cells within the table
     int count() const;
+    ///@brief clears the table
+    ///@brief frees cells in a cell_map
+    void clear();
 private:
     ///@brief validates an address
     ///@throws when address is not within the limits of the table std::invalid_argument is thrown
     void validate_address(const absolute_cellname& address) const;
     ///@brief reevaluates all expression cells which contain the current cell as part of their expression
     void update_table(const absolute_cellname& current);
-    ///@brief clears the table
-    void clear();
-    ///@brief frees cells in a cell_map
     static void free_cell_map(cell_map& m);
+    int number_of_digits(int number) const;
+    int max_val_len_by_col(int j) const;
+    int max_expr_len_by_col(int j) const;
 };
 
 

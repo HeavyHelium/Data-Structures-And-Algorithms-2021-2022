@@ -7,22 +7,21 @@
 
 class base_cell;
 
-
 class expression_cell : public base_cell {
     static inline const std::unordered_multimap<const char*, operator_token> operators = {
-            { "*",  operator_token{ operator_type::Multiply,       3, true } },
-            { "+",  operator_token{ operator_type::Plus,           2, true } },
-            { "-",  operator_token{ operator_type::Minus,          2, true } },
-            { "-",  operator_token{ operator_type::U_minus,        5, false} },
-            { "+",  operator_token{ operator_type::U_plus,         5, false} },
-            { "/", operator_token { operator_type::Div,            3, true } },
-            { "==", operator_token{ operator_type::Equals,         0, true } },
-            { "!=", operator_token{ operator_type::NotEquals,      0, true } },
-            { "<",  operator_token{ operator_type::Smaller,        1, true } },
-            { ">",  operator_token{ operator_type::Greater,        1, true } },
-            { "(",  operator_token{ operator_type::L_paren,       -1, false} },
-            { ")",  operator_token{ operator_type::R_paren,       -1, false} },
-            { ",",  operator_token{ operator_type::Separator,     -1, false} },
+            { "*",  operator_token{ operator_type::Multiply,   3, true } },
+            { "+",  operator_token{ operator_type::Plus,       2, true } },
+            { "-",  operator_token{ operator_type::Minus,      2, true } },
+            { "-",  operator_token{ operator_type::U_minus,    5, false} },
+            { "+",  operator_token{ operator_type::U_plus,     5, false} },
+            { "/", operator_token { operator_type::Div,        3, true } },
+            { "==", operator_token{ operator_type::Equals,     0, true } },
+            { "!=", operator_token{ operator_type::NotEquals,  0, true } },
+            { "<",  operator_token{ operator_type::Smaller,    1, true } },
+            { ">",  operator_token{ operator_type::Greater,    1, true } },
+            { "(",  operator_token{ operator_type::L_paren,   -1, false} },
+            { ")",  operator_token{ operator_type::R_paren,   -1, false} },
+            { ",",  operator_token{ operator_type::Separator, -1, false} },
     };
     static inline const std::unordered_multimap<const char*, function_token> functions = {
             { "sum",   function_token{ function_type::Sum,   2 } },
@@ -73,9 +72,14 @@ private:
     ///@brief turns expression to a modified reverse polish notation
     static void to_RPN(std::queue<base_token*>& output_queue,
                        const std::vector<base_token*>& tokens);
-    ///@brief here the actual calculation happens
+    ///@brief calculates expression and sets the numeric value
+    ///@throws when expression is incorrect semantically or its format is invalid
     void calculate(std::queue<base_token*>& output_queue, table& table_link);
+    ///@brief calculates functions sum and count and gets rid of them;
+    ///this is because they are the only functions,
+    /// whose parameter cannot be substituted with their values right away
     std::vector<base_token*> calculate_special_functions(const std::vector<base_token*>& tokens, table& table_link);
+    ///@brief gets the absolute address of a relative address cell
     absolute_cellname to_absolute(const relative_cellname& other_name, table& table_link);
 };
 

@@ -16,7 +16,9 @@ public:
     std::string print_value() const override;
     std::string print_expr() const override;
     type get_type() const;
+    ///@brief increments value if it represents an int
     void increment_value();
+    ///@brief decrements value if it represents an int
     void decrement_value();
     string_cell* clone() const override;
 };

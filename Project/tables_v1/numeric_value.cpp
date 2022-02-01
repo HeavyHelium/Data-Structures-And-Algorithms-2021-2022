@@ -6,16 +6,13 @@ std::string numeric_value::print_value() const {
     switch(T) {
         case type::Int : {
             return std::to_string(V.i_val);
-            break;
         }
         case type::Double : {
             return std::to_string(V.d_val);
-            break;
         }
     }
 }
 
-// TODO: rename to operator++
 void numeric_value::increment() {
     switch(T) {
         case type::Int : {

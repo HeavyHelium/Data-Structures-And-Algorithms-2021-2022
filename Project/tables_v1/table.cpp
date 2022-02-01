@@ -8,8 +8,9 @@
 #include <stdexcept>
 #include <utility>
 #include <typeinfo>
+#include <iomanip>
 
-void table::set(const absolute_cellname& n, const std::string& value) {
+void table::set(const absolute_cellname& n, const std::string& value, bool check_for_bounds) {
     base_cell* new_cell = nullptr;
     try {
         new_cell = make_cell(value, n, *this);
@@ -54,11 +55,59 @@ void table::print_expr(const absolute_cellname& address) const {
 }
 
 void table::print_val_all() const {
-    //TODO: implement
+    if(cell_count == 0) {
+        std::cout << "|\n";
+        return;
+    }
+    int numeration_offset = number_of_digits(max_row);
+    std::cout << std::setw(numeration_offset) << "";
+    std::cout << " | ";
+    for(int i = 0; i < max_column + 1; ++i) {
+        int temp = max_val_len_by_col(i);
+        std::cout << std::setw(temp) << i << " | ";
+    }
+    std::cout << '\n';
+    for(int i = 0; i < max_row + 1; ++i) {
+        std::cout << std::setw(numeration_offset) << i << " | ";
+        for(int j = 0; j < max_column + 1; ++j) {
+            const_table_iterator found = t.find({ i, j });
+            if(found == t.end()) {
+                std::cout << std::setw(max_val_len_by_col(j)) << " " << " | ";
+            } else {
+                std::string val = found->second->print_value();
+                std::cout << std::setw(max_val_len_by_col(j)) << val << " | ";
+            }
+        }
+        std::cout << std::endl;
+    }
 }
 
 void table::print_expr_all() const {
-    //TODO: implement
+    if(cell_count == 0) {
+        std::cout << "|\n";
+        return;
+    }
+    int numeration_offset = number_of_digits(max_row);
+    std::cout << std::setw(numeration_offset) << "";
+    std::cout << " | ";
+    for(int i = 0; i < max_column + 1; ++i) {
+        int temp = max_expr_len_by_col(i);
+        std::cout << std::setw(temp) << i << " | ";
+    }
+    std::cout << '\n';
+    for(int i = 0; i < max_row + 1; ++i) {
+        std::cout << std::setw(numeration_offset) << i << " | ";
+        for(int j = 0; j < max_column + 1; ++j) {
+            const_table_iterator found = t.find({ i, j });
+            if(found == t.end()) {
+                std::cout << std::setw(max_expr_len_by_col(j)) << " " << " | ";
+            } else {
+                std::string val = found->second->print_expr();
+                std::cout << std::setw(max_expr_len_by_col(j)) << val << " | ";
+            }
+        }
+        std::cout << std::endl;
+    }
 }
 
 void table::save(const std::string& ofilename) const {
@@ -92,26 +141,34 @@ void table::load(const std::string& ifilename) {
             ++current_line;
             int current_col = -1;
             const char *l = line.c_str();
+            skip_white_space(l);
+            if(!l) {
+                continue;
+            }
             while (*l) {
+                skip_white_space(l);
+                if(!*l) continue;
+                if(*l == ',' && !*(l + 1)) break;
                 std::string cell_info;
                 skip_white_space(l);
                 while (*l && *l != ',') {
                     cell_info.push_back(*(l++));
                 }
-                if (*l == ',') {
-                    ++current_col;
-                    ++l;
-                }
-                skip_white_space(l);
-                if (!cell_info.empty() && *l && *l != ',') {
-                    std::cout << l;
+                if (*l != ',') {
                     throw std::runtime_error("on line " + std::to_string(current_line) + ": invalid format");
                 }
+                ++current_col;
+                ++l;
                 if (!cell_info.empty()) {
-                    set({current_line, current_col}, cell_info);
+                    try { set({current_line, current_col}, cell_info); }
+                    catch(const std::exception& e) {
+                        throw std::runtime_error("on line " + std::to_string(current_line) + ": "+ e.what());
+                    }
                 }
             }
         }
+        std::cout << "Successfully loaded table from file " <<
+                      ifilename << "!" << std::endl;
     } catch(...) {
         clear();
         throw ;
@@ -284,8 +341,46 @@ void table::update_table(const absolute_cellname& current) {
     }
 }
 
+int table::number_of_digits(int number) const {
+    int cnt = 1;
+    while(number >= 10) {
+        ++cnt;
+        number /= 10;
+    }
+    return cnt;
+}
+
+int table::max_val_len_by_col(int j) const {
+    int max = number_of_digits(j);
+    for(int i = 0; i < max_row + 1; ++i) {
+        const const_table_iterator found = t.find({ i, j });
+        if(found != t.end()) {
+            int current = found->second->print_value().size();
+            if(current > max) {
+                max = current;
+            }
+        }
+    }
+    return max;
+}
+
+int table::max_expr_len_by_col(int j) const {
+    int max = number_of_digits(j);
+    for(int i = 0; i < max_row + 1; ++i) {
+        const const_table_iterator found = t.find({ i, j });
+        if(found != t.end()) {
+            int current = found->second->print_expr().size();
+            if(current > max) {
+                max = current;
+            }
+        }
+    }
+    return max;
+}
+
 void table::clear() {
     free_cell_map(t);
+    t.clear();
     max_row = max_column = 0;
 }
 /// Rule of 3
@@ -334,6 +429,3 @@ void table::free_cell_map(cell_map& m) {
         delete pair.second;
     }
 }
-
-
-

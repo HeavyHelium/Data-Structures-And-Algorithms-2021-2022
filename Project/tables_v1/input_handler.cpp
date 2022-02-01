@@ -40,10 +40,12 @@ void input_handler::execute_command(const command &c) {
         }
         case print_val_all: {
             t.print_val_all();
+            std::cout << std::endl;
             break;
         }
         case print_expr_all: {
             t.print_expr_all();
+            std::cout << std::endl;
             break;
         }
         case save: {
@@ -52,10 +54,11 @@ void input_handler::execute_command(const command &c) {
             break;
         }
         case load: {
-            t.load(c.arguments[0]);
             if(reassure_saved() == action::stop) {
                 return;
             }
+            t.clear();
+            t.load(c.arguments[0]);
             saved = true;
             break;
         }
@@ -73,6 +76,7 @@ void input_handler::execute_command(const command &c) {
             if(reassure_saved() == action::stop) {
                 return;
             }
+            t.clear();
             std::cout << "...Goodbye\n...press any key to close the program\n";
             getting_input = false;
             char ch;

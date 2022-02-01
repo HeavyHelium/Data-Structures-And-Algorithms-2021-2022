@@ -1,9 +1,8 @@
 #include "Cell.hpp"
-#include "string_helpers.hpp"
 #include "table.hpp"
+#include "string_helpers.hpp"
 #include "string_cell.hpp"
 #include "expression_cell.hpp"
-#include <iostream>
 
 /// factory function
 base_cell* make_cell(const std::string& value, const absolute_cellname& name, table& t) {

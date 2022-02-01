@@ -1,7 +1,6 @@
 #include "cellname.hpp"
 #include "string_helpers.hpp"
 #include <stdexcept>
-#include <iostream>
 #include <string>
 
 absolute_cellname::absolute_cellname(const std::string& text) {
@@ -42,7 +41,7 @@ int absolute_cellname::row() const {
 int absolute_cellname::column() const {
     return m_column;
 }
-///@throws when a coordinate is negative
+
 absolute_cellname::absolute_cellname(int r, int c)
     : cellname(r, c) {
     if(r < 0 || c < 0) {

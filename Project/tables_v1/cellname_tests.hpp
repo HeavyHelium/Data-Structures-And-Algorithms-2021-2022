@@ -18,7 +18,7 @@ TEST_CASE("relative cellnames are created correctly") {
     REQUIRE_THROWS(relative_cellname("R[58h][-17]"));
 }
 
-TEST_CASE("cellnames are serialized correctly") {
+TEST_CASE("cellnames are stringified correctly") {
     absolute_cellname a(5, 0);
     REQUIRE(a.to_name() == "R5C0");
     relative_cellname r(16, -32);

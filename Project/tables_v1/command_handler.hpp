@@ -36,12 +36,12 @@ struct command_parser {
     using arguments_info = std::vector<std::string>;
     std::string name;
     std::vector<std::string> arguments;
-    static inline const std::unordered_map<std::string, type_args> supported_commands =     {
+    static inline const std::vector<std::pair<std::string, type_args>> supported_commands = {
         { "SET",            { command_type::set,           { "address", "expression" } } },
+        { "PRINT EXPR ALL", { command_type::print_expr_all                             } },
+        { "PRINT VAL ALL",  { command_type::print_val_all                              } },
         { "PRINT VAL",      { command_type::print_val,     { "address"  }              } },
         { "PRINT EXPR",     { command_type::print_expr,    { "address"  }              } },
-        { "PRINT VAL ALL",  { command_type::print_val_all                              } },
-        { "PRINT EXPR ALL", { command_type::print_expr_all                             } },
         { "SAVE",           { command_type::save,          { "filename" }              } },
         { "LOAD",           { command_type::load,          { "filename" }              } },
         { "++",             { command_type::incr,          { "address"  }              } },

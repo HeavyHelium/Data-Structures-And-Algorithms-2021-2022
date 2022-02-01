@@ -55,7 +55,7 @@ command command_parser::parse(const char* line) {
         }
         case print_expr_all: {
             skip_white_space(line);
-            if(line) {
+            if(*line) {
                 throw std::invalid_argument("wrong argument count\n");
             }
             return command{ type };

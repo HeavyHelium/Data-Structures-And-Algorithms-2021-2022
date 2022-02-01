@@ -13,21 +13,20 @@ class table;
 
 class base_cell {
 public:
+    ///@return the numeric value of a cell
     virtual numeric_value get_numeric() const = 0;
+    ///@return the value used for saving value when saving the table
     virtual std::string save_value() const = 0;
+    ///@return the stringified numeric value
     virtual std::string print_value() const = 0;
+    ///@return the actual value held, without "s for strings
+    ///and for expressions the expression itself
     virtual std::string print_expr() const = 0;
+    ///@brief to allow for easy copy-construction of the table
     virtual base_cell* clone() const = 0;
+    ///@brief a dtor
     virtual ~base_cell() = default;
 };
-
-/// in case a clear cell operation is added, for now it's not meant to be used
-class empty_cell : public base_cell {
-public:
-    empty_cell() = default;
-    numeric_value get_numeric() const;
-};
-
 /// a factory function
 base_cell* make_cell(const std::string& value, const absolute_cellname& name, table& t);
 

@@ -9,7 +9,7 @@ TEST_CASE("set cell works correctly", "[table]") {
     table t1;
     t1.set({ 1, 1 }, "\"hello world!\"");
     REQUIRE(t1.get_type({ 1, 1 }) == cell_type::str);
-    REQUIRE(t1.get_value({ 1, 1 }) == "hello world!");
+    REQUIRE(t1.get_value({ 1, 1 }) == "0");
 }
 
 TEST_CASE("incr works correctly", "[table]") {
@@ -70,6 +70,7 @@ TEST_CASE("expression cells evaluate expressions correctly", "[table]") {
         REQUIRE_THROWS(t1.set({ 1, 6 }, "if(unknown_token > 7, 4, 5, 6)"));
     }
     SECTION("for more complex ones containing cellnames") {
+        REQUIRE_NOTHROW(t1.set({ 0, 0 }, "0"));
         REQUIRE_NOTHROW(t1.set({ 1, 1 }, "5 + R[-1]C[-1] + 2 * R0C0 / 7"));
         REQUIRE_NOTHROW(t1.set({ 1, 0 }, "\"hello world\""));
         REQUIRE_NOTHROW(t1.set({ 1, 3 }, "R1C0"));
@@ -80,9 +81,10 @@ TEST_CASE("expression cells evaluate expressions correctly", "[table]") {
         REQUIRE(t1.get_value({ 1, 3 }) == "0");
         REQUIRE(t1.get_value({ 1, 4 }) == "9");
 
-        REQUIRE(t1.count() == 5);
+        REQUIRE(t1.count() == 6);
     }
     SECTION("cyclic dependencies are detected") {
+        REQUIRE_NOTHROW(t1.set({ 0, 0 }, "0"));
         REQUIRE_NOTHROW(t1.set({ 1, 1 }, "5 + R[-1]C[-1] + 2 * R0C0 / 7"));
         REQUIRE_NOTHROW(t1.set({ 1, 0 }, "\"hello world\""));
         REQUIRE_NOTHROW(t1.set({ 1, 3 }, "R1C0"));
@@ -93,7 +95,6 @@ TEST_CASE("expression cells evaluate expressions correctly", "[table]") {
         REQUIRE_THROWS(t1.set({ 1, 1 }, "R1C1 + 4"));
         REQUIRE_THROWS(t1.set({ 1, 1 }, "R[0]C[0] + 4"));
     }
-    //SECTION("correctly ")
 }
 
 #endif //TABLES_V1_TABLE_TESTS_HPP

@@ -7,9 +7,11 @@
 #include <unordered_map>
 #include "numeric_value.hpp"
 
+/// an abstract class to represent an expression token
 struct base_token
 {
     base_token() = default;
+    ///@brief translated a token to its stringified notation
     virtual std::string save_value() const = 0;
     virtual base_token* clone() const = 0;
     virtual ~base_token() = default;
@@ -55,6 +57,7 @@ struct operator_token : base_token {
     operator_type t;
     const int precedence = -1;
     const bool left_associative = true;
+    ///@brief by default all operators are left-associative
     operator_token(operator_type t,
                    const int precedence = 0,
                    const bool left_associative = true);

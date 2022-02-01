@@ -69,7 +69,6 @@ std::string expression_cell::print_value() const {
     return val.print_value();
 }
 
-
 expression_cell::expression_cell(const absolute_cellname &name, table& table_link, const std::string& text)
         : name(name) {
     tokens = tokenize(text.c_str());
@@ -83,7 +82,7 @@ expression_cell::~expression_cell() {
 }
 
 std::string expression_cell::save_value() const {
-    return print_expr();
+    return val.print_value();
 }
 
 bool expression_cell::contains(const absolute_cellname& name) const {
@@ -399,7 +398,6 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
     std::stack<numeric_value> calculation_stack;
     while(!output_queue.empty()) {
         base_token* token = output_queue.front();
-        //std::cout << token->save_value() << std::endl;
         output_queue.pop();
         if(isInt(token)) {
             int_token* temp = dynamic_cast<int_token*>(token);
@@ -680,7 +678,7 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
                     break;
                 }
                 default: {
-                    std::cerr << "i don't know why we got here\n";
+                    std::cerr << "error\n";
                 }
             }
         }
@@ -753,6 +751,10 @@ std::vector<base_token *> expression_cell::calculate_special_functions(const std
                     op2 = to_absolute(t->name, table_link);
                 }
                 numeric_value res;
+                if(op1.row() <= name.row() && op2.row() >= name.row() &&
+                   op1.column() <= name.column() && op2.column() >= name.column()) {
+                    throw std::invalid_argument("cyclic dependencies are not allowed");
+                }
                 if(sum) res = table_link.sum_area(op1, op2);
                 else {
                     res.T = type::Int;
