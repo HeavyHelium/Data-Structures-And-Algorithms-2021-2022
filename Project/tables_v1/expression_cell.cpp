@@ -60,15 +60,9 @@ void expression_cell::evaluate(table& table_link) {
     std::queue<base_token*> output_queue;
     std::vector<base_token*> filtered_tokens = calculate_special_functions(tokens, table_link);
     to_RPN(output_queue, filtered_tokens);
-/*
-    while(!output_queue.empty()) {
-        std::cout << output_queue.front()->save_value() << " ";
-        output_queue.pop();
-    }
-    std::cout << std::endl;
-*/
     calculate(output_queue, table_link);
     free_tokens(filtered_tokens);
+
 }
 
 std::string expression_cell::print_value() const {
@@ -98,7 +92,7 @@ bool expression_cell::contains(const absolute_cellname& name) const {
             const absolute_cellname_token* temp = dynamic_cast<const absolute_cellname_token*>(ptr);
             if(name.row() == temp->name.row() &&
                name.column() == temp->name.column()) {
-                return true;
+                    return true;
             }
         } else if(typeid(*ptr) == typeid(relative_cellname)) {
             const relative_cellname_token* temp = dynamic_cast<const relative_cellname_token*>(ptr);
@@ -409,6 +403,7 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
     std::stack<numeric_value> calculation_stack;
     while(!output_queue.empty()) {
         base_token* token = output_queue.front();
+        //std::cout << token->save_value() << std::endl;
         output_queue.pop();
         if(isInt(token)) {
             int_token* temp = dynamic_cast<int_token*>(token);
@@ -715,12 +710,12 @@ std::vector<base_token *> expression_cell::calculate_special_functions(const std
             bool count = f->t == function_type::Count;
             if(sum || count) {
                 if(i + 1 == tokens.size() || !isL_paren(tokens[i + 1])) {
-                    throw std::invalid_argument("wrong expression format");
+                     throw std::invalid_argument("wrong expression format");
                 }
                 ++i; // we are now at the left parenthesis
                 if(i + 1 == tokens.size() ||
-                   !isRelCellname(tokens[i + 1]) ||
-                   !isAbsCellname(tokens[i + 1])) {
+                   (!isRelCellname(tokens[i + 1]) &&
+                   !isAbsCellname(tokens[i + 1]))) {
                     throw std::invalid_argument("wrong expression format");
                 }
                 ++i; // we are now at the first argument
@@ -732,8 +727,8 @@ std::vector<base_token *> expression_cell::calculate_special_functions(const std
                 ++i; // we are not at the separator
                 // next must be an address
                 if(i + 1 == tokens.size() ||
-                   !isRelCellname(tokens[i + 1]) ||
-                   !isAbsCellname(tokens[i + 1])) {
+                   (!isRelCellname(tokens[i + 1]) &&
+                   !isAbsCellname(tokens[i + 1]))) {
                     throw std::invalid_argument("wrong expression format");
                 }
                 ++i; // we are now at the second address
@@ -771,9 +766,13 @@ std::vector<base_token *> expression_cell::calculate_special_functions(const std
                 int_token* new_token = new int_token(res);
                 result.push_back(new_token);
             }
-            else result.push_back(tokens[i]->clone());
+            else {
+                result.push_back(tokens[i]->clone());
+            }
         }
-        else result.push_back(tokens[i]->clone());
+        else {
+            result.push_back(tokens[i]->clone());
+        }
     }
     return result;
 }

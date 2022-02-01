@@ -9,15 +9,15 @@ void input_handler::get_input() {
     while(getting_input &&
           std::cout << "> " &&
           std::getline(std::cin, line)) {
-        if(is_line_empty(line)){
+        if(is_line_empty(line)) {
             continue;
         }
         command_parser h;
-        try{
+        try {
             command c(h.parse(line.c_str()));
             execute_command(c);
         }
-        catch(const std::exception& e){
+        catch(const std::exception& e) {
             std::cerr << "error: " << e.what() << "\n";
         }
     }
@@ -46,11 +46,11 @@ void input_handler::execute_command(const command &c) {
             break;
         }
         case save: {
-            std::cout << "hakuna_matata save\n";
+            t.save(c.arguments[0]);
             break;
         }
         case load: {
-            std::cout << "hakuna_matata load\n";
+            t.load(c.arguments[0]);
             break;
         }
         case incr: {

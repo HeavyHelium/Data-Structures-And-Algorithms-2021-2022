@@ -16,6 +16,9 @@ command command_parser::parse(const char* line) {
                 throw std::invalid_argument("wrong argument count\n");
             }
             skip_white_space(line);
+            if(!*line) {
+                throw std::invalid_argument("wrong argument count\n");
+            }
             return command{ type, { std::string(address.beg, address.len), line } };
 
         }
@@ -123,7 +126,6 @@ command_type command_parser::parse_name(const char*& line) {
     if(!*line) {
         throw std::invalid_argument("line is empty");
     }
-    const char* begin = line;
     for(const_command_info& c : command_parser::supported_commands) {
         string_slice sl = is_prefix(c.first.c_str(), line);
         if(sl.len) {

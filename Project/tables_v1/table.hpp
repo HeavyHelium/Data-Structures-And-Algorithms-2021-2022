@@ -4,14 +4,26 @@
 #include <unordered_map>
 #include "cellname.hpp"
 #include <utility>
+#include <functional>
+#include <unordered_map>
 #include <map>
 
 class base_cell;
 class numeric_value;
 
-using coordinates = std::pair<int, int>;
+/// a template specialization for hashing cellnames
+template<>
+struct std::hash<absolute_cellname>
+{
+    std::size_t operator()(const absolute_cellname& name) const noexcept
+    {
+        std::size_t h1 = std::hash<int>{}(name.row());
+        std::size_t h2 = std::hash<int>{}(name.column());
+        return h1 ^ h2;
+    }
+};
 /// Matrix is represented as a dictionary of keys
-using cell_map = std::map<std::pair<int, int>, base_cell*>;
+using cell_map = std::unordered_map<absolute_cellname, base_cell*>;
 using table_iterator = cell_map::iterator;
 using const_table_iterator = cell_map::const_iterator;
 
@@ -48,9 +60,9 @@ public:
     ///@brief prints the expression in a given cell
     void print_expr(const absolute_cellname& address) const;
     ///@brief prints the value of all cells in the table
-    void print_val_all(const absolute_cellname& address) const;
+    void print_val_all() const;
     ///@brief prints the expressions in all cells in the table
-    void print_expr_all(const absolute_cellname& address) const;
+    void print_expr_all() const;
     ///@brief saves the table in a csv file
     void save(const std::string& ofilename) const;
     ///@brief reads the table from a csv file
@@ -82,6 +94,8 @@ private:
     void update_table(const absolute_cellname& current);
     ///@brief clears the table
     void clear();
+    ///@brief frees cells in a cell_map
+    static void free_cell_map(cell_map& m);
 };
 
 
