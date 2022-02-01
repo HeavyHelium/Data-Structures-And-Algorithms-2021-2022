@@ -6,14 +6,15 @@
 #include <cassert>
 #include "table.hpp"
 
-#if 1
+#if 0
 int main() try {
     table t1;
     t1.set({ 1, 1 }, "\"hello world\"");
     t1.set({ 1, 3 }, "\"3.14\"");
     t1.set({ 2, 3 }, "\"42\"");
-    t1.set({ 1, 2 }, "(5 + R[1]C[1] + sin(3)) / 2");
+    t1.set({ 1, 2 }, "--16");
     std::cout << t1.get_num_value({ 1, 2 }).print_value() << std::endl;
+    t1.print_val({ 1, 3 });
    // t1.print_expr({ 1, 2 });
     //std::cout << t1.get_num_value({ 2, 1 }).print_value() << std::endl;
     //t1.set({1, 1}, "\"42\"");
@@ -29,13 +30,15 @@ int main() try {
 }
 catch(const std::exception& e) {
     std::cerr << e.what() << std::endl;
+    char ch;
+    std::cin.get(ch);
     return -1;
 }
 
 
 
 #endif
-#if 0
+#if 1
 int main() {
    input_handler h;
    h.get_input();

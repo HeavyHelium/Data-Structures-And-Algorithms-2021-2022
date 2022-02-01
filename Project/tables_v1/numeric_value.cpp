@@ -360,7 +360,7 @@ numeric_value::operator bool() const {
 
 numeric_value numeric_value::operator!() const {
     numeric_value temp = { type::Int };
-    if(*this) {
+    if((bool)*this) {
         temp.V.i_val = 0;
     } else {
         temp.V.i_val = 1;

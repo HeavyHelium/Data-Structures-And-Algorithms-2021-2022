@@ -26,15 +26,15 @@ void input_handler::get_input() {
 void input_handler::execute_command(const command &c) {
     switch (c.type) {
         case set: {
-            std::cout << "hakuna_matata set\n";
+            t.set(c.arguments[0], c.arguments[1]);
             break;
         }
         case print_val: {
-            std::cout << "hakuna_matata print_val\n";
+            t.print_val(c.arguments[0]);
             break;
         }
         case print_expr: {
-            std::cout << "hakuna_matata print_expr\n";
+            t.print_expr(c.arguments[0]);
             break;
         }
         case print_val_all: {
@@ -54,11 +54,11 @@ void input_handler::execute_command(const command &c) {
             break;
         }
         case incr: {
-            std::cout << "hakuna_matata ++\n";
+            t.incr(c.arguments[0]);
             break;
         }
         case dcr: {
-            std::cout << "hakuna_matata --\n";
+            t.dcr(c.arguments[0]);
             break;
         }
         case command_type::Exit: {

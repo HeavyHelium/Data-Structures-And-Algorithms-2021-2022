@@ -9,8 +9,8 @@
 #include <cassert>
 #include <string>
 
-class tree{
-    struct Node{
+class tree {
+    struct Node {
         int value;
         std::list<Node*> children;
     };

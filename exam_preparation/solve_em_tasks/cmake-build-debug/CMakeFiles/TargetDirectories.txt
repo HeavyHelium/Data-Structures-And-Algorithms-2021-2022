@@ -1,0 +1,3 @@
+G:/FMI/Year 2/fall_winter/SDP/exam_preparation/solve_em_tasks/cmake-build-debug/CMakeFiles/solve_em_tasks.dir
+G:/FMI/Year 2/fall_winter/SDP/exam_preparation/solve_em_tasks/cmake-build-debug/CMakeFiles/edit_cache.dir
+G:/FMI/Year 2/fall_winter/SDP/exam_preparation/solve_em_tasks/cmake-build-debug/CMakeFiles/rebuild_cache.dir

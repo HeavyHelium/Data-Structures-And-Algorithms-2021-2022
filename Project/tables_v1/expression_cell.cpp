@@ -89,11 +89,7 @@ expression_cell::~expression_cell() {
 }
 
 std::string expression_cell::save_value() const {
-    std::string res;
-    for(const base_token* ptr : tokens) {
-        res += ptr->save_value();
-    }
-    return res;
+    return print_expr();
 }
 
 bool expression_cell::contains(const absolute_cellname& name) const {
@@ -136,8 +132,7 @@ std::vector<base_token*> expression_cell::tokenize(const char* text) {
 base_token *expression_cell::extract_token(const char*& current, bool& prev_op) {
     operator_token* op = extract_operator(current, prev_op);
     if(op) {
-        if(op->t != operator_type::L_paren &&
-           op->t != operator_type::R_paren) {
+        if(op->t != operator_type::R_paren) {
             prev_op = true;
         }
         else prev_op = false;
@@ -305,8 +300,8 @@ void expression_cell::to_RPN(std::queue<base_token *>& output_queue,
                              const std::vector<base_token*>& tokens) {
     assert(output_queue.empty());
     std::stack<base_token*> operator_stack;
-    // with 2 more stacks we can handle nested function calls
-    // and functions with variable count of arguments
+    /// with 2 more stacks we can handle nested function calls
+    /// and functions with variable count of arguments
     std::stack<bool> were_values_stack;
     std::stack<int> arg_cnt_stack;
     for(base_token* token : tokens) {
@@ -387,20 +382,27 @@ void expression_cell::to_RPN(std::queue<base_token *>& output_queue,
                 operator_token* top = dynamic_cast<operator_token*>(operator_stack.top());
                 if(current->left_associative &&
                    current->precedence <= top->precedence ||
-                   !current->left_associative &&
-                   current->precedence <= top->precedence) {
-                    output_queue.push(top);
+                    (!current->left_associative &&
+                      current->precedence < top->precedence)) {
                     operator_stack.pop();
+                    //std::cout << "popped " << top->save_value() << std::endl;
+                    output_queue.push(top);
                 }
-                else break;
+                else {
+                    //std::cout << "a " << top->t << std::endl;
+                    break;
+                }
             }
+            //std::cout << "pt: " << token->save_value() << std::endl;
             operator_stack.push(token);
         }
     }
     while(!operator_stack.empty()) {
         output_queue.push(operator_stack.top());
+        //std::cout << operator_stack.top() ->save_value() << std::endl;
         operator_stack.pop();
     }
+
 }
 
 void expression_cell::calculate(std::queue<base_token*> &output_queue, table& table_link) {
@@ -448,25 +450,28 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
             switch(temp->t) {
                 case operator_type::U_minus : {
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
-                    calculation_stack.top() = -calculation_stack.top();
+                    numeric_value temp = calculation_stack.top();
+                    temp = -temp;
+                    calculation_stack.pop();
+                    calculation_stack.push(temp);
                     break;
                 }
                 case operator_type::U_plus : {
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     break;
                 }
                 case operator_type::Plus : {
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     numeric_value operand2 = calculation_stack.top();
                     calculation_stack.pop();
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     numeric_value operand1 = calculation_stack.top();
                     calculation_stack.pop();
@@ -476,12 +481,12 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
                 }
                 case operator_type::Minus : {
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     numeric_value operand2 = calculation_stack.top();
                     calculation_stack.pop();
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     numeric_value operand1 = calculation_stack.top();
                     calculation_stack.pop();
@@ -491,12 +496,12 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
                 }
                 case operator_type::Multiply : {
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     numeric_value operand2 = calculation_stack.top();
                     calculation_stack.pop();
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     numeric_value operand1 = calculation_stack.top();
                     calculation_stack.pop();
@@ -506,12 +511,12 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
                 }
                 case operator_type::Div : {
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     numeric_value operand2 = calculation_stack.top();
                     calculation_stack.pop();
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     numeric_value operand1 = calculation_stack.top();
                     calculation_stack.pop();
@@ -524,12 +529,12 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
                 }
                 case operator_type::Equals : {
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     numeric_value operand2 = calculation_stack.top();
                     calculation_stack.pop();
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     numeric_value operand1 = calculation_stack.top();
                     calculation_stack.pop();
@@ -539,12 +544,12 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
                 }
                 case operator_type::NotEquals : {
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     numeric_value operand2 = calculation_stack.top();
                     calculation_stack.pop();
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     numeric_value operand1 = calculation_stack.top();
                     calculation_stack.pop();
@@ -554,12 +559,12 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
                 }
                 case operator_type::Smaller : {
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     numeric_value operand2 = calculation_stack.top();
                     calculation_stack.pop();
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     numeric_value operand1 = calculation_stack.top();
                     calculation_stack.pop();
@@ -569,12 +574,12 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
                 }
                 case operator_type::Greater : {
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     numeric_value operand2 = calculation_stack.top();
                     calculation_stack.pop();
                     if(calculation_stack.empty()) {
-                        throw std::invalid_argument("expression in incorrect");
+                        throw std::invalid_argument("expression is incorrect");
                     }
                     numeric_value operand1 = calculation_stack.top();
                     calculation_stack.pop();
@@ -636,7 +641,7 @@ void expression_cell::calculate(std::queue<base_token*> &output_queue, table& ta
                     if(!f) {
                         throw std::invalid_argument("wrong argument count");
                     }
-                    bool res = true;
+                    bool res = false;
                     while(arg_cnt--) {
                         if(calculation_stack.empty()) {
                             throw std::invalid_argument("wrong expression format");

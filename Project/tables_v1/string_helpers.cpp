@@ -36,7 +36,6 @@ std::string extract_word(const char*& str)
 }
 
 string_slice is_prefix(const char* str, const char* word) {
-    //std::cout << str << std::endl;
     const char* beg = str;
     std::size_t len = 0;
     while(*str && *word) {
@@ -105,6 +104,15 @@ bool string_slice::operator==(const string_slice &other) const {
         }
     }
     return true;
+}
+
+std::ostream& operator<<(std::ostream& os, const string_slice& sl) {
+    int iter = sl.len;
+    const char* current = sl.beg;
+    while(iter--) {
+        os << *current++;
+    }
+    return os;
 }
 /// undefined behaviour in case of sl not representing a non-negative number
 int slice_to_i(const string_slice& sl) {

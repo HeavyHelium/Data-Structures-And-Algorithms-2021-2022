@@ -16,14 +16,17 @@ std::string operator_token::save_value() const {
         }
         case operator_type::Multiply : {
             return "*";
-        }case operator_type::Div : {
+        }
+        case operator_type::Div : {
             return "/";
         }
         case operator_type::Equals : {
             return "==";
-        }case operator_type::NotEquals : {
+        }
+        case operator_type::NotEquals : {
             return "!=";
-        }case operator_type::Smaller : {
+        }
+        case operator_type::Smaller : {
             return "<";
         }
         case operator_type::Greater : {
@@ -114,7 +117,7 @@ std::string relative_cellname_token::save_value() const {
     return name.to_name();
 }
 
-relative_cellname_token *relative_cellname_token::clone() const {
+relative_cellname_token* relative_cellname_token::clone() const {
     return new relative_cellname_token(*this);
 }
 

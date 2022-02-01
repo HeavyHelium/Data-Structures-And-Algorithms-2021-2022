@@ -9,20 +9,27 @@
 
 //second is the base_cell*
 void table::set(const absolute_cellname& n, const std::string& value) {
-    base_cell* new_cell = make_cell(value, n, *this);
-    auto found = t.find({ n.row(), n.column() });
-    if(found != t.end()) {
-        delete found->second;
-        found->second = new_cell;
+    base_cell* new_cell;
+    try {
+        base_cell* new_cell = make_cell(value, n, *this);
+        auto found = t.find({ n.row(), n.column() });
+        if(found != t.end()) {
+            delete found->second;
+            found->second = new_cell;
+        }
+        else t.insert({ { n.row(), n.column() }, new_cell });
+        if(n.row() > max_row) {
+            max_row = n.row();
+        }
+        if(n.column() > max_column) {
+            max_column = n.column();
+        }
+        ++cell_count;
+        update_table(n);
+    } catch(...) {
+        delete new_cell;
+        throw;
     }
-    else t.insert({ { n.row(), n.column() }, new_cell });
-    if(n.row() > max_row) {
-        max_row = n.row();
-    }
-    if(n.column() > max_column) {
-        max_column = n.column();
-    }
-    ++cell_count;
 }
 
 void table::print_val(const absolute_cellname& address) const {
@@ -37,7 +44,6 @@ void table::print_val(const absolute_cellname& address) const {
 
 void table::print_expr(const absolute_cellname& address) const {
     validate_address(address);
-    //TODO: implement
     auto found = t.find({ address.row(), address.column() });
     if(found == t.end()) {
         std::cout << "empty\n";
@@ -248,4 +254,19 @@ int table::count_area(const absolute_cellname &address1, const absolute_cellname
 
 const_table_iterator table::find_cell(const absolute_cellname &n) const {
     return t.find({ n.row(), n.column() });
+}
+
+bool is_expression(const base_cell* cell) {
+    return typeid(*cell) == typeid(expression_cell);
+}
+
+void table::update_table(const absolute_cellname& current) {
+    for(table_iterator iter = t.begin(); iter != t.end(); ++iter) {
+        if(is_expression(iter->second) &&
+           current.row() != iter->first.first &&
+           current.column() != iter->first.second) {
+           expression_cell* temp = dynamic_cast<expression_cell*>(iter->second);
+           temp->evaluate(*this);
+        }
+    }
 }
