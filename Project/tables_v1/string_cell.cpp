@@ -54,7 +54,7 @@ string_cell* string_cell::clone() const {
 }
 
 std::string string_cell::print_value() const {
-    return val;
+    return get_numeric().print_value();
 }
 
 void string_cell::increment_value() {

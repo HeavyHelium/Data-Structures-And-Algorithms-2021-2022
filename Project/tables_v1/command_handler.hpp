@@ -33,7 +33,7 @@ using command_info = std::pair<std::string, type_args>;
 using const_command_info = const std::pair<std::string, type_args>;
 
 struct command_parser {
-    using arguments_info = std::vector<std::string> ;
+    using arguments_info = std::vector<std::string>;
     std::string name;
     std::vector<std::string> arguments;
     static inline const std::unordered_map<std::string, type_args> supported_commands =     {

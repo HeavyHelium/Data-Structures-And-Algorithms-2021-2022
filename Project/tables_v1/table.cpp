@@ -1,4 +1,3 @@
-#include <stdexcept>
 #include "table.hpp"
 #include "string_helpers.hpp"
 #include "Cell.hpp"
@@ -6,12 +5,14 @@
 #include "string_cell.hpp"
 #include <iostream>
 #include <fstream>
+#include <stdexcept>
 #include <utility>
+#include <typeinfo>
 
 void table::set(const absolute_cellname& n, const std::string& value) {
     base_cell* new_cell = nullptr;
     try {
-        base_cell* new_cell = make_cell(value, n, *this);
+        new_cell = make_cell(value, n, *this);
         table_iterator found = t.find({ n.row(), n.column() });
         if(found != t.end()) {
             delete found->second;
@@ -187,53 +188,6 @@ void table::validate_address(const absolute_cellname& address) const {
     }
 }
 
-void table::clear() {
-    free_cell_map(t);
-    max_row = max_column = 0;
-}
-/// Rule of 3
-table::table(const table& other)
-    : max_row(other.max_row),
-      max_column(other.max_column),
-      cell_count(other.cell_count) {
-    cell_map temp;
-    try {
-        for(const std::pair<absolute_cellname, base_cell*>& pair : other.t) {
-            temp.insert({ pair.first,
-                          pair.second->clone() });
-        }
-    } catch(...) {
-        free_cell_map(temp);
-        throw ;
-    }
-    t = std::move(temp);
-}
-
-table& table::operator=(const table &other) {
-    if(this != &other) {
-        cell_map temp;
-        try {
-            for(const std::pair<absolute_cellname, base_cell*>& pair : other.t) {
-                temp.insert({ pair.first,
-                              pair.second->clone() });
-            }
-        } catch(...) {
-            free_cell_map(temp);
-            throw ;
-        }
-        clear();
-        t = std::move(temp);
-        max_row = other.max_row;
-        max_column = other.max_column;
-        cell_count = other.cell_count;
-    }
-    return *this;
-}
-
-table::~table() {
-    clear();
-}
-
 int table::count() const {
     return cell_count;
 }
@@ -328,6 +282,51 @@ void table::update_table(const absolute_cellname& current) {
            temp->evaluate(*this);
         }
     }
+}
+
+void table::clear() {
+    free_cell_map(t);
+    max_row = max_column = 0;
+}
+/// Rule of 3
+table::table(const table& other)
+        : max_row(other.max_row),
+          max_column(other.max_column),
+          cell_count(other.cell_count) {
+    try {
+        for(const std::pair<absolute_cellname, base_cell*>& pair : other.t) {
+            t.insert({ pair.first,
+                          pair.second->clone() });
+        }
+    } catch(...) {
+        free_cell_map(t);
+        throw ;
+    }
+}
+
+table& table::operator=(const table &other) {
+    if(this != &other) {
+        cell_map temp;
+        try {
+            for(const std::pair<absolute_cellname, base_cell*>& pair : other.t) {
+                temp.insert({ pair.first,
+                              pair.second->clone() });
+            }
+        } catch(...) {
+            free_cell_map(temp);
+            throw ;
+        }
+        clear();
+        t = std::move(temp);
+        max_row = other.max_row;
+        max_column = other.max_column;
+        cell_count = other.cell_count;
+    }
+    return *this;
+}
+
+table::~table() {
+    clear();
 }
 
 void table::free_cell_map(cell_map& m) {

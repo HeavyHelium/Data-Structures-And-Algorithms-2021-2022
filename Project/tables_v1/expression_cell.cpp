@@ -7,14 +7,14 @@
 #include <stack>
 #include "table.hpp"
 
-bool isSeparator(const base_token* p);
-bool isL_paren(const base_token* p);
-bool isR_paren(const base_token* p);
-bool isFunc(const base_token* p);
-bool isOperator(const base_token* p);
-bool isAbsCellname(const base_token* p);
-bool isRelCellname(const base_token* p);
-bool isInt(const base_token* p);
+static bool isSeparator(const base_token* p);
+static bool isL_paren(const base_token* p);
+static bool isR_paren(const base_token* p);
+static bool isFunc(const base_token* p);
+static bool isOperator(const base_token* p);
+static bool isAbsCellname(const base_token* p);
+static bool isRelCellname(const base_token* p);
+static bool isInt(const base_token* p);
 
 expression_cell::expression_cell(const expression_cell& other)
         : name(other.name),
@@ -54,7 +54,7 @@ numeric_value expression_cell::get_numeric() const {
 expression_cell* expression_cell::clone() const {
     return new expression_cell(*this);
 }
-/// turns tokens into RPN
+/// turns tokens into RPN,
 /// calculates that RPN
 void expression_cell::evaluate(table& table_link) {
     std::queue<base_token*> output_queue;
@@ -164,7 +164,7 @@ operator_token* expression_cell::extract_operator(const char*& text, bool prev_o
     for(auto& op_pair : operators) {
         string_slice sl = is_prefix(op_pair.first, text);
         if(sl.len) {
-            // in case there is a unary and binary operator of the same notation
+            /// in case there is a unary and binary operator of the same notation
             if(prev_op &&
                op_pair.second.t == operator_type::Plus ||
                prev_op && op_pair.second.t == operator_type::Minus) {
@@ -273,7 +273,7 @@ int_token* expression_cell::extract_int(const char*& text) {
     if(num.len == 0) {
         return nullptr;
     }
-    value val;
+    value val{ type::Int };
     val.i_val = slice_to_i(num);
     numeric_value v{ type::Int, val };
     int_token* new_cell = new int_token{ v };
@@ -315,7 +315,7 @@ void expression_cell::to_RPN(std::queue<base_token *>& output_queue,
         if(typeid(*token) == typeid(function_token)) {
             /// push name onto the stack
             operator_stack.push(token);
-            // we came across a new function
+            /// we came across a new function
             arg_cnt_stack.push(0);
             if(!were_values_stack.empty()) {
                 were_values_stack.pop();
@@ -379,21 +379,17 @@ void expression_cell::to_RPN(std::queue<base_token *>& output_queue,
                     (!current->left_associative &&
                       current->precedence < top->precedence)) {
                     operator_stack.pop();
-                    //std::cout << "popped " << top->save_value() << std::endl;
                     output_queue.push(top);
                 }
                 else {
-                    //std::cout << "a " << top->t << std::endl;
                     break;
                 }
             }
-            //std::cout << "pt: " << token->save_value() << std::endl;
             operator_stack.push(token);
         }
     }
     while(!operator_stack.empty()) {
         output_queue.push(operator_stack.top());
-        //std::cout << operator_stack.top() ->save_value() << std::endl;
         operator_stack.pop();
     }
 
@@ -817,6 +813,7 @@ bool isFunc(const base_token* p) {
     }
     return false;
 }
+
 bool isInt(const base_token* p) {
     if(!p) return false;
     if(typeid(*p) == typeid(int_token)) {
