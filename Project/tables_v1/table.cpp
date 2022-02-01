@@ -119,9 +119,9 @@ void table::save(const std::string& ofilename) const {
         for(int j = 0; j <= max_column; ++j) {
             const_table_iterator found = t.find({ i, j });
             if(found == t.end()) {
-                ofile << ", ";
+                ofile << "; ";
             } else {
-                ofile << found->second->save_value() << ", ";
+                ofile << found->second->save_value() << "; ";
             }
         }
         ofile << '\n';
@@ -148,13 +148,13 @@ void table::load(const std::string& ifilename) {
             while (*l) {
                 skip_white_space(l);
                 if(!*l) continue;
-                if(*l == ',' && !*(l + 1)) break;
+                if(*l == ';' && !*(l + 1)) break;
                 std::string cell_info;
                 skip_white_space(l);
-                while (*l && *l != ',') {
+                while (*l && *l != ';') {
                     cell_info.push_back(*(l++));
                 }
-                if (*l != ',') {
+                if (*l != ';') {
                     throw std::runtime_error("on line " + std::to_string(current_line) + ": invalid format");
                 }
                 ++current_col;

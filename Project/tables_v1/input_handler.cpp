@@ -1,5 +1,5 @@
-#include "input_handler.hpp"
 #include <string>
+#include "input_handler.hpp"
 #include "string_helpers.hpp"
 #include "command_handler.hpp"
 
