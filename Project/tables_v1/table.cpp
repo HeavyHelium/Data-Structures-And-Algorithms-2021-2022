@@ -64,6 +64,7 @@ void table::print_val_all() const {
     std::cout << " | ";
     for(int i = 0; i < max_column + 1; ++i) {
         int temp = max_val_len_by_col(i);
+       // std::cout << std::endl << temp + 1 + numeration_offset << std::endl;
         std::cout << std::setw(temp) << i << " | ";
     }
     std::cout << '\n';

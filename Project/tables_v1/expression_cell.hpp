@@ -14,7 +14,7 @@ class expression_cell : public base_cell {
             { "-",  operator_token{ operator_type::Minus,      2, true } },
             { "-",  operator_token{ operator_type::U_minus,    5, false} },
             { "+",  operator_token{ operator_type::U_plus,     5, false} },
-            { "/", operator_token { operator_type::Div,        3, true } },
+            { "/",  operator_token{ operator_type::Div,        3, true } },
             { "==", operator_token{ operator_type::Equals,     0, true } },
             { "!=", operator_token{ operator_type::NotEquals,  0, true } },
             { "<",  operator_token{ operator_type::Smaller,    1, true } },
@@ -39,7 +39,7 @@ class expression_cell : public base_cell {
 public:
     /// @brief the table link is only important when initialization occurs
     /// otherwise the expression cell represents some value(int or double) and
-    expression_cell(const absolute_cellname &name, table &table_link, const std::string &text);
+    expression_cell(const absolute_cellname& name, table& table_link, const std::string& text);
     ///@brief tells whether or not a given cellname is contained within tokens
     bool contains(const absolute_cellname& name) const;
     ///@brief calculates the expression

@@ -62,7 +62,6 @@ void expression_cell::evaluate(table& table_link) {
     to_RPN(output_queue, filtered_tokens);
     calculate(output_queue, table_link);
     free_tokens(filtered_tokens);
-
 }
 
 std::string expression_cell::print_value() const {
@@ -336,10 +335,15 @@ void expression_cell::to_RPN(std::queue<base_token *>& output_queue,
             if(operator_stack.empty()) {
                 throw std::invalid_argument("wrong expression format");
             }
-            assert(!were_values_stack.empty());
+            if(were_values_stack.empty()) {
+                throw std::invalid_argument("wrong expression format");
+            }
             bool w = were_values_stack.top();
+            were_values_stack.pop();
             if(w) {
-                assert(!arg_cnt_stack.empty());
+                if(arg_cnt_stack.empty()) {
+                    throw std::invalid_argument("wrong expression format");
+                }
                 ++arg_cnt_stack.top();
             }
             were_values_stack.push(false);
@@ -388,7 +392,11 @@ void expression_cell::to_RPN(std::queue<base_token *>& output_queue,
         }
     }
     while(!operator_stack.empty()) {
-        output_queue.push(operator_stack.top());
+        base_token* top = operator_stack.top();
+        if(isL_paren(top) || isR_paren(top)) {
+            throw std::invalid_argument("wrong expression format");
+        }
+        output_queue.push(top);
         operator_stack.pop();
     }
 

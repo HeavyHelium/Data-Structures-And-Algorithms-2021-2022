@@ -395,4 +395,40 @@ numeric_value numeric_value::cos(const numeric_value &v1) {
     return res;
 }
 
+numeric_value numeric_value::pow(const numeric_value &v1, const numeric_value& v2) {
+    numeric_value res{ type::Int };
+    switch(v1.T) {
+        case Int : {
+            switch(v2.T) {
+                case Int : {
+                    res.V.i_val = std::pow(v1.V.i_val, v2.V.i_val);
+                    break;
+                }
+                case Double : {
+                    res.T = type::Double;
+                    res.V.d_val = std::pow(v1.V.i_val, v2.V.d_val);
+                    break;
+                }
+            }
+            break;
+        }
+        case Double : {
+            switch(v2.T) {
+                case Int : {
+                    res.T = type::Double;
+                    res.V.d_val = std::pow(v1.V.d_val, v2.V.i_val);
+                    break;
+                }
+                case(Double) : {
+                    res.T = type::Double;
+                    res.V.d_val = std::pow(v1.V.d_val, v2.V.d_val);
+                    break;
+                }
+            }
+            break;
+        }
+    }
+    return res;
+}
+
 

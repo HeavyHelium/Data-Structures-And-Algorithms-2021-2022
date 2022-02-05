@@ -34,6 +34,7 @@ struct numeric_value {
     operator bool() const;
     static numeric_value sin(const numeric_value& v1);
     static numeric_value cos(const numeric_value& v1);
+    static numeric_value pow(const numeric_value& v1, const numeric_value& other);
 };
 
 #endif //TABLES_V1_NUMERIC_VALUE_HPP
