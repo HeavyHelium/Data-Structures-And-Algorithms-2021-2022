@@ -6,7 +6,7 @@ void longest_palim_helper(const char* word,
                           int begin,
                           int end,
                           std::vector<std::vector<int>>& dp) {
-    if(dp[begin][end]) {
+    if(begin > end || dp[begin][end]) {
         return;
     }
     if(begin == end) {
