@@ -1,3 +1,0 @@
-G:/FMI/Year 2/fall_winter/SDP/dp/nth_fib/cmake-build-debug/CMakeFiles/nth_fib.dir
-G:/FMI/Year 2/fall_winter/SDP/dp/nth_fib/cmake-build-debug/CMakeFiles/edit_cache.dir
-G:/FMI/Year 2/fall_winter/SDP/dp/nth_fib/cmake-build-debug/CMakeFiles/rebuild_cache.dir
