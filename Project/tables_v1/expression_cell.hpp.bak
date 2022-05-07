@@ -69,7 +69,7 @@ private:
     static absolute_cellname_token* extract_abs_cellname(const char*& text);
     static relative_cellname_token* extract_rel_cellname(const char*& text);
     static int_token* extract_int(const char*& text);
-    ///@brief turns expression into a modified reverse polish notation
+    ///@brief turns expression to a modified reverse polish notation
     static void to_RPN(std::queue<base_token*>& output_queue,
                        const std::vector<base_token*>& tokens);
     ///@brief calculates expression and sets the numeric value
