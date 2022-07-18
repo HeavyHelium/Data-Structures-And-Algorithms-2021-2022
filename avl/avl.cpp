@@ -39,9 +39,8 @@ struct avl_tree {
         m_size = 0;
     }
 
-    void insert() {
-        insert_rec(); // insert and update node heights
-        //fix_avl_property();
+    void insert(const KeyType& key) {
+        insert_rec(key); // insert and update node heights
     }
 
     ~avl_tree() {
@@ -54,6 +53,24 @@ private:
         node* left = nullptr;
         node* right = nullptr;
     };
+
+    ///@brief so as to follow the mathematical def of tree height
+    static int node_height(const node* node) {
+        if(node) {
+            return node->height;
+        }
+        return -1;
+    }
+
+
+    static int delta(const node* root) {
+        int d = 0;
+        if(root) {
+            d = std::abs(node_height(root->left) -
+                         node_height(root->right));
+        }
+        return d;
+    }
 
     static void clear_rec(node*& root) {
         if(root) {
@@ -68,21 +85,26 @@ private:
         node* root = nullptr;
         if(other_root) {
             root = new node{ other_root->key,
-                             height,
+                             other_root->height,
                              copy_rec(other_root->left),
                              copy_rec(other_root->right) };
         }
         return root;
     }
 
-    static int height(const node* node) {
-        if(node) {
-            return node->height;
-        }
-        return -1;
-    }
-
     static void insert_rec(node*& root, const KeyType& key) {
+        if(!root) {
+            root = new node{ key };
+        } else if(root->key < key) {
+            insert_rec(root->right, key);
+        } else {
+            insert_rec(root->left, key);
+        }
+        root->height = 1 + std::max(node_height(root->right),
+                                    node_height(root->left));
+        int diff = delta(root);
+
+
 
     }
 
