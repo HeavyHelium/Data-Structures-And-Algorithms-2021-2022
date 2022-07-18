@@ -15,8 +15,9 @@ struct avl_tree {
 
     avl_tree& operator=(const avl_tree& other) {
         if(this != &other) {
+            node* temp = copy_rec(other.root);
             clear();
-            root = copy_rec(other.root);
+            root = temp;
             m_size = other.m_size;
         }
         return *this;
