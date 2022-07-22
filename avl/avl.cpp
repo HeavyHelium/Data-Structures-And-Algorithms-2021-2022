@@ -126,8 +126,7 @@ private:
             int diff = delta(root);
 
             if(diff < -1) { // it is right-heavy
-                int temp = delta(root->right);
-                if(temp <= 0) {  // it is doubly right-heavy or right child is balanced
+                if(delta(root->right) <= 0) {  // it is doubly right-heavy or right child is balanced
                     left_rotate(root);
                 } else {
                     node* old_root = root;
@@ -135,8 +134,7 @@ private:
                     left_rotate(root);
                 }
             } else if(diff > 1) {
-                int temp = delta(root->left);
-                if(temp >= 0) {  // it is doubly left-heavy or left child is balanced
+                if(delta(root->left) >= 0) {  // it is doubly left-heavy or left child is balanced
                     right_rotate(root);
                 } else {
                     node* old_root = root;
