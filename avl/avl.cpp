@@ -59,8 +59,7 @@ struct avl_tree {
         return node_height(root);
     }
 
-    ///@returns the weight a.k.a. number of nodes
-    /// currently in BST
+    ///@returns the weight a.k.a. number of nodes currently in BST
     int size() const {
         return m_size;
     }
@@ -276,8 +275,6 @@ private:
     node* root = nullptr;
     int m_size = 0;
 };
-
-
 
 
 int main() {
