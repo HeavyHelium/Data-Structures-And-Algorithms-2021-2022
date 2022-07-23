@@ -44,13 +44,13 @@ struct avl_tree {
         return *this;
     }
 
-    avl_tree& operator=(avl_tree&& other) {
+    avl_tree& operator=(avl_tree&& other) noexcept {
         std::swap(root, other.root);
         std::swap(m_size, other.m_size);
         return *this;
     }
 
-    avl_tree(avl_tree&& other) {
+    avl_tree(avl_tree&& other) noexcept {
         std::swap(root, other.root);
         std::swap(m_size, other.m_size);
     }
@@ -135,7 +135,6 @@ private:
                 if(delta(root->right) <= 0) {  // it is doubly right-heavy or right child is balanced
                     left_rotate(root);
                 } else {
-                    node* old_root = root;
                     right_rotate(root->right);
                     left_rotate(root);
                 }
@@ -143,7 +142,6 @@ private:
                 if(delta(root->left) >= 0) {  // it is doubly left-heavy or left child is balanced
                     right_rotate(root);
                 } else {
-                    node* old_root = root;
                     left_rotate(root->left);
                     right_rotate(root);
                 }
