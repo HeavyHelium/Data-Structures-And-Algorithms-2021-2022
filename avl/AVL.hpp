@@ -1,3 +1,8 @@
+#pragma once
+
+#ifndef AVL_TREE_HPP
+#define AVL_TREE_HPP
+
 #include <cassert>
 #include <stdexcept>
 #include <algorithm>
@@ -274,3 +279,5 @@ private:
     node* root = nullptr;
     int m_size = 0;
 };
+
+#endif

@@ -1,8 +1,6 @@
 #include "AVL.hpp"
 #include <cmath>
 
-/// TODO: test rule of 5 is implemented correctly
-
 #define CATCH_CONFIG_MAIN
 #define CATCH_TESTS
 
