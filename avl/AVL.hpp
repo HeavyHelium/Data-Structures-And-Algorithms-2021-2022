@@ -1,5 +1,5 @@
-#include <iostream>
 #include <cassert>
+#include <stdexcept>
 #include <algorithm>
 #include <utility>
 #include <vector>
@@ -77,6 +77,7 @@ struct avl_tree {
 
     void erase(const KeyType& key) {
         erase_rec(root, key);
+        --m_size;
     }
 
     ///@returns nullptr if key is nowhere to be found in tree
@@ -273,17 +274,3 @@ private:
     node* root = nullptr;
     int m_size = 0;
 };
-
-
-int main() {
-    avl_tree<int> tree{ 8, 7, 6, 5, 4, 3, 2, 1 };
-    tree.erase(1);
-    std::vector<int> inorder = tree.inorder();
-    for(int elem : inorder) {
-        std::cout << elem << " ";
-    }
-    std::cout << std::endl;
-    std::cout << "height: " << tree.height() << std::endl;
-    std::cout << "weight: " << tree.size() << std::endl;
-    return 0;
-}
