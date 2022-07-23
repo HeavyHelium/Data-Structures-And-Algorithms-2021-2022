@@ -10,6 +10,19 @@ int max_height(int node_cnt) {
     return std::floor(1.44 * std::log2(node_cnt + 1) - 0.328);
 }
 
+template<class T>
+bool operator==(const std::vector<T>& v1, const std::vector<T>& v2) {
+    if(v1.size() == v2.size()) {
+        for(int i = 0; i < v1.size(); ++i) {
+            if(v1[i] != v2[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
 #if 0
 TEST_CASE("sanity test") {
     REQUIRE((5 + 5 == 10));
@@ -105,6 +118,29 @@ TEST_CASE("Erasure of elements is performed correctly", "[avl_tree]") {
     tree.erase(0);
     tree.erase(-18);
     REQUIRE(tree.empty());
+}
+
+TEST_CASE("Inorder traversal is performed correctly", "[avl_tree]") {
+    avl_tree<int> tree{ 5, 0, -42, 5, 85, 15, 14, 3 };
+    std::vector<int> inorder = tree.inorder();
+    std::vector<int> sorted{ -42, 0, 3, 5, 14, 15, 85 };
+    REQUIRE(sorted.size() == inorder.size());
+    for(int i = 0; i < sorted.size(); ++i) {
+        REQUIRE(inorder[i] == sorted[i]);
+    }
+}
+
+TEST_CASE("Copy semantics", "[avl_tree]") {
+    avl_tree<int> tree{ 5, 0, -42, 5, 85, 15, 14, 3 };
+    SECTION("Copy construction") {
+        avl_tree<int> copy(tree);
+        REQUIRE(tree.inorder() == copy.inorder());
+    }
+    SECTION("Copy assignment") {
+        avl_tree<int> treeprime{ 42, 42, 42, 42, 42 };
+        treeprime = tree;
+        REQUIRE(tree.inorder() == treeprime.inorder());
+    }
 }
 
 #endif
