@@ -1,9 +1,0 @@
-# depslib dependency file v1.0
-1634335632 source:g:\fmi\year 2\fall_winter\sdp\seminars\seminar1\dynamicvector\dynamicvector\main.cpp
-	<iostream>
-	"dynamicVector.h"
-
-1634488271 g:\fmi\year 2\fall_winter\sdp\seminars\seminar1\dynamicvector\dynamicvector\dynamicvector.h
-	<cstddef>
-	<algorithm>
-

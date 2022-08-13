@@ -1,8 +1,0 @@
-# depslib dependency file v1.0
-1635781841 source:g:\fmi\year 2\fall_winter\sdp\seminars\seminar3_bitset\main.cpp
-	<cstdint>
-	<cstring>
-	<iostream>
-	<utility>
-	<cassert>
-

@@ -1,5 +1,0 @@
-﻿  main.cpp
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\revamp\console\console\input.h(33,29): warning C4018: '<': signed/unsigned mismatch
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\revamp\console\console\input.h(52,29): warning C4018: '<': signed/unsigned mismatch
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\revamp\hw1\hw1\implementation.h(424): warning C4715: 'MyStore::takeResource': not all control paths return a value
-  console.vcxproj -> G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\revamp\hw1\Debug\console.exe

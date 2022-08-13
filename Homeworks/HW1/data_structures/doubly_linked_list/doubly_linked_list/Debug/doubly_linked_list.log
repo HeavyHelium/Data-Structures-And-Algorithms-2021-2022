@@ -1,6 +1,0 @@
-﻿  main.cpp
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\doubly_linked_list\doubly_linked_list\main.cpp(19,21): warning C4553: '==': result of expression not used; did you intend '='?
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\doubly_linked_list\doubly_linked_list\main.cpp(29,21): warning C4553: '==': result of expression not used; did you intend '='?
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\doubly_linked_list\doubly_linked_list\main.cpp(41,21): warning C4553: '==': result of expression not used; did you intend '='?
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\doubly_linked_list\doubly_linked_list\main.cpp(48,21): warning C4553: '==': result of expression not used; did you intend '='?
-  doubly_linked_list.vcxproj -> G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\doubly_linked_list\Debug\doubly_linked_list.exe

@@ -1,4 +1,0 @@
-﻿  main.cpp
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\Console\Console\input.hpp(32,28): warning C4018: '<': signed/unsigned mismatch
-G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\Console\Console\input.hpp(51,29): warning C4018: '<': signed/unsigned mismatch
-  Console.vcxproj -> G:\FMI\Year 2\fall_winter\SDP\Homeworks\HW1\Console\Debug\Console.exe
