@@ -21,7 +21,7 @@
 | **Operation** | **Complexity** |
 |---------------|----------------|
 | *Insert*      | O(log log u)   |
-| *Delete*      | O(log log u)   |
+| *Erase*       | O(log log u)   |
 | *Predecessor* | O(log log u)   |
 | *Successor*   | O(log log u)   |
 
