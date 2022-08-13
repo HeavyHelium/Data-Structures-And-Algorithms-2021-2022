@@ -813,3 +813,9 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/c++,visualstudio,cmake
 *.vcxproj.filters*cmake-build-debug*
 *cmake-build-debug*
+*Debug*
+*obj
+*out
+*.exe
+*.layout
+*.depend
