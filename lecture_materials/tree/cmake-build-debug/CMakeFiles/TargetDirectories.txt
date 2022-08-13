@@ -1,3 +1,0 @@
-C:/Users/Diana Markova/CLionProjects/tree/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-C:/Users/Diana Markova/CLionProjects/tree/cmake-build-debug/CMakeFiles/tree.dir
-C:/Users/Diana Markova/CLionProjects/tree/cmake-build-debug/CMakeFiles/edit_cache.dir

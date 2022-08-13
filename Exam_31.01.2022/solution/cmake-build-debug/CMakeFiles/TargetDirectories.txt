@@ -1,4 +1,0 @@
-G:/FMI/Year 2/fall_winter/SDP/Exam_31.01.2022/solution/cmake-build-debug/CMakeFiles/task1.dir
-G:/FMI/Year 2/fall_winter/SDP/Exam_31.01.2022/solution/cmake-build-debug/CMakeFiles/task2.dir
-G:/FMI/Year 2/fall_winter/SDP/Exam_31.01.2022/solution/cmake-build-debug/CMakeFiles/edit_cache.dir
-G:/FMI/Year 2/fall_winter/SDP/Exam_31.01.2022/solution/cmake-build-debug/CMakeFiles/rebuild_cache.dir
