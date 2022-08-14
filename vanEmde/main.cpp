@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stdexcept>
 #include "van Emde Boas.hpp"
+#include <cassert>
 
 #if 0
 #define CATCH_CONFIG_MAIN
@@ -17,9 +18,24 @@ int main() try {
     vanEmde_tree tree(16);
     tree.insert(5);
     tree.insert(7);
-    std::cout << tree.contains(5) << std::endl;
+    tree.insert(12);
+    tree.insert(14);
+    tree.insert(3);
 
-    std::cout << tree.predecessor(7) << std::endl;
+    assert(tree.contains(5));
+    assert(tree.contains(7));
+    assert(tree.contains(12));
+    assert(tree.contains(14));
+    assert(tree.contains(3));
+
+    tree.erase(3);
+
+    assert(tree.contains(5));
+    assert(tree.contains(7));
+    assert(tree.contains(12));
+    assert(tree.contains(14));
+
+    std::cout << std::endl;
 
   //  tree.insert(5);
 //    tree.insert(6);

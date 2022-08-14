@@ -1,5 +1,4 @@
 #include "van Emde Boas.hpp"
-#include <iostream>
 
 vanEmde_tree::vanEmde_tree(int cnt)
     : m_universe_size(cnt) {
@@ -54,6 +53,7 @@ void vanEmde_tree::insert(int x) {
         throw std::domain_error("element is not in range");
     }
     insert_rec(x);
+    ++current_size;
 }
 
 void vanEmde_tree::insert_rec(int x) {
@@ -85,17 +85,13 @@ void vanEmde_tree::insert_rec(int x) {
 
 void vanEmde_tree::erase(int x) {
     if(!contains(x)) {
-        throw std::invalid_argument("Element is not contained in tree!");
+        throw std::invalid_argument("Element is not contained in tree\n");
     }
     erase_rec(x);
+    --current_size;
 }
 
 void vanEmde_tree::erase_rec(int x) {
-    if(x == m_min && x == m_max) { // single element tree
-        m_min = m_max = None;
-        return;
-    }
-
     if(universe_size() == 2) {
         if(x == m_min) {
             m_min = m_max;
@@ -104,8 +100,9 @@ void vanEmde_tree::erase_rec(int x) {
         }
         return;
     }
+
     /// There is summary here
-    if(x == m_min) { // Find new min
+    if(x == m_min) { // Find new min aka predecessor
         int i = summary->min(); // first non-empty cluster
         if(i == None) {  // Single element tree
             m_min = m_max = None;
@@ -116,9 +113,9 @@ void vanEmde_tree::erase_rec(int x) {
     int h = high(x);
     int l = low(x);
 
-    clusters[h]->erase(l);
+    clusters[h]->erase_rec(l);
     if(clusters[h]->empty()) { // update summary
-        summary->erase(h);
+        summary->erase_rec(h);
     }
     // In case we've just deleted the max
     if(x == m_max) {
@@ -211,6 +208,7 @@ int vanEmde_tree::predecessor_rec(int x) const {
     }
     return index(i, j);
 }
+
 
 vanEmde_tree::~vanEmde_tree() {
     delete summary;
