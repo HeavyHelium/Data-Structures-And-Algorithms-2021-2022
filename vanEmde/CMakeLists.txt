@@ -3,4 +3,4 @@ project(vanEmde)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(vanEmde main.cpp van\ Emde\ Boas.cpp)
+add_executable(vanEmde tests.cpp van\ Emde\ Boas.cpp)

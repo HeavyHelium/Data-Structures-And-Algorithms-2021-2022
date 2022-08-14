@@ -20,6 +20,31 @@ vanEmde_tree::vanEmde_tree(int cnt)
     }
 }
 
+vanEmde_tree::vanEmde_tree(const vanEmde_tree& other)
+    : clusters(other.clusters.size()),
+      m_max(other.m_max),
+      m_min(other.m_min),
+      m_universe_size(other.m_universe_size),
+      current_size(other.current_size),
+      summary(nullptr) {
+
+    for(int i = 0; i < other.clusters.size(); ++i) {
+        clusters[i] = new vanEmde_tree(*other.clusters[i]);
+    }
+    if(other.summary) {
+        summary = new vanEmde_tree(*other.summary);
+    }
+}
+
+void vanEmde_tree::operator=(vanEmde_tree other) {
+    clusters.swap(other.clusters);
+    std::swap(m_max, other.m_max);
+    std::swap(m_min, other.m_min);
+    std::swap(m_universe_size, other.m_universe_size);
+    std::swap(current_size, other.current_size);
+    std::swap(summary, other.summary);
+}
+
 bool vanEmde_tree::empty() const {
     return m_min == None;
 }
@@ -130,11 +155,18 @@ void vanEmde_tree::erase_rec(int x) {
 }
 
 bool vanEmde_tree::contains(int x) const {
+    return in_range(x) ? contains_rec(x) : false;
+}
+
+bool vanEmde_tree::contains_rec(int x) const {
+    if(empty()) {
+        return false;
+    }
     if(m_min == x || m_max == x) {
         return true;
     }
     if(m_universe_size > 2) {
-        return clusters[high(x)]->contains(low(x));
+        return clusters[high(x)]->contains_rec(low(x));
     }
     return false;
 }
@@ -144,30 +176,22 @@ int vanEmde_tree::successor(int x) const {
 }
 
 int vanEmde_tree::successor_rec(int x) const {
-    if(empty()) {
+    if (empty() || x >= m_max) {
         return None;
     }
-    if(x < m_min) {
-        return m_min;
-    }
-    if(universe_size() == 2 && x < m_max) {
+    if (x < m_min) return m_min;
+    if (universe_size() == 2) {
         return m_max;
     }
-    if(universe_size() == 2) {
-        return None;
-    }
-    // there is a summary vector
+
     int i = high(x);
     int j = low(x);
-
-    if(clusters[i]->max() > j) { // successor is in the name cluster
-        j = index(i, clusters[i]->successor_rec(j));
-    } else { // find next nonempty cluster
-        i = summary->successor_rec(i);
-        if(i == None) {
-            return None;
-        }
-        j = index(i, clusters[i]->min());
+    if (j < clusters[i] -> m_max) {
+        j = clusters[i] -> successor_rec(j);
+    } else {
+        i = summary->successor(i);
+        if (i == None) return None;
+        j = clusters[i]->min();
     }
     return index(i, j);
 }
@@ -177,17 +201,14 @@ int vanEmde_tree::predecessor(int x) const {
 }
 
 int vanEmde_tree::predecessor_rec(int x) const {
-    if(empty()) {
+    if(empty() || x <= m_min) {
         return None;
     }
     if(x > m_max) {
         return m_max;
     }
-    if(m_universe_size == 2 && x > m_min) {
-        return m_min;
-    }
     if(m_universe_size == 2) {
-        return None;
+        return m_min;
     }
 
     int i = high(x);
@@ -209,12 +230,16 @@ int vanEmde_tree::predecessor_rec(int x) const {
     return index(i, j);
 }
 
+void vanEmde_tree::clear() {
+    for(vanEmde_tree*& cluster : clusters) {
+        cluster->clear();
+    }
+    delete summary;
+}
+
 
 vanEmde_tree::~vanEmde_tree() {
-    delete summary;
-    for(vanEmde_tree*& cluster : clusters) {
-        delete cluster;
-    }
+    clear();
 }
 
 int vanEmde_tree::high(int x) const {
@@ -228,4 +253,5 @@ int vanEmde_tree::low(int x) const {
 int vanEmde_tree::index(int high, int low) const {
     return high * cluster_size() + low;
 }
+
 

@@ -14,13 +14,12 @@
 struct vanEmde_tree {
     // could be set to -1 as well, doesn't matter much
     static constexpr int None = INT_MIN;
+    static constexpr int DefaultUniverse = 16;
 
-    vanEmde_tree() = default;
+    vanEmde_tree(int cnt = DefaultUniverse);
 
-    vanEmde_tree(int cnt);
-
-    vanEmde_tree(const vanEmde_tree& other) = delete;
-    void operator=(const vanEmde_tree& other) = delete;
+    vanEmde_tree(const vanEmde_tree& other);
+    void operator=(vanEmde_tree other);
 
     bool empty() const;
     int size() const;
@@ -38,12 +37,16 @@ struct vanEmde_tree {
     int successor(int x) const;
     int predecessor(int x) const;
 
+    void clear();
+
     ~vanEmde_tree();
 
 private:
 
-    void insert_rec(int c);
-    void erase_rec(int c);
+    void insert_rec(int x);
+    void erase_rec(int x);
+
+    bool contains_rec(int x) const;
 
     int successor_rec(int x) const;
     int predecessor_rec(int x) const;
