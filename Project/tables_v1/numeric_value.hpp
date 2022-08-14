@@ -23,8 +23,8 @@ struct numeric_value {
 
     numeric_value& operator+();
     numeric_value& operator-();
-    numeric_value operator+(int);
-    numeric_value operator-(int);
+    numeric_value operator+(int) const;
+    numeric_value operator-(int) const;
 
     numeric_value operator==(const numeric_value& other) const;
     numeric_value operator!=(const numeric_value& other) const;

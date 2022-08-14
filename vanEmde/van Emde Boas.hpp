@@ -9,9 +9,9 @@
 #include <climits>
 #include <cmath>
 
+
 /// @brief universe spans in range [0, universe_size)
 struct vanEmde_tree {
-
     // could be set to -1 as well, doesn't matter much
     static constexpr int None = INT_MIN;
 
@@ -27,8 +27,10 @@ struct vanEmde_tree {
     bool contains(int x) const;
     int cluster_size() const;
     int universe_size() const;
+    bool in_range(int x) const;
 
     void insert(int x);
+    void erase(int x);
 
     int min() const;
     int max() const;
@@ -39,6 +41,13 @@ struct vanEmde_tree {
     ~vanEmde_tree();
 
 private:
+
+    void insert_rec(int c);
+    void erase_rec(int c);
+
+    int successor_rec(int x) const;
+    int predecessor_rec(int x) const;
+
     /// @return given a universe value x,
     /// returns corresponding cluster index
     int high(int x) const;
@@ -52,6 +61,7 @@ private:
 
     int m_max = None;
     int m_min = None;
+
     int m_universe_size = 0;
     int current_size = 0;
 };

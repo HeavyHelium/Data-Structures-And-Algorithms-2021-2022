@@ -15,9 +15,14 @@
 int main() try {
 
     vanEmde_tree tree(16);
-
     tree.insert(5);
-    tree.insert(6);
+    tree.insert(7);
+    std::cout << tree.contains(5) << std::endl;
+
+    std::cout << tree.predecessor(7) << std::endl;
+
+  //  tree.insert(5);
+//    tree.insert(6);
 
 
 

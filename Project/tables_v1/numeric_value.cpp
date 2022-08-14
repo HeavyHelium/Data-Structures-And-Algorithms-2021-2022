@@ -337,10 +337,10 @@ numeric_value& numeric_value::operator-() {
     return *this;
 }
 
-numeric_value numeric_value::operator+(int) {
+numeric_value numeric_value::operator+(int) const {
     return *this;
 }
-numeric_value numeric_value::operator-(int) {
+numeric_value numeric_value::operator-(int) const{
     numeric_value copy(*this);
     return -copy;
 }
@@ -383,7 +383,7 @@ numeric_value numeric_value::sin(const numeric_value &v1) {
 numeric_value numeric_value::cos(const numeric_value &v1) {
     numeric_value res { type::Double };
     switch(v1.T) {
-        case type::Int : {
+            case type::Int : {
             res.V.d_val = std::cos(v1.V.i_val);
             break;
         }

@@ -1,6 +1,5 @@
 #  **Van Emde Boas Tree**
 
-## About the data structure
 * ***Goal***
   * store n integers from a *Universe* **u**
     
@@ -28,3 +27,4 @@
 * ```Note:``` when u = n<sup>O(1)</sup> or u = n<sup>(log n)<sup>O(1)</sup></sup>, then **u = log log *n***
 <br></br>
 * Exponentially faster than balanced BSTs
+
