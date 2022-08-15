@@ -21,7 +21,7 @@ struct vanEmde_tree {
 
     vanEmde_tree(const vanEmde_tree& other);
     vanEmde_tree(vanEmde_tree&& other);
-    void operator=(vanEmde_tree other);
+    vanEmde_tree& operator=(vanEmde_tree other);
 
     void swap(vanEmde_tree& other);
 

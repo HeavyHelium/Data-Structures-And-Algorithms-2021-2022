@@ -40,8 +40,9 @@ vanEmde_tree::vanEmde_tree(vanEmde_tree&& other) {
     swap(other);
 }
 
-void vanEmde_tree::operator=(vanEmde_tree other) {
+vanEmde_tree& vanEmde_tree::operator=(vanEmde_tree other) {
     swap(other);
+    return *this;
 }
 
 void vanEmde_tree::swap(vanEmde_tree& other) {
