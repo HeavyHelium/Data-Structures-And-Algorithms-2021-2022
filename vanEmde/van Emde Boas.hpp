@@ -1,4 +1,5 @@
 #pragma once
+
 #ifndef VAN_EMDE
 #define VAN_EMDE
 
@@ -12,14 +13,17 @@
 
 /// @brief universe spans in range [0, universe_size)
 struct vanEmde_tree {
-    // could be set to -1 as well, doesn't matter much
+
     static constexpr int None = INT_MIN;
     static constexpr int DefaultUniverse = 16;
 
     vanEmde_tree(int cnt = DefaultUniverse);
 
     vanEmde_tree(const vanEmde_tree& other);
+    vanEmde_tree(vanEmde_tree&& other);
     void operator=(vanEmde_tree other);
+
+    void swap(vanEmde_tree& other);
 
     bool empty() const;
     int size() const;
@@ -36,8 +40,6 @@ struct vanEmde_tree {
 
     int successor(int x) const;
     int predecessor(int x) const;
-
-    void clear();
 
     ~vanEmde_tree();
 

@@ -36,7 +36,15 @@ vanEmde_tree::vanEmde_tree(const vanEmde_tree& other)
     }
 }
 
+vanEmde_tree::vanEmde_tree(vanEmde_tree&& other) {
+    swap(other);
+}
+
 void vanEmde_tree::operator=(vanEmde_tree other) {
+    swap(other);
+}
+
+void vanEmde_tree::swap(vanEmde_tree& other) {
     clusters.swap(other.clusters);
     std::swap(m_max, other.m_max);
     std::swap(m_min, other.m_min);
@@ -77,8 +85,10 @@ void vanEmde_tree::insert(int x) {
     if(!in_range(x)) {
         throw std::domain_error("element is not in range");
     }
-    insert_rec(x);
-    ++current_size;
+    if(!contains(x)) {
+        insert_rec(x);
+        ++current_size;
+    }
 }
 
 void vanEmde_tree::insert_rec(int x) {
@@ -117,7 +127,17 @@ void vanEmde_tree::erase(int x) {
 }
 
 void vanEmde_tree::erase_rec(int x) {
+    // because of the lazy propagation
+    if (m_min == x && m_max == x) {
+        m_min = m_max = None;
+        return;
+    }
+
     if(universe_size() == 2) {
+        if(m_min == m_max) {
+            m_min = m_max = None;
+            return;
+        }
         if(x == m_min) {
             m_min = m_max;
         } else {
@@ -230,18 +250,6 @@ int vanEmde_tree::predecessor_rec(int x) const {
     return index(i, j);
 }
 
-void vanEmde_tree::clear() {
-    for(vanEmde_tree*& cluster : clusters) {
-        cluster->clear();
-    }
-    delete summary;
-}
-
-
-vanEmde_tree::~vanEmde_tree() {
-    clear();
-}
-
 int vanEmde_tree::high(int x) const {
     return x / cluster_size();
 }
@@ -252,6 +260,13 @@ int vanEmde_tree::low(int x) const {
 
 int vanEmde_tree::index(int high, int low) const {
     return high * cluster_size() + low;
+}
+
+vanEmde_tree::~vanEmde_tree() {
+    for(vanEmde_tree* cluster : clusters) {
+        delete cluster;
+    }
+    delete summary;
 }
 
 

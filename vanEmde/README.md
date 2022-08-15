@@ -13,9 +13,7 @@
     * IP addresses, ranges, hence predecessor/successor problem arises
       
       * IPv4: **u** = 2<sup>32</sup>
-  
-  * ...more that I am oblivious of
-  
+      
 ## Operations
 | <ins>**Operation**</ins> | <ins>**Complexity**</ins> |
 |--------------------------|---------------------------|

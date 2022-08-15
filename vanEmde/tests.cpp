@@ -2,14 +2,16 @@
 #include "catch.hpp"
 #include "van Emde Boas.hpp"
 #include <climits>
+#include <utility>
 
 static constexpr int size = 1 << 8;
-const std::vector<int> sample_numbers{ 4, 72, 14, 6, 5, 3, 168, 42 };
+static const std::vector<int> sample_numbers{ 4, 72, 14, 6, 5, 3, 168, 42 };
+static const std::vector<int> sample_numbers1{ 27, 63, 15, 237, 45, 133, 17, 171};
 
 #if 1
 
-void init_tree(vanEmde_tree& t) {
-    for(int num : sample_numbers) {
+void init_tree(vanEmde_tree& t, const std::vector<int>& vec) {
+    for(int num : vec) {
         t.insert(num);
     }
 }
@@ -23,7 +25,7 @@ TEST_CASE("Creation of an empty tree", "[vanEmde_tree]") {
 
 TEST_CASE("Insertion works correctly", "[vanEmde_tree]") {
     vanEmde_tree t(size);
-    init_tree(t);
+    init_tree(t, sample_numbers);
 
     SECTION("For input in universe") {
         for(int num : sample_numbers) {
@@ -48,7 +50,7 @@ TEST_CASE("Insertion works correctly", "[vanEmde_tree]") {
 
 TEST_CASE("Predecessor/Successor work correctly", "[vanEmde_tree]") {
     vanEmde_tree t(size);
-    init_tree(t);
+    init_tree(t, sample_numbers);
 
     std::vector<int> sorted(sample_numbers);
     std::ranges::sort(sorted);
@@ -78,7 +80,7 @@ TEST_CASE("Predecessor/Successor work correctly", "[vanEmde_tree]") {
 
 TEST_CASE("Erasure works correctly", "[vanEmde_tree]") {
     vanEmde_tree t(size);
-    init_tree(t);
+    init_tree(t, sample_numbers);
 
     int sz = sample_numbers.size();
 
@@ -89,18 +91,69 @@ TEST_CASE("Erasure works correctly", "[vanEmde_tree]") {
             t.erase(num);
             --sz;
             REQUIRE(t.size() == sz);
-            std::cout << num << std::endl;
             REQUIRE(!t.contains(num));
         }
     }
 
     SECTION("For input outside of Universe") {
-
+        REQUIRE_THROWS(t.erase(169));
+        REQUIRE_THROWS(t.erase(INT_MIN));
     }
 }
 
 TEST_CASE("Copy semantics works correctly", "[vanEmde_tree]") {
+    vanEmde_tree t1(size);
+    init_tree(t1, sample_numbers);
 
+    SECTION("Copy ctor") {
+        vanEmde_tree t2(t1);
+
+        REQUIRE(t2.size() == t1.size());
+        REQUIRE(t2.universe_size() == t1.universe_size());
+
+        for(int elem : sample_numbers) {
+            REQUIRE(t2.contains(elem));
+        }
+    }
+
+    SECTION("Copy assignment") {
+        vanEmde_tree t2(size);
+        init_tree(t2, sample_numbers1);
+
+        t2 = t1;
+
+        REQUIRE(t2.size() == t1.size());
+        REQUIRE(t2.universe_size() == t1.universe_size());
+
+        for(int elem : sample_numbers) {
+            REQUIRE(t2.contains(elem));
+        }
+    }
+}
+
+TEST_CASE("Move semantics works correctly", "vanEmde_tree") {
+    vanEmde_tree t1(size);
+    init_tree(t1, sample_numbers1);
+
+    SECTION("Move ctor") {
+        vanEmde_tree t2(std::move(t1));
+
+        REQUIRE(t2.size() == sample_numbers1.size());
+        for(int num : sample_numbers1) {
+            REQUIRE(t2.contains(num));
+        }
+    }
+
+    SECTION("Move assignment") {
+        vanEmde_tree t2(size);
+        init_tree(t2, sample_numbers);
+        t2 = std::move(t1);
+        REQUIRE(t2.size() == sample_numbers1.size());
+        for(int num : sample_numbers1) {
+            REQUIRE(t2.contains(num));
+        }
+        REQUIRE(t1.empty());
+    }
 }
 
 #endif
@@ -115,7 +168,7 @@ int main() try {
     vanEmde_tree t(256);
 
     t.insert(3);
-  //  assert(tree.contains(3));
+    assert(tree.contains(3));
     t.insert(4);
     t.insert(5);
     t.insert(6);
