@@ -215,3 +215,15 @@ int main() try {
     std::cerr << e.what() << "\n";
     return -1;
 }
+
+/* Sample input -> Expected output: 11
+
+{"timestamp": 1, count: 10, "type": "enter"}
+{"timestamp": 5, count: 1, "type": "enter"}
+{"timestamp": 6, count: 1, "type": "enter"}
+{"timestamp": 7, count: 1, "type": "enter"}
+{"timestamp": 3, count: 2, "type": "exit"}
+{"timestamp": 9, count: 3, "type": "exit"}
+{"timestamp": 10, count: 8, "type": "exit"}
+
+*/
