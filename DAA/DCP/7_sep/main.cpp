@@ -57,7 +57,10 @@ private:
        if(cache[cid] != BLANK) {
            return cache[cid];
        }
-       for(int i = 1; i <= arr[cid] && i + cid < arr.size(); ++i) {
+
+       int beg = std::min(((int)arr.size()) - 1 - cid, arr[cid]);
+
+       for(int i = beg; i; --i) {
            if(get_to_end(cid + i, cache)) {
                return cache[cid] = TRUE;
            }
