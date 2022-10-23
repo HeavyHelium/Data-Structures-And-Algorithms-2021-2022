@@ -26,7 +26,7 @@
 | ***Contains***           | O(log log u)              |
 
 
-* ```Note:``` when u = **n<sup>O(1)</sup>** or u = **n<sup>(log n)<sup>O(1)</sup></sup>**, then **u = log log *n***
+* ```Note:``` when u = **n<sup>O(1)</sup>** or u = **n<sup>(log n)<sup>O(1)</sup></sup>**, then **log log u = log log *n***
 <br></br>
 * Exponentially faster than balanced BSTs
 
