@@ -9,7 +9,7 @@
 ## Associated problems  
 Many counting problems map to Catlan number calculation.
 * Number of BSTs
-* Unbalanced trees
+* Unlabled trees
 	* that's just n! * Cn since n! is the number of possible orderings 
 * N parantheses
 
